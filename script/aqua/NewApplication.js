@@ -27,9 +27,9 @@ $(document).on({
 			return $('#fewaTime').hide();
 		} else if ($('#fewaTime').length) {
 			$(document).on('keydown.e click.e scroll.e mousemove.e', () => {
-				var $emp = $('div.formField--employmentStartDate').parent().filter(':visible');
-				if ($emp) {
-					$emp.before($('#fewaTime').show());
+				var $emp = $('div.formField--employmentStartDate').filter(':visible');
+				if ($emp.length) {
+					$emp.parent().before($('#fewaTime').show());
 					$(document).off('.e');
 				}
 			});
@@ -71,9 +71,9 @@ $(document).on({
 				.append($('<div>').attr('class', "formField")
 					.append($labelEst, $est));
 			$(document).on('keydown.e click.e scroll.e mousemove.e', () => {
-				var $emp = $('div.formField--employmentStartDate').parent().filter(':visible');
-				if ($emp) {
-					$emp.before($('#fewaTime').show());
+				var $emp = $('div.formField--employmentStartDate').filter(':visible');
+				if ($emp.length) {
+					$emp.parent().before($fewaTime.show());
 					$(document).off('.e');
 				}
 			});
