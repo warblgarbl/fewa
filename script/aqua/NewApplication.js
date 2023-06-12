@@ -62,7 +62,7 @@ $(document).on({
 	var $head = $('h1.heading--1');
 	var $html = $head.html();
 	var regex = new RegExp(sessionStorage.getItem('dealer'));
-	if ($head && !regex.test(header.html())) {
+	if ($head && !regex.test($html)) {
 		$head.html($html + ' - ' + regex.source)
 	}
 	$(document).off('.h');
