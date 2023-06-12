@@ -23,42 +23,66 @@ function fewaUpdate() {
 $(document).on({
 	'change': function() {
 		var $this = $(this);
-		var siblings = $($this.parents('#Employment')).children();
 		if (!/(?<!un)employed/i.test($this.val())) {
 			return $('#fewaTime').hide();
 		} else if ($('#fewaTime').length) {
-			setTimeout(() => {$('div.formField--employmentStartDate').parent().before($('#fewaTime').show())}, 25);
+			$(document).on('keydown.e click.e scroll.e mousemove.e', () => {
+				var $emp = $('div.formField--employmentStartDate').parent().filter(':visible');
+				if ($emp) {
+					$emp.before($('#fewaTime').show());
+					$(document).off('.e');
+				}
+			});
 		} else {
-			var $fewaTime = $('<div id="fewaTime">');
-			var $fewaYearLabel = $('<label class="label" for="fewaYear">');
-			var $fewaYear = $('<input type="number" id="fewaYear" min="0" max="80" style="width:2rem;height:1rem">');
-			var $fewaMonthLabel = $('<label class="label" for="fewaMonth">');
-			var $fewaMonth = $('<input type="number" id="fewaMonth" min="0" max="11" style="width:2rem;height:1rem">');
-			var $fewaTimeEstLabel = $('<div class="label">');
-			var $fewaTimeEst = $('<div id="fewaTimeEst">');
-			var $div = $('<div>');
-			var $br = $('<br>');
-			$fewaYearLabel.html('Years: ');
-			$fewaMonthLabel.html(' Months: ');
-			$fewaTimeEstLabel.html('Suggested start date:');
-			$div.html($fewaYearLabel);
-			$fewaYearLabel.after($fewaYear);
-			$fewaYear.after($fewaMonthLabel);
-			$fewaMonthLabel.after($fewaMonth);
-			$fewaTime.html($div);
-			$div.after($br);
-			$div = $('<div class="formField">');
-			$div.html($fewaTimeEstLabel);
-			$fewaTimeEstLabel.after($fewaTimeEst);
-			$br.after($div);
-			$fewaTime.attr('style','background-color:oldlace');
-			setTimeout(() => $('div.formField--employmentStartDate').parent().before($fewaTime), 25);
+			var $fewaTime = $('<div>').attr({
+				'id': "fewaTime",
+				'style': "background-color:oldlace"
+			});
+			var $labelEst = $('<div>').html('Suggested start date:').attr({
+				'class': "label"
+			});
+			var $labelY = $('<label>').html('Years: ').attr({
+				'class': "label",
+				'for': "fewaYear"
+			});
+			var $labelM = $('<label>').html(' Months: ').attr({
+				'class': "label",
+				'for': "fewaMonth"
+			});
+			var $year = $('<input>').attr({
+				'type': "number",
+				'id': "fewaYear",
+				'min': "0",
+				'max': "80",
+				'style': "width:2rem;height:1rem;"
+			});
+			var $month = $('<input>').attr({
+				'type': "number",
+				'id': "fewaMonth",
+				'min': "0",
+				'max': "11",
+				'style': "width:2rem;height:1rem;"
+			});
+			var $est = $('<div>').attr({
+				'id': "fewaTimeEst"
+			});
+			$fewaTime.append($('<div>').append($labelY, $year, $labelM, $month))
+				.append($('<br>'))
+				.append($('<div>').attr('class', "formField")
+					.append($labelEst, $est));
+			$(document).on('keydown.e click.e scroll.e mousemove.e', () => {
+				var $emp = $('div.formField--employmentStartDate').parent().filter(':visible');
+				if ($emp) {
+					$emp.before($('#fewaTime').show());
+					$(document).off('.e');
+				}
+			});
 		}
 	}
 }, 'select[name="EmploymentType"]')
 .on({'change': fewaUpdate}, '#fewaMonth')
 .on({'change': fewaUpdate}, '#fewaYear')
-.on('mousemove.h keydown.h', () => {
+.on('keydown.h click.h scroll.h mousemove.h', () => {
 	var $head = $('h1.heading--1');
 	var $html = $head.html();
 	var regex = new RegExp(sessionStorage.getItem('dealer'));
