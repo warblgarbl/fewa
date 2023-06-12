@@ -15,15 +15,6 @@ if (/.*cic\.meridianlink\.com.*/.test(url)) {
 	} else if (/.*applications\/new/.test(url)) {
 		src += 'NewApplication.js';
 	}
-} else if (/.*clientportal\.preferredcredit\.com.*/.test(url)) {
-	src += 'pci\/';
-	if (/.*OnlineApplication\/?$/.test(url)) {
-		src += 'OnlineApplication_list.js';
-	} else if (/.*PCILive.*/.test(url)) {
-		src += 'PCILive.js';
-	} else if (/.*STAReport\/?$/.test(url)) {
-		src += 'STAReport.js';
-	}
 }
 
 if (/\.js/.test(src)) {
