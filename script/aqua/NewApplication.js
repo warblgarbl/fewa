@@ -58,7 +58,12 @@ $(document).on({
 }, 'select[name="EmploymentType"]')
 .on({'change': fewaUpdate}, '#fewaMonth')
 .on({'change': fewaUpdate}, '#fewaYear')
-.ready(() => {
-	var header = $('h1.heading--1');
-	setTimeout(() => header.html(header.html() + ' - ' + sessionStorage.getItem('dealer')), 25);
+.on('mousemove.h keydown.h', () => {
+	var $head = $('h1.heading--1');
+	var $html = $head.html();
+	var regex = new RegExp(sessionStorage.getItem('dealer'));
+	if ($head && !regex.test(header.html())) {
+		$head.html($html + ' - ' + regex.source)
+	}
+	$(document).off('.h');
 });
