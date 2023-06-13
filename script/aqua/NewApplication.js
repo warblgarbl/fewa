@@ -54,14 +54,14 @@ $(document).on({
 				'id': "fewaYear",
 				'min': "0",
 				'max': "80",
-				'style': "width:2rem;height:1rem;padding-right:1rem;padding-left:1rem;"
+				'style': "width:2rem;height:1rem;margin-left:1rem;margin-right:1rem;"
 			});
 			var $month = $('<input>').attr({
 				'type': "number",
 				'id': "fewaMonth",
 				'min': "0",
 				'max': "11",
-				'style': "width:2rem;height:1rem;padding-right:1rem;padding-left:1rem;"
+				'style': "width:2rem;height:1rem;margin-left:1rem;margin-right:1rem;"
 			});
 			var $est = $('<div>').attr({
 				'id': "fewaTimeEst"
