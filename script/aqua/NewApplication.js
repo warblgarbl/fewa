@@ -21,7 +21,7 @@ function fewaUpdate() {
 };
 
 $(document).on({
-	'change': () => {
+	'change': function() {
 		var $this = $(this);
 		if (!/(?<!un)employed/i.test($this.val())) {
 			return $('#fewaTime').hide();
@@ -82,7 +82,7 @@ $(document).on({
 }, 'select[name="EmploymentType"]')
 .on({'change': fewaUpdate}, '#fewaMonth')
 .on({'change': fewaUpdate}, '#fewaYear')
-.on('keydown.h click.h scroll.h mousemove.h', () => {
+.on('keydown.h click.h scroll.h mousemove.h', function() {
 	var $head = $('h1.heading--1');
 	var $html = $head.html();
 	var regex = new RegExp(sessionStorage.getItem('dealer'));

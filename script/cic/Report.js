@@ -2,7 +2,7 @@ if (!$) {
 	var $ = jQuery;
 }
 
-$(document).on('click.f keydown.f', function () {
+$(document).on('click.f keydown.f', function() {
 	var sub = $('td.mcl2-report-body').filter((i, e) => /\*{3}-\*{2}/.test(e.innerHTML));
 	var rep = $('td.mcl2-report-body').filter((i, e) => /\*{5}/.test(e.innerHTML));
 	for (i = 0; i < sub.length; i++) {
