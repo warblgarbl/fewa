@@ -31,7 +31,7 @@ $(document).ready(() => {
 					var $this = $rows.eq(i);
 					var $html = $this.html();
 					switch ($html) {
-						case 'A': $this.html($html += ': 100%'); break;
+						case 'A+': $this.html($html += ': 100%'); break;
 						case 'A': $this.html($html += ': 98%'); break;
 						case 'B': $this.html($html += ': 93%'); break;
 						case 'C': $this.html($html += ': 88%'); break;
@@ -46,9 +46,9 @@ $(document).ready(() => {
 				$(document).trigger('resize');
 			});
 		});
-	
+		
 		var target = document.getElementById('loading-table');
-	
+		
 		observer.observe(target, {
 			attributes: true,
 			attributeFilter: ['style']
@@ -77,7 +77,7 @@ $(document).ready(() => {
 			attributes: true,
 			attributeFilter: ['style']
 		});
-	
+		
 		function decision(tar) {
 			var rows = $(`#stareport-${tar}-datatable > tbody > tr[role=row] > td:nth-child(9)`);
 			for (i = 0; i < rows.length; i++) {

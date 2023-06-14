@@ -13,7 +13,7 @@ var observer = new MutationObserver(mutations => {
 			var $this = $rows.eq(i);
 			var $html = $this.html();
 			switch ($html) {
-				case 'A': $this.html($html += ': 100%'); break;
+				case 'A+': $this.html($html += ': 100%'); break;
 				case 'A': $this.html($html += ': 98%'); break;
 				case 'B': $this.html($html += ': 93%'); break;
 				case 'C': $this.html($html += ': 88%'); break;
