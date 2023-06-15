@@ -6,7 +6,9 @@ var ext = (min ? '.' + min : '') + '.js';
 if (/.*cic\.meridianlink\.com.*/.test(url)) {
 	src += 'cic\/';
 	if (/.*ClientConsumer\.aspx/.test(url)) {
-		src += 'Form' + ext;
+		src += 'New_File' + ext;
+	} else if (/.*credit_file\/(ReportResult|ViewFile)\.aspx/.test(url)) {
+		src += 'View_File' + ext;
 	} else if (/.*reports\/print_htm\.aspx/.test(url)) {
 		src += 'Report' + ext;
 	}
