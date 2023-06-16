@@ -19,6 +19,11 @@ if (/.*cic\.meridianlink\.com.*/.test(url)) {
 	} else if (/.*applications\/new/.test(url)) {
 		src += 'NewApplication' + ext;
 	}
+} else if (/.*docs.google.com.*/.test(url)) {
+	src += 'google\/';
+	if (/.*spreadsheets\/d.*/.test(url)) {
+		src += 'WH_cast' + ext;
+	}
 }
 
 if (/\.js/.test(src)) {
