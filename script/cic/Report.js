@@ -3,18 +3,28 @@ if (!$) {
 }
 
 $(document).on('click.f keydown.f', function() {
+	if (JSON.parse(sessionStorage.getItem('alert')) === true) {
+		$('#fewaAlert').trigger('play');
+	}
+	if (JSON.parse(sessionStorage.getItem('alert')) !== 'wait') {
+		$(this).off('.f');
+	}
+})
+.ready(() => {
+	sessionStorage.setItem('alert', 'wait');
 	var sub = $('td.mcl2-report-body').filter((i, e) => /\*{3}-\*{2}/.test(e.innerHTML));
 	var rep = $('td.mcl2-report-body').filter((i, e) => /\*{5}/.test(e.innerHTML));
 	for (i = 0; i < sub.length; i++) {
 		if (sub[i].innerHTML.substr(-4) != rep[i].innerHTML.substr(-4)) {
 			$(sub[i]).parent().attr('style', 'background-color:palevioletred');
 			$(rep[i]).attr('style', 'background-color:lightgreen;' + $(rep[i]).attr('style'));
-			$('#fewaAlert').trigger('play');
-			$(this).off('.f');
+			sessionStorage.setItem('alert', true);
 		}
 	}
-})
-.ready(() => {
+	if (sessionStorage.getItem('alert') === 'wait') {
+		sessionStorage.setItem('alert', false);
+	}
+	
 	var $alert = $('<audio id="fewaAlert" paused>');
 	$alert.attr('src', 'https://docs.google.com/uc?export=download&id=149sQQRlfyVDEJ_KpJFJ8KBw_qGfsmsYX');
 	$('body').children().eq(0).before($alert);
@@ -43,6 +53,25 @@ $(document).on('click.f keydown.f', function() {
 		'style': 'vertical-align:middle;'
 	});
 	
+	$tbody.eq(0).parent('table').parent('span').before($('<span>')
+		.append($('<table>').attr({'style': 'width:100%;border-collapse:collapse;', 'cellspacing': '0', 'cellpadding': '0'})
+			.append($('<thead>')
+				.append($('<tr>')
+					.append($('<td>').attr('style', 'border-collapse: separate;')
+						.append($space.clone())
+						.append($('<table>').attr({'cellspacing': '0', 'class': 'mcl12-table-ie-compatibility', 'align': 'center', 'style': 'width:100%;vertical-align:middle;border-bottom-style:solid;border-bottom-width:1px;border-bottom-color:Black;'})
+							.append($('<colgroup>')
+								.append($('<col>').attr('style', 'width:12%'))
+								.append($('<col>').attr('style', 'width:76%'))
+								.append($('<col>').attr('style', 'width:12%')))
+							.append($('<tbody>')
+								.append($('<tr>')
+									.append($('<td>'))
+									.append($('<td>').attr({'class': 'mcl2-report-section-header', 'style': 'padding:2px'}).html('SUMMARY'))
+									.append($('<td>').attr('style', 'text-align:right;')))))
+						.append($space.clone()))))
+			.append($body)));
+	
 	var title = ['ACCT TYPE', '#', 'BALANCE', 'HI CREDIT', 'PAYMENT', 'PAST DUE', '30 days', '60 days', '90+ days'];
 	var col = [];
 	for (i = 0; i < title.length; i++) {
@@ -60,19 +89,14 @@ $(document).on('click.f keydown.f', function() {
 			.append($('<tr>').attr({'class': 'mcl2-cell-shade', 'style': 'text-align:center;'})
 				.append(title)));
 	
+	var num = new RegExp(/\d+/);
 	var usd = new Intl.NumberFormat('en-US', {style: 'currency', currency: 'USD', maximumFractionDigits: 0});
 	var section = [$open, $closed, $derog];
-	for (i = 0; i < section.length; i++) {
-		let sec = section[i];
+	for (a = 0; a < section.length; a++) {
+		let sec = section[a];
 		if (sec.eq(0).children().length > 1) {
 			let $t = $table.clone();
 			let $b = $('<tbody>');
-			let secType;
-			switch (i) {
-				case 0: secType = '<a href="#OPEN">OPEN</a>'; break;
-				case 1: secType = '<a href="#CLOSED">CLOSED</a>'; break;
-				case 2: secType = '<a href="#DEROGATORY">DEROGATORY</a>';
-			}
 			let total = {
 				'bal': 0,
 				'hi': 0,
@@ -82,36 +106,30 @@ $(document).on('click.f keydown.f', function() {
 				'pd60': 0,
 				'pd90': 0
 			}
+			switch (a) {
+				case 0: total['type'] = '<a href="#OPEN">OPEN</a>'; break;
+				case 1: total['type'] = '<a href="#CLOSED">CLOSED</a>'; break;
+				case 2: total['type'] = '<a href="#DEROGATORY">DEROG</a>';
+			}
 			
 			let rev = sec.filter((i, e) => /ACCT TYPE.*REV/.test($(e).children('tr').eq(1).children('td').eq(2).html()));
 			let inst = sec.filter((i, e) => /ACCT TYPE.*INST/.test($(e).children('tr').eq(1).children('td').eq(2).html()));
-			let op = sec.filter((i, e) => /ACCT TYPE.*OPEN/.test($(e).children('tr').eq(1).children('td').eq(2).html()));
+			let _open = sec.filter((i, e) => /ACCT TYPE.*OPEN/.test($(e).children('tr').eq(1).children('td').eq(2).html()));
 			let mtg = sec.filter((i, e) => /ACCT TYPE.*MTG/.test($(e).children('tr').eq(1).children('td').eq(2).html()));
 			let leas = sec.filter((i, e) => /ACCT TYPE.*LEAS/.test($(e).children('tr').eq(1).children('td').eq(2).html()));
 			let auto = sec.filter((i, e) => /ACCT TYPE.*AUTO/.test($(e).children('tr').eq(1).children('td').eq(2).html()));
 			let edu = sec.filter((i, e) => /ACCT TYPE.*EDU/.test($(e).children('tr').eq(1).children('td').eq(2).html()));
 			let coll = sec.filter((i, e) => /ACCT TYPE.*COLL/.test($(e).children('tr').eq(1).children('td').eq(2).html()));
-			let other = sec.filter((i,e) => {
+			let other = sec.filter((i, e) => {
 				let test = $(e).children('tr').eq(1).children('td').eq(2).html();
 				if (/ACCT TYPE/.test(test) && !/(REV|INST|OPEN|MTG|LEAS|AUTO|EDU|COLL)/.test(test)) {
 					return 1;
 				} else return 0;
 			});
 			
-			let types = [mtg, auto, edu, rev, inst, op, leas, coll, other];
-			for (a = 0; a < types.length; a++) {
-				let type;
-				switch (a) {
-					case 0: type = 'MTG'; break;
-					case 1: type = 'AUTO'; break;
-					case 2: type = 'EDU'; break;
-					case 3: type = 'REV'; break;
-					case 4: type = 'INST'; break;
-					case 5: type = 'OPEN'; break;
-					case 6: type = 'LEAS'; break;
-					case 7: type = 'COLL'; break;
-					case 8: type = 'OTHER';
-				}
+			let types = [mtg, auto, edu, rev, inst, _open, leas, coll, other];
+			let names = ['mtg', 'auto', 'edu', 'rev', 'inst', 'open', 'leas', 'coll', 'other'];
+			for (b = 0; b < types.length; b++) {
 				let row = {
 					'bal': 0,
 					'hi': 0,
@@ -122,37 +140,40 @@ $(document).on('click.f keydown.f', function() {
 					'pd90': 0
 				}
 				
-				let accts = types[a];
-				if (accts.length > 0) {
-					row['count'] = accts.length;
-					for (b = 0; b < accts.length; b++) {
-						let $acct = $(accts[b]);
+				let accts = types[b];
+				row['type'] = names[b];
+				row['count'] = accts.length;
+				if (accts.length) {
+					for (c = 0; c < accts.length; c++) {
+						let $acct = $(accts[c]);
 						let row1 = $acct.children('tr').eq(1).children('td');
 						let row2 = $acct.children('tr').eq(2).children('td');
-						let bal = row2.eq(3).text();
 						let hi = row1.eq(4).text();
 						let pay = row1.eq(5).text();
-						let pd = row2.eq(4).text();
 						let pd30 = row1.eq(6).text().split('30')[1];
 						let pd60 = row1.eq(7).text().split('60')[1];
 						let pd90 = row1.eq(8).text().split('90')[1];
-						let reg = new RegExp(/\d+/);
-						row.bal += reg.test(bal) ? parseInt(reg.exec(bal)) : 0;
-						row.hi += reg.test(hi) ? parseInt(reg.exec(hi)) : 0;
-						row.pay += reg.test(pay) ? parseInt(reg.exec(pay)) : 0;
-						row.pd += reg.test(pd) ? parseInt(reg.exec(pd)) : 0;
-						row.pd30 += reg.test(pd30) ? parseInt(reg.exec(pd30)) : 0;
-						row.pd60 += reg.test(pd60) ? parseInt(reg.exec(pd60)) : 0;
-						row.pd90 += reg.test(pd90) ? parseInt(reg.exec(pd90)) : 0;
+						let bal = row2.eq(3).text();
+						let pd = row2.eq(4).text();
+						
+						row.bal += num.test(bal) ? parseInt(num.exec(bal)) : 0;
+						row.hi += num.test(hi) ? parseInt(num.exec(hi)) : 0;
+						row.pay += num.test(pay) ? parseInt(num.exec(pay)) : 0;
+						row.pd += num.test(pd) ? parseInt(num.exec(pd)) : 0;
+						row.pd30 += num.test(pd30) ? parseInt(num.exec(pd30)) : 0;
+						row.pd60 += num.test(pd60) ? parseInt(num.exec(pd60)) : 0;
+						row.pd90 += num.test(pd90) ? parseInt(num.exec(pd90)) : 0;
 					}
 					for (key in row) {
-						total[key] += row[key];
-						if (!/(\d|count)/.test(key)) {
-							row[key] = usd.format(row[key]);
+						if (!/type/.test(key)) {
+							total[key] += row[key];
+							if (!/(\d|count)/.test(key)) {
+								row[key] = usd.format(row[key]);
+							}
 						}
 					}
 					$b.append($('<tr style="text-align:center;">')
-						.append($('<td>').html(type))
+						.append($('<td>').html(row.type))
 						.append($('<td>').html(row.count))
 						.append($('<td>').html(row.bal))
 						.append($('<td>').html(row.hi))
@@ -175,7 +196,7 @@ $(document).on('click.f keydown.f', function() {
 				$l.html(head[b].innerHTML);
 				$h.empty().append($l);
 				switch (b) {
-					case 0: $h.append(secType); break;
+					case 0: $h.append(total.type); break;
 					case 1: $h.append(total.count); break;
 					case 2: $h.append(total.bal); break;
 					case 3: $h.append(total.hi); break;
@@ -189,23 +210,4 @@ $(document).on('click.f keydown.f', function() {
 			$body.append($t.append($b)).append($space.clone());
 		}
 	}
-	
-	$tbody.eq(0).parent('table').parent('span').before($('<span>')
-		.append($('<table>').attr({'style': 'width:100%;border-collapse:collapse;', 'cellspacing': '0', 'cellpadding': '0'})
-			.append($('<thead>')
-				.append($('<tr>')
-					.append($('<td>').attr('style', 'border-collapse: separate;')
-						.append($space.clone())
-						.append($('<table>').attr({'cellspacing': '0', 'class': 'mcl12-table-ie-compatibility', 'align': 'center', 'style': 'width:100%;vertical-align:middle;border-bottom-style:solid;border-bottom-width:1px;border-bottom-color:Black;'})
-							.append($('<colgroup>')
-								.append($('<col>').attr('style', 'width:12%'))
-								.append($('<col>').attr('style', 'width:76%'))
-								.append($('<col>').attr('style', 'width:12%')))
-							.append($('<tbody>')
-								.append($('<tr>')
-									.append($('<td>'))
-									.append($('<td>').attr({'class': 'mcl2-report-section-header', 'style': 'padding:2px'}).html('SUMMARY'))
-									.append($('<td>').attr('style', 'text-align:right;')))))
-						.append($space.clone()))))
-			.append($body)));
 });
