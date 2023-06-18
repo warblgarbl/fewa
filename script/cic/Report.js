@@ -2,6 +2,13 @@ if (!$) {
 	var $ = jQuery;
 }
 
+var $alert = $('<audio>').attr({
+    'id': "fewaAlert",
+    'src': "https://docs.google.com/uc?export=download&id=149sQQRlfyVDEJ_KpJFJ8KBw_qGfsmsYX",
+    'paused': true
+  });
+$('body').children().eq(0).before($alert);
+
 $(document).on('click.f keydown.f', function() {
 	if (JSON.parse(sessionStorage.getItem('alert')) === true) {
 		$('#fewaAlert').trigger('play');
@@ -25,9 +32,16 @@ $(document).on('click.f keydown.f', function() {
 		sessionStorage.setItem('alert', false);
 	}
 	
-	var $alert = $('<audio id="fewaAlert" paused>');
-	$alert.attr('src', 'https://docs.google.com/uc?export=download&id=149sQQRlfyVDEJ_KpJFJ8KBw_qGfsmsYX');
-	$('body').children().eq(0).before($alert);
+  if ($('#fewaAlert').length) {
+    console.log('bingo!');
+  } else {
+     var $alert = $('<audio>').attr({
+       'id': "fewaAlert",
+       'src': "https://docs.google.com/uc?export=download&id=149sQQRlfyVDEJ_KpJFJ8KBw_qGfsmsYX",
+       'paused': true
+     });
+     $('body').children().eq(0).before($alert);
+  }
 	
 	$('td').filter((i,e) => e.innerHTML === 'SCORE MODELS').attr('id', 'SUMMARY');
 	var $tbody = $('tbody').filter((i, e) => $(e).prev('thead').find('td.mcl2-report-section-header').filter((a, b) => {
