@@ -1,7 +1,6 @@
 var url = document.URL;
-var min = 'min';
-var src = 'https://warblgarbl.github.io/fewa/' + (min ? 'min/' : 'script/');
-var ext = (min ? '.' + min : '') + '.js';
+var src = 'https://warblgarbl.github.io/fewa/script/');
+var ext = '.js';
 
 if (/.*cic\.meridianlink\.com.*/.test(url)) {
 	src += 'cic\/';
