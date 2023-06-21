@@ -1,5 +1,5 @@
 var url = document.URL;
-var src = 'https://warblgarbl.github.io/fewa/script/');
+var src = 'https://warblgarbl.github.io/fewa/script/';
 var ext = '.js';
 
 if (/.*cic\.meridianlink\.com.*/.test(url)) {

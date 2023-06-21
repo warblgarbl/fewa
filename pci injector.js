@@ -47,7 +47,7 @@ $(document).ready(() => {
 			});
 		});
 		
-		var target = $('loading-table').get();
+		var target = $('loading-table').get()[0];
 		
 		observer.observe(target, {
 			attributes: true,
@@ -55,8 +55,8 @@ $(document).ready(() => {
 		});
 		
 	} else if (/.*STAReport\/?$/.test(url)) {
-		var target = $('#stareport-pending-loading').get();
-		var target2 = $('#stareport-pastdue-loading').get();
+		var target = $('#stareport-pending-loading').get()[0];
+		var target2 = $('#stareport-pastdue-loading').get()[0];
 		
 		var observer = (tar) => {
 			return new MutationObserver(mutations => {
