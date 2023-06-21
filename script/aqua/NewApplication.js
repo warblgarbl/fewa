@@ -80,8 +80,8 @@ $(document).on({
 		}
 	}
 }, 'select[name="EmploymentType"]')
-.on({'change': fewaUpdate}, '#fewaMonth')
-.on({'change': fewaUpdate}, '#fewaYear')
+.on({'change keyup': fewaUpdate}, '#fewaMonth')
+.on({'change keyup': fewaUpdate}, '#fewaYear')
 .on('keydown.h click.h scroll.h mousemove.h', function() {
 	var $head = $('h1.heading--1');
 	var $html = $head.html();
