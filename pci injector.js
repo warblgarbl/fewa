@@ -47,7 +47,7 @@ $(document).ready(() => {
 			});
 		});
 		
-		var target = $('loading-table').get()[0];
+		var target = $('#loading-table').get()[0];
 		
 		observer.observe(target, {
 			attributes: true,
