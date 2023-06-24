@@ -24,6 +24,9 @@ $(document).ready(() => {
 	$lab.wrapInner('<a href="javascript:void(0);" onclick="only(0);"></a>');
 	$labApp.wrapInner('<a href="javascript:void(0);" onclick="only(1);"></a>');
 	$labCo.wrapInner('<a href="javascript:void(0);" onclick="only(2);"></a>');
+  if (/ReportResult/.test(document.URL)) {
+    $('#btnCustom').click();
+  }
 });
 
 function only(n) {
