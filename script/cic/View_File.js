@@ -10,7 +10,7 @@ $(document).ready(() => {
 		'id': "fewa_bc",
 		'type': "checkbox",
 		'name': "fewa_bc",
-		'disabled': true
+		'disabled': ""
 	});
 	$lab.html('BOTH').attr({
 		'for': "fewa_bc"

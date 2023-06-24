@@ -6,7 +6,7 @@ $(document).on({
 	'focusout': function() {
 		var $this = $(this);
 		if (!$this.val().trim()) {
-			setTimeout(() => $('#CoBorrower_txtSurName').val(''), 25)
+			setTimeout(()=>$('#CoBorrower_txtSurName').val(''),0)
 		}
 	}
 }, '#CoBorrower_txtFirstName')

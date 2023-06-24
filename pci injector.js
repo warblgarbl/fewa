@@ -91,7 +91,7 @@ $(document).ready(() => {
 });
 
 function decision(tar) {
-	var $rows = $(`#stareport-${tar}-datatable > tbody > tr[role=row]`);
+	var $rows = $(`#stareport-${tar}-datatable tbody tr[role=row]`);
   var shade = ['lavender', 'honeydew'];
   var swap = 0;
   var date;
@@ -128,5 +128,5 @@ function decision(tar) {
 		}
 	}
 	$(document).trigger('resize');
-	$(`#stareport-${tar}-datatable > thead > tr > th[aria-label="Date: activate to sort column descending"]`).trigger('click');
+	$(`#stareport-${tar}-datatable th[aria-label="Date: activate to sort column descending"]`).trigger('click');
 }

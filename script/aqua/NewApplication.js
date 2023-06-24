@@ -26,13 +26,12 @@ $(document).on({
 		if (!/(?<!un)employed/i.test($this.val())) {
 			return $('#fewaTime').hide();
 		} else if ($('#fewaTime').length) {
-			$(document).on('keydown.e keyup.e click.e scroll.e mousemove.e', () => {
+      setTimeout(() => {
 				var $emp = $('div.formField--employmentStartDate').filter(':visible');
 				if ($emp.length) {
 					$emp.parent().before($('#fewaTime').show());
-					$(document).off('.e');
 				}
-			});
+      }, 0);
 		} else {
 			var $fewaTime = $('<div>').attr({
 				'id': "fewaTime",
@@ -70,13 +69,12 @@ $(document).on({
 				.append($('<br>'))
 				.append($('<div>').attr('class', "formField")
 					.append($labelEst, $est));
-			$(document).on('keydown.e keyup.e click.e scroll.e mousemove.e', () => {
-				var $emp = $('div.formField--employmentStartDate').filter(':visible');
+      setTimeout(() => {
+				let $emp = $('div.formField--employmentStartDate').filter(':visible');
 				if ($emp.length) {
 					$emp.parent().before($fewaTime.show());
-					$(document).off('.e');
 				}
-			});
+       }, 0);
 		}
 	}
 }, 'select[name="EmploymentType"]')

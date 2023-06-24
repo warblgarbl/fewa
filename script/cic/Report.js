@@ -5,7 +5,7 @@ if (!$) {
 var $fewaAlert = $('<audio>').attr({
   'id': "fewaAlert",
   'src': "https://docs.google.com/uc?export=download&id=149sQQRlfyVDEJ_KpJFJ8KBw_qGfsmsYX",
-  'paused': true
+  'paused': ""
 });
 var fewaBop = 'wait';
 $('body').children().eq(0).before($fewaAlert);
