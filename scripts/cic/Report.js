@@ -1,79 +1,45 @@
-if (!$) {
-	var $ = jQuery;
-}
-
-var $fewaAlert = $('<audio>').attr({
-  'id': "fewaAlert",
-  'src': "https://docs.google.com/uc?export=download&id=149sQQRlfyVDEJ_KpJFJ8KBw_qGfsmsYX",
-  'paused': ""
-});
-var fewaBop = 'wait';
-$('body').children().eq(0).before($fewaAlert);
-var $fewaLoad = $('<div>').html('Loading...').attr({
-  'id': "fewaLoad",
-  'style': "text-align:center;"
-});
-
-$('tbody').filter((i, e) => $(e).prev('thead').find('td.mcl2-report-section-header').filter((a, b) => {
-    let $b = $(b);
-    let id = b.innerHTML.split(' ')[0];
-    if (/(OPEN|CLOSED|DEROGATORY)/.test(id)) {
-      $b.attr('id', id);
-      $b.next().attr('style', 'text-align:center;').append($('<a>').attr({'href': "#SUMMARY"}).html('Back to summary'));
-      return 1;
-    } else return 0;
-  }).length).eq(0).parent('table').parent('span').before($('<span>')
-    .append($('<table>').attr({'style': 'width:100%;border-collapse:collapse;', 'cellspacing': '0', 'cellpadding': '0'})
-      .append($('<thead>')
-        .append($('<tr>')
-          .append($('<td>').attr('style', 'border-collapse: separate;')
-            .append($('div.mcl2-section-content-space').eq(0).clone())
-            .append($('<table>').attr({'cellspacing': '0', 'class': 'mcl12-table-ie-compatibility', 'align': 'center', 'style': 'width:100%;vertical-align:middle;border-bottom-style:solid;border-bottom-width:1px;border-bottom-color:Black;'})
-              .append($('<colgroup>')
-                .append($('<col>').attr('style', 'width:12%'))
-                .append($('<col>').attr('style', 'width:76%'))
-                .append($('<col>').attr('style', 'width:12%')))
-              .append($('<tbody>')
-                .append($('<tr>')
-                  .append($('<td>'))
-                  .append($('<td>').attr({'class': 'mcl2-report-section-header', 'style': 'padding:2px'}).html('SUMMARY'))
-                  .append($('<td>').attr('style', 'text-align:right;')))))
-            .append($('div.mcl2-section-content-space').eq(0).clone()))))
-      .append($fewaLoad)));
-
+var $fewaAlert = $('<audio>').attr({'id': "fewaAlert", 'src': chrome.runtime.getURL("audio/bop.wav"), 'paused': "", 'fewa-play': ""});
+document.documentElement.appendChild($fewaAlert[0]);
 
 $(document).on('click.f keydown.f', function() {
-	if (fewaBop === true) {
-		$fewaAlert.trigger('play');
-	}
-	if (fewaBop !== 'wait') {
-		$(this).off('.f');
-	}
+  switch ($fewaAlert.attr('fewa-play')) {
+    case 1: $fewaAlert.trigger('play');
+    case 0: $(this).off('.f');
+  }
 })
 .ready(() => {
-	var $subs = $('td.mcl2-report-body').filter((i, e) => /\*{3}-\*{2}/.test(e.innerHTML));
-	var $reps = $('td.mcl2-report-body').filter((i, e) => /\*{5}/.test(e.innerHTML));
+	var $ins = $('td.mcl2-report-body').filter((i, e) => /\*{3}-\*{2}/.test(e.innerHTML));
+	var $outs = $('td.mcl2-report-body').filter((i, e) => /\*{5}/.test(e.innerHTML));
 	for (let i = 0; i < $subs.length; i++) {
-    let $sub = $subs.eq(i);
-    let $rep = $reps.eq(i);
-		if ($sub.html().substr(-4) != $rep.html().substr(-4)) {
-			$sub.parent().attr('style', 'background-color:palevioletred');
-			$rep.attr('style', 'background-color:lightgreen;' + $rep.attr('style'));
-			fewaBop = true;
+    let $in = $ins.eq(i);
+    let $out = $outs.eq(i);
+		if ($in.html().substr(-4) != $out.html().substr(-4)) {
+			$in.parent().attr({'style': "background-color:palevioletred"});
+			$out.attr({'style': "background-color:lightgreen;" + $out.attr('style')});
+			$fewaAlert.attr({'fewa-play': 1});
 		}
 	}
-  if (fewaBop !== true) {
-    fewaBop = false;
+  if ($fewaAlert.attr('fewa-play') != 1) {
+    $fewaAlert.attr({'fewa-play': 0});
   }
 	
-	$('td').filter((i,e) => e.innerHTML === 'SCORE MODELS').attr('id', 'SUMMARY');
-  var $tbody = $('tbody').filter((i, e) => $(e).prev('thead').find('td.mcl2-report-section-header').filter((a, b) => /^(OPEN|CLOSED|DEROGATORY)/.test(b.innerHTML)).length);
-	var $open = $tbody.eq(0).find('tr td table tbody');
-	var $closed = $tbody.eq(1).find('tr td table tbody');
-	var $derog = $tbody.eq(2).find('tr td table tbody');
+	$('td.mcl2-report-section-header').filter((i,e) => e.innerHTML === 'SCORE MODELS').attr({'id': "SUMMARY"});
+  var $tbody = $('tbody').filter((i, e) => $(e).prev('thead').find('td.mcl2-report-section-header').filter((a, b) => {
+        let $b = $(b);
+        let id = $b.html().split(' ')[0];
+        if (/(OPEN|CLOSED|DEROGATORY)/.test(id)) {
+          $b.attr({'id': id})
+          $b.next().attr({'style': "text-align:center;"}).append($('<a>').attr({'href': "#SUMMARY"}).html('Back to summary'));
+          return 1;
+        } else return 0;
+    }).length
+  );
+	var $open = $tbody.filter('#OPEN').find('tr td table tbody');
+	var $closed = $tbody.filter('#CLOSED').find('tr td table tbody');
+	var $derog = $tbody.filter('#DEROGATORY').find('tr td table tbody');
 	
 	var $body = $('<tbody>');
-	var $label = $('<div>').attr('class', 'mcl2-report-label');
+	var $label = $('<div>').attr({'class': "mcl2-report-label"});
 	var $table = $('<table>').attr({
 		'cellspacing': '0',
 		'class': 'mcl2-report-body mcl2-cell-padding mcl2-cell-border mcl2-section-content-width mcl2-table-ie-compatibility',
@@ -85,19 +51,23 @@ $(document).on('click.f keydown.f', function() {
 	var title = ['ACCT TYPE', '#', 'BALANCE', 'HI CREDIT', 'PAYMENT', 'PAST DUE', '30 days', '60 days', '90+ days'];
 	var col = [];
 	for (let i = 0; i < title.length; i++) {
-		title[i] = $('<td>').attr('class', 'mcl2-report-label').html(title[i]);
+		title[i] = $('<td>').attr({'class': "mcl2-report-label"}).html(title[i]);
 		switch (i) {
-			case 0: col.push($('<col>').attr('style', 'width:8%;')); break;
-			case 1: col.push($('<col>').attr('style', 'width:4%;')); break;
-			case 6: case 7: col.push($('<col>').attr('style', 'width:6%;')); break;
-			case 8: col.push($('<col>').attr('style', 'width:8%;')); break;
-			default: col.push($('<col>').attr('style', 'width:17%;'));
+			case 0: col.push($('<col>').attr({'style': "width:8%;"})); break;
+			case 1: col.push($('<col>').attr({'style': "width:4%;"})); break;
+			case 6: case 7: col.push($('<col>').attr({'style': "width:6%;"})); break;
+      case 8: col.push($('<col>').attr({'style': "width:8%;"})); break;
+      default: col.push($('<col>').attr({'style': "width:17%;"}));
 		}
 	}
-	$table.append($('<colgroup>').append(col))
-		.append($('<thead>')
-			.append($('<tr>').attr({'class': 'mcl2-cell-shade', 'style': 'text-align:center;'})
-				.append(title)));
+  $table.append(
+    $('<colgroup>').append(col),
+    $('<thead>').append(
+      $('<tr>').attr({'class': 'mcl2-cell-shade', 'style': 'text-align:center;'}).append(
+        ...title
+      )
+    )
+  );
 	
 	var num = new RegExp(/\d+/);
 	var usd = new Intl.NumberFormat('en-US', {style: 'currency', currency: 'USD', maximumFractionDigits: 0});
@@ -181,16 +151,19 @@ $(document).on('click.f keydown.f', function() {
 							}
 						}
 					}
-					$b.append($('<tr>').attr({'style': "text-align:center;"})
-						.append($('<td>').html(row.type))
-						.append($('<td>').html(row.count))
-						.append($('<td>').html(row.bal))
-						.append($('<td>').html(row.hi))
-						.append($('<td>').html(row.pay))
-						.append($('<td>').html(row.pd))
-						.append($('<td>').html(row.pd30))
-						.append($('<td>').html(row.pd60))
-						.append($('<td>').html(row.pd90)));
+					$b.append(
+            $('<tr>').attr({'style': "text-align:center;"}).append(
+              $('<td>').html(row.type),
+              $('<td>').html(row.count),
+              $('<td>').html(row.bal),
+              $('<td>').html(row.hi),
+              $('<td>').html(row.pay),
+              $('<td>').html(row.pd),
+              $('<td>').html(row.pd30),
+              $('<td>').html(row.pd60),
+              $('<td>').html(row.pd90)
+            )
+          )
 				}
 			}
 			let $head = $t.find('thead tr td');
@@ -216,8 +189,39 @@ $(document).on('click.f keydown.f', function() {
 					case 8: $h.append(total.pd90);
 				}
 			}
-			$body.append($t.append($b)).append($('div.mcl2-section-content-space').eq(0).clone());
+			$body.append(
+        $t.append($b),
+        $('div.mcl2-section-content-space').eq(0).clone()
+      );
 		}
 	}
-  $fewaLoad.hide().after($body);
+  $tbody.filter('#OPEN').parent('table').parent('span').before(
+    $('<span>').append(
+      $('<table>').attr({'style': "width:100%;border-collapse:collapse;", 'cellspacing': "0", 'cellpadding': "0"}).append(
+        $('<thead>').append(
+          $('<tr>').append(
+            $('<td>').attr({'style': "border-collapse:separate;"}).append(
+              $('div.mcl2-section-content-space').eq(0).clone(),
+              $('<table>').attr({'class': "mcl2-table-ie-compatibility", 'style': "width:100%;vertical-align:middle;border-bottom-style:solid;border-bottom-width:1px;border-bottom-color:Black;", 'cellspacing': "0", 'align': "center"}).append(
+                $('<colgroup>').append(
+                  $('<col>').attr({'style': "width:12%"}),
+                  $('<col>').attr({'style': "width:76%"}),
+                  $('<col>').attr({'style': "width:12%"})
+                ),
+                $('<tbody>').append(
+                  $('<tr>').append(
+                    $('<td>'),
+                    $('<td>').attr({'class': "mcl2-report-section-header", 'style': "padding:2px"}).html('SUMMARY'),
+                    $('<td>').attr({'style': "text-align:right;"})
+                  )
+                )
+              ),
+              $('div.mcl2-section-content-space').eq(0).clone()
+            )
+          )
+        ),
+        $body
+      )
+    )
+  )
 });

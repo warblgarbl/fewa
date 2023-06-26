@@ -1,7 +1,3 @@
-if (!$) {
-	var $ = jQuery;
-}
-
 $(document).on({
 	'focusout': function() {
 		var $this = $(this);
@@ -21,7 +17,8 @@ $(document).on({
       '#CurrentAddress_faUSA_strPOBox_txtPOBox_Input',
       '#CurrentAddress_faUSA_strMilitary_ddlDesignation',
       '#CurrentAddress_faUSA_strRRHC_ddlDesignation',
-      '#CurrentAddress_faUSA_strPuertoRico_ddlUrbanization'];
+      '#CurrentAddress_faUSA_strPuertoRico_ddlUrbanization'
+    ];
     
     if (e.keyCode === 9 && !e.shiftKey && !$first.val()) {
       $(ids.join(', ')).filter(':visible').trigger('focus');
@@ -34,7 +31,7 @@ $(document).on({
 		var $this = $($users[i]);
 		if (/color/.test($this.attr('style'))) {
 			$this.attr('selected', 'selected');
-			if ($this.html() === 'TINA PANE') {
+			if (/TINA/i.test($this.html())) {
 				$('#CurrentAddress_faUSA_rbnNormal').trigger('click');
 			}
 			break;

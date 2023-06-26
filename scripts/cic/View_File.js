@@ -1,29 +1,18 @@
-if (!$) {
-	var $ = jQuery;
-}
-
 $(document).ready(() => {
-	var $li = $('<li>');
-	var $inp = $('<input>');
-	var $lab = $('<label>');
-	$inp.attr({
-		'id': "fewa_bc",
-		'type': "checkbox",
-		'name': "fewa_bc",
-		'disabled': ""
-	});
-	$lab.html('BOTH').attr({
-		'for': "fewa_bc"
-	});
-	$li.append($inp, $lab);
-	
-	var $labApp = $('label[for="custom_pc"]');
-	var $labCo = $('label[for="custom_sc"]');
-	
-	$labApp.parent('li').before($li);
-	$lab.wrapInner('<a href="javascript:void(0);" onclick="only(0);"></a>');
-	$labApp.wrapInner('<a href="javascript:void(0);" onclick="only(1);"></a>');
-	$labCo.wrapInner('<a href="javascript:void(0);" onclick="only(2);"></a>');
+	var $label = $('<label>').html('BOTH').attr({'for': "fewa_bc"});
+	var $appL = $('label[for="custom_pc"]');
+	var $coL = $('label[for="custom_sc"]');
+
+	$label.wrapInner($('<a>').attr({'href': "javascript:void(0);"}).on('click', () => only(0)));
+	$appL.wrapInner($('<a>').attr({'href': "javascript:void(0);"}).on('click', () => only(1))));
+	$coL.wrapInner($('<a>').attr({'href': "javascript:void(0);"}).on('click', () => only(2))));
+  
+	$appL.parent('li').before(
+    $('<li>').append(
+      $('<input>').attr({'type': "checkbox", 'id': "fewa_bc", 'name': "fewa_bc", 'disabled': ""}),
+      $label
+    )
+  );
   if (/ReportResult/.test(document.URL)) {
     $('#btnCustom').click();
   }

@@ -1,0 +1,70 @@
+{
+	"name": "FEWA Finance",
+	"description": "Autofill and functionality enhancements for FEWA's Finance Department",
+	"version": "0.3",
+	"manifest_version": 3,
+  "icons": {
+    "16": "img/icon-16.png",
+    "32": "img/icon-32.png",
+    "48": "img/icon-48.png",
+    "128": "img/icon-128.png"
+  },
+  "permissions": ["storage"],
+	"host_permissions": [
+    "https://cic.meridianlink.com/",
+		"https://portal.aquafinance.com/",
+		"https://clientportal.preferredcredit.com/"
+	],
+  "web_accessible_resources": [{
+    "resources": ["audio/bop.wav"],
+    "matches": ["<all_urls>"]
+  }],
+  "content_security_policy": {
+    "extension_pages": "default-src 'self' 'wasm-unsafe-eval';"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://cic.meridianlink.com/*ClientConsumer.aspx"],
+      "js": ["external/jquery-3.7.0.min.js", "scripts/cic/New_File.js"],
+      "run_at": "document_start"
+    },
+    {
+      "matches": [
+        "https://cic.meridianlink.com/*ViewFile.aspx",
+        "https://cic.meridianlink.com/*ReportResult.aspx"
+      ],
+      "js": ["external/jquery-3.7.0.min.js", "scripts/cic/View_File.js"],
+      "run_at": "document_start"
+    },
+    {
+      "matches": ["https://cic.meridianlink.com/*reports/print_htm.aspx"],
+      "js": ["external/jquery-3.7.0.min.js", "scripts/cic/Report.js"],
+      "run_at": "document_start"
+    },
+    {
+      "matches": ["https://portal.aquafinance.com/applications"],
+      "js": ["external/jquery-3.7.0.min.js", "scripts/aqua/Dealer.js"],
+      "run_at": "document_start"
+    },
+    {
+      "matches": ["https://portal.aquafinance.com/*applications/new*"],
+      "js": ["external/jquery-3.7.0.min.js", "scripts/aqua/NewApplication.js"],
+      "run_at": "document_start"
+    },
+    {
+      "matches": ["https://clientportal.preferredcredit.com/OnlineApplication"],
+      "js": ["external/jquery-3.7.0.min.js", "scripts/pci/OnlineApplication.js"],
+      "run_at": "document_start"
+    },
+    {
+      "matches": ["https://clientportal.preferredcredit.com/PCILive/*"],
+      "js": ["external/jquery-3.7.0.min.js", "scripts/pci/PCILive.js"],
+      "run_at": "document_start"
+    },
+    {
+      "matches": ["https://clientportal.preferredcredit.com/Reports/STAReport"],
+      "js": ["external/jquery-3.7.0.min.js", "scripts/pci/STAReport.js"],
+      "run_at": "document_start"
+    }
+  ]
+}
