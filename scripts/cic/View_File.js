@@ -1,3 +1,4 @@
+
 $(document).ready(() => {
   var $label = $('<label>').html('BOTH').attr({
     for: "fewa_bc"
@@ -26,9 +27,9 @@ $(document).ready(() => {
       $label
     )
   );
-  if (/ReportResult/.test(document.URL)) {
-    $('#btnCustom').trigger('click');
-  }
+  setTimeout(() => {
+    $('#btnCustom').trigger('click')
+  }, 1000);
 });
 
 function only(n) {

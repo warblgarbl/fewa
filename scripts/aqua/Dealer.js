@@ -143,7 +143,7 @@ $(document).on({
       var $this = $(this);
       var $that = $('#selectDealerModal .button--primary')
       if ($this.val().length) {
-        $that.removeAttr('disabled');
+        $that.html('Confirm').removeAttr('disabled').clearQueue();
       } else {
         $that.attr({
           disabled: ""
