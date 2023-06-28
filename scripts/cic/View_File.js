@@ -27,6 +27,7 @@ $(document).ready(() => {
       $label
     )
   );
+  if (/ReportResult/.test(document.URL))
   setTimeout(() => {
     $('#btnCustom').trigger('click')
   }, 1000);

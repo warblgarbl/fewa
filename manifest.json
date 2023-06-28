@@ -10,11 +10,6 @@
     "128": "img/icon-128.png"
   },
   "permissions": ["storage"],
-	"host_permissions": [
-    "https://cic.meridianlink.com/",
-		"https://portal.aquafinance.com/",
-		"https://clientportal.preferredcredit.com/"
-	],
   "web_accessible_resources": [{
     "resources": ["audio/bop.wav"],
     "matches": ["<all_urls>"]
