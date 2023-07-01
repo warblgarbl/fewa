@@ -1,26 +1,31 @@
 {
-	"name": "FEWA Finance",
-	"description": "Autofill and functionality enhancements for FEWA's Finance Department",
-	"version": "0.3",
-	"manifest_version": 3,
-  "icons": {
-    "16": "img/icon-16.png",
-    "32": "img/icon-32.png",
-    "48": "img/icon-48.png",
-    "128": "img/icon-128.png"
+  "name": "FEWA Office",
+  "description": "Autofill and functionality enhancements for FEWA offices",
+  "version": "0.4",
+  "manifest_version": 3,
+  "permissions": [
+		"storage",
+		"tabs"
+	],
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
   },
-  "permissions": ["storage"],
-  "web_accessible_resources": [{
-    "resources": ["audio/bop.wav"],
-    "matches": ["<all_urls>"]
-  }],
+	"icons": {
+		"16": "img/icon-16.png",
+		"32": "img/icon-32.png",
+		"48": "img/icon-48.png",
+		"128": "img/icon-128.png"
+	},
+  "action": {
+    "default_popup": "popup.html"
+  },
   "content_security_policy": {
     "extension_pages": "default-src 'self' 'wasm-unsafe-eval';"
   },
-  "content_scripts": [
-    {
+  "content_scripts": [{
       "matches": ["https://cic.meridianlink.com/*ClientConsumer.aspx"],
-      "js": ["external/jquery-3.7.0.min.js", "scripts/cic/New_File.js"],
+      "js": ["scripts/external/jquery-3.7.0.min.js", "scripts/cic/New File.js"],
       "run_at": "document_start"
     },
     {
@@ -28,38 +33,43 @@
         "https://cic.meridianlink.com/*ViewFile.aspx",
         "https://cic.meridianlink.com/*ReportResult.aspx"
       ],
-      "js": ["external/jquery-3.7.0.min.js", "scripts/cic/View_File.js"],
+      "js": ["scripts/external/jquery-3.7.0.min.js", "scripts/cic/View File.js"],
       "run_at": "document_start"
     },
     {
       "matches": ["https://cic.meridianlink.com/*reports/print_htm.aspx"],
-      "js": ["external/jquery-3.7.0.min.js", "scripts/cic/Report.js"],
+      "js": ["scripts/external/jquery-3.7.0.min.js", "scripts/cic/Report.js"],
       "run_at": "document_start"
     },
     {
       "matches": ["https://portal.aquafinance.com/applications"],
-      "js": ["external/jquery-3.7.0.min.js", "scripts/aqua/Dealer.js"],
+      "js": ["scripts/external/jquery-3.7.0.min.js", "scripts/aqua/Dealer.js"],
       "run_at": "document_start"
     },
     {
       "matches": ["https://portal.aquafinance.com/*applications/new*"],
-      "js": ["external/jquery-3.7.0.min.js", "scripts/aqua/NewApplication.js"],
+      "js": ["scripts/external/jquery-3.7.0.min.js", "scripts/aqua/New Application.js"],
+      "css": ["scripts/aqua/New Application.css"],
       "run_at": "document_start"
     },
     {
       "matches": ["https://clientportal.preferredcredit.com/OnlineApplication"],
-      "js": ["external/jquery-3.7.0.min.js", "scripts/pci/OnlineApplication.js"],
+      "js": ["scripts/external/jquery-3.7.0.min.js", "scripts/pci/Online Application.js"],
       "run_at": "document_start"
     },
     {
       "matches": ["https://clientportal.preferredcredit.com/PCILive/*"],
-      "js": ["external/jquery-3.7.0.min.js", "scripts/pci/PCILive.js"],
+      "js": ["scripts/external/jquery-3.7.0.min.js", "scripts/pci/PCI Live.js"],
       "run_at": "document_start"
     },
     {
       "matches": ["https://clientportal.preferredcredit.com/Reports/STAReport"],
-      "js": ["external/jquery-3.7.0.min.js", "scripts/pci/STAReport.js"],
+      "js": ["scripts/external/jquery-3.7.0.min.js", "scripts/pci/STAReport.js"],
       "run_at": "document_start"
+    },
+    {
+      "matches": ["https://docs.google.com/spreadsheets/d/*"],
+      "js": ["scripts/external/jquery-3.7.0.min.js", "scripts/google/sheets/Slideshow.js"]
     }
   ]
 }

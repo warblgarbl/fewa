@@ -1,4 +1,3 @@
-
 $(document).ready(() => {
   var $label = $('<label>').html('BOTH').attr({
     for: "fewa_bc"
@@ -27,17 +26,18 @@ $(document).ready(() => {
       $label
     )
   );
-  if (/ReportResult/.test(document.URL))
-  setTimeout(() => {
-    $('#btnCustom').trigger('click')
-  }, 1000);
+  if (/ReportResult/.test(document.URL)) {
+    setTimeout(() => {
+      $('#btnCustom').trigger('click')
+    }, 1000);
+  }
 });
 
 function only(n) {
   var $app = $('#custom_pc');
   var $co = $('#custom_sc');
 
-  switch (parseInt(n)) {
+  switch (n) {
     case 0: {
       if ($app.filter(':checked').length === 0) $app.trigger('click');
       if ($co.filter(':checked').length === 0) $co.trigger('click');

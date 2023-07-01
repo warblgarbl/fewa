@@ -7,7 +7,8 @@ var $fewaAlert = $('<audio>').attr({
 });
 document.documentElement.appendChild($fewaAlert[0]);
 
-$(document).on('click.f keydown.f', function() {
+$(document)
+  .on('click.f keydown.f', function() {
     switch ($fewaAlert.data('fewa-play')) {
       case 1:
         $fewaAlert.trigger('play');
@@ -38,6 +39,13 @@ $(document).on('click.f keydown.f', function() {
         'fewa-play': 0
       });
     }
+
+    var num = new RegExp(/\d+/);
+    var usd = new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      maximumFractionDigits: 0
+    });
 
     var $headers = $('td.mcl2-report-section-header');
     for (let i = 0; i < $headers.length; i++) {
@@ -106,32 +114,32 @@ $(document).on('click.f keydown.f', function() {
       align: 'center',
       style: 'vertical-align:middle;'
     }).append(
-      $('<colgroup>')
-      .append(col),
-      $('<thead>')
-      .append($('<tr>').attr({
+      $('<colgroup>').append(col),
+      $('<thead>').append(
+        $('<tr>').attr({
           class: 'mcl2-cell-shade',
           style: 'text-align:center;'
-        })
-        .append(titles)
+        }).append(titles)
       )
     );
 
     var $tbody = $('<tbody>');
+    var total = {
+      type: "ALL",
+      bal: 0,
+      hi: 0,
+      pay: 0,
+      pd: 0,
+      pd30: 0,
+      pd60: 0,
+      pd90: 0
+    }
 
-    var num = new RegExp(/\d+/);
-    var usd = new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      maximumFractionDigits: 0
-    });
     var section = [$open, $closed, $derog];
     for (let a = 0; a < section.length; a++) {
       let sec = section[a];
       if (sec.eq(0).children().length > 1) {
-        let $t = $table.clone();
-        let $b = $('<tbody>');
-        let total = {
+        let sum = {
           bal: 0,
           hi: 0,
           pay: 0,
@@ -142,13 +150,13 @@ $(document).on('click.f keydown.f', function() {
         }
         switch (a) {
           case 0:
-            total['type'] = '<a href="#OPEN">OPEN</a>';
+            sum['type'] = '<a href="#OPEN">OPEN</a>';
             break;
           case 1:
-            total['type'] = '<a href="#CLOSED">CLOSED</a>';
+            sum['type'] = '<a href="#CLOSED">CLOSED</a>';
             break;
           case 2:
-            total['type'] = '<a href="#DEROGATORY">DEROG</a>';
+            sum['type'] = '<a href="#DEROGATORY">DEROG</a>';
         }
 
         let rev = sec.filter((i, e) => /ACCT TYPE.*REV/.test($(e).children('tr').eq(1).children('td').eq(2).html()));
@@ -166,6 +174,7 @@ $(document).on('click.f keydown.f', function() {
           } else return 0;
         });
 
+        let $b = $('<tbody>');
         let types = [mtg, auto, edu, rev, inst, _open, leas, coll, other];
         let names = ['mtg', 'auto', 'edu', 'rev', 'inst', 'open', 'leas', 'coll', 'other'];
         for (let b = 0; b < types.length; b++) {
@@ -204,6 +213,7 @@ $(document).on('click.f keydown.f', function() {
             }
             for (let key in row) {
               if (!/type/.test(key)) {
+                sum[key] += row[key];
                 total[key] += row[key];
                 if (!/(\d|count)/.test(key)) {
                   row[key] = usd.format(row[key]);
@@ -227,12 +237,13 @@ $(document).on('click.f keydown.f', function() {
             )
           }
         }
-        let $head = $t.find('thead tr td');
-        for (let key in total) {
+        for (let key in sum) {
           if (!/(\d|count|type)/.test(key)) {
-            total[key] = usd.format(total[key]);
+            sum[key] = usd.format(sum[key]);
           }
         }
+        let $t = $table.clone();
+        let $head = $t.find('thead tr td');
         for (let b = 0; b < $head.length; b++) {
           let $h = $head.eq(b);
           let $l = $label.clone();
@@ -240,31 +251,31 @@ $(document).on('click.f keydown.f', function() {
           $h.empty().append($l);
           switch (b) {
             case 0:
-              $h.append(total.type);
+              $h.append(sum.type);
               break;
             case 1:
-              $h.append(total.count);
+              $h.append(sum.count);
               break;
             case 2:
-              $h.append(total.bal);
+              $h.append(sum.bal);
               break;
             case 3:
-              $h.append(total.hi);
+              $h.append(sum.hi);
               break;
             case 4:
-              $h.append(total.pay);
+              $h.append(sum.pay);
               break;
             case 5:
-              $h.append(total.pd);
+              $h.append(sum.pd);
               break;
             case 6:
-              $h.append(total.pd30);
+              $h.append(sum.pd30);
               break;
             case 7:
-              $h.append(total.pd60);
+              $h.append(sum.pd60);
               break;
             case 8:
-              $h.append(total.pd90);
+              $h.append(sum.pd90);
           }
         }
         $tbody.append(
@@ -273,6 +284,51 @@ $(document).on('click.f keydown.f', function() {
         );
       }
     }
+    let $t = $table.clone();
+    let $b = $('<tbody>');
+    let $head = $t.find('thead tr td');
+    for (let key in total) {
+      if (!/(\d|count|type)/.test(key)) {
+        total[key] = usd.format(total[key]);
+      }
+    }
+    for (let b = 0; b < $head.length; b++) {
+      let $h = $head.eq(b);
+      let $l = $label.clone();
+      $l.html($h.html());
+      $h.empty().append($l);
+      switch (b) {
+        case 0:
+          $h.append(total.type);
+          break;
+        case 1:
+          $h.append(total.count);
+          break;
+        case 2:
+          $h.append(total.bal);
+          break;
+        case 3:
+          $h.append(total.hi);
+          break;
+        case 4:
+          $h.append(total.pay);
+          break;
+        case 5:
+          $h.append(total.pd);
+          break;
+        case 6:
+          $h.append(total.pd30);
+          break;
+        case 7:
+          $h.append(total.pd60);
+          break;
+        case 8:
+          $h.append(total.pd90);
+      }
+    }
+    $tbody.children().eq(0)
+      .before($t.append($b))
+      .before($('div.mcl2-section-content-space').eq(0).clone());
     $('span:has(#SUMMARY)').after(
       $('<span>').append(
         $('<table>').attr({

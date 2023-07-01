@@ -1,4 +1,21 @@
-$(document).on({
+$(document).ready(() => {
+    var $users = $('#BranchUser_cboUser > option');
+    for (let i = 0; i < $users.length; i++) {
+      var $user = $users.eq(i);
+      if (/color/.test($user.attr('style'))) {
+        $user.attr({
+          selected: ""
+        });
+        if (/TINA/i.test($user.html())) {
+          $('#CurrentAddress_faUSA_rbnNormal').trigger('click');
+        }
+        break;
+      }
+    }
+    $('#UIOptions_tuc_credit').trigger('click');
+    $('#Borrower_txtFirstName').trigger('focus');
+  })
+  .on({
     focusout: function() {
       var $this = $(this);
       if (!$this.val().trim()) {
@@ -23,21 +40,4 @@ $(document).on({
         $(ids.join(', ')).filter(':visible').trigger('focus');
       }
     }
-  }, '#CoBorrower_txtSurName')
-  .ready(() => {
-    var $users = $('#BranchUser_cboUser > option');
-    for (let i = 0; i < $users.length; i++) {
-      var $user = $users.eq(i);
-      if (/color/.test($user.attr('style'))) {
-        $user.attr({
-          selected: ""
-        });
-        if (/TINA/i.test($user.html())) {
-          $('#CurrentAddress_faUSA_rbnNormal').trigger('click');
-        }
-        break;
-      }
-    }
-    $('#UIOptions_tuc_credit').trigger('click');
-    $('#Borrower_txtFirstName').trigger('focus');
-  });
+  }, '#CoBorrower_txtSurName');

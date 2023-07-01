@@ -1,0 +1,53 @@
+* {
+  font-family: Play, Helvetica, Arial, sans-serif;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  width: 3.5rem;
+  -moz-appearance: textfield;
+}
+
+.default {
+  width: 12rem;
+}
+
+.slideshow {
+  display: none;
+  max-width: 400px;
+  min-width: 100px;
+}
+
+.sheet {
+  display: flex;
+}
+
+.label {
+  font-variant: small-caps;
+  padding-left: 0.5rem;
+}
+
+.btnSet {
+  display: flex;
+  padding: 0.75rem 0.25rem;
+}
+
+.btnSet input {
+  align-self: center;
+  margin: 0.5rem;
+}
+
+.sheet-name {
+  font-size: 1.25rem;
+}
+
+.gid {
+  font-variant: none;
+  font-size: 1rem;
+  font-style: italic;
+}

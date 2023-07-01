@@ -26,79 +26,106 @@ function waitForElm(selector) {
   });
 }
 
-$(document).on({
+$(document)
+  .on({
+    click: function() {
+      setTimeout(() => {
+        var $emp = $('select[name="EmploymentType"]').trigger('change');
+      }, 0);
+    }
+  }, '.formSubsection__editButton')
+  .on({
+    keydown: function(e) {
+      var $this = $(this);
+      if (e.keyCode == 9) {
+        var cal = $('.react-datepicker__tab-loop:visible').hide();
+        var val = $this.val().toString().trim();
+        if (val.length === 8 && /^\d{8}$/.test(val)) {
+          $this.val(val.substr(0, 2) + '\/' + val.substr(2, 2) + '\/' + val.substr(4));
+        }
+      }
+    }
+  }, 'input.react-datepicker-ignore-onclickoutside')
+  .on({
     change: function() {
       var $val = $(this).val();
       var $fewaTime = $('#fewaTime');
+      var $fewaEst = $('#fewaTimeEst');
+
       if (!/(?<!un)employed/i.test($val)) {
-        return $fewaTime.hide();
+        return ($fewaTime.hide(), $fewaEst.hide());
       } else if ($fewaTime.length) {
-        setTimeout(() => {
+        return setTimeout(() => {
           let $emp = $('div.formField--employmentStartDate').filter(':visible');
           if ($emp.length) {
-            $emp.parent().before($fewaTime.show());
-          }
-        }, 0);
-      } else {
-        $fewaTime = $('<div>').attr({
-          id: "fewaTime",
-          style: "background-color:oldlace"
-        });
-        $fewaTime.append(
-          $('<div>').append(
-            $('<label>').attr({
-              class: "label",
-              for: "fewaYear"
-            }).html('Years:'),
-            $('<input>').attr({
-              type: "number",
-              id: "fewaYear",
-              min: "0",
-              max: "80",
-              style: "width:2rem;height:1rem;margin-left:0.3rem;margin-right:1rem;"
-            }),
-            $('<label>').attr({
-              class: "label",
-              for: "fewaMonth"
-            }).html('Months:'),
-            $('<input>').attr({
-              type: "number",
-              id: "fewaMonth",
-              min: "0",
-              max: "11",
-              style: "width:2rem;height:1rem;margin-left:0.3rem;margin-right:1rem;"
-            }),
-            $('<label>').attr({
-              class: "label",
-              for: "fewaWeek"
-            }).html('Weeks:'),
-            $('<input>').attr({
-              type: "number",
-              id: "fewaWeek",
-              min: "0",
-              max: "3",
-              style: "width:2rem;height:1rem;margin-left:0.3rem;margin-right:1rem;"
-            }),
-          ),
-          $('<br>'),
-          $('<div>').attr({
-            class: "formField"
-          }).append(
-            $('<div>').attr({
-              class: "label"
-            }).html('Suggested start date:'),
-            $('<div>').attr({
-              id: "fewaTimeEst"
-            })
-          )
-        );
-        setTimeout(() => {
-          let $emp = $('div.formField--employmentStartDate').filter(':visible');
-          if ($emp.length) {
-            $emp.parent().before($fewaTime.show());
+            $emp.parent().before($fewaTime.show()).before($fewaEst.show());
           }
         }, 0);
       }
+
+      var $fewa_div = $('<div>').attr({
+        class: "fewa--div"
+      });
+      var $fewa_label = $('<label>').attr({
+        class: "fewa--label"
+      });
+      var $fewa_num = $('<input>').attr({
+        class: "fewa--num",
+        type: "number",
+        min: "0"
+      });
+
+      var year = $fewa_div.clone().append(
+        $fewa_label.clone().attr({
+          for: "fewaYear"
+        }).html('Years:'),
+        $fewa_num.clone().attr({
+          id: "fewaYear",
+          max: "80"
+        })
+      );
+      var month = $fewa_div.clone().append(
+        $fewa_label.clone().attr({
+          for: "fewaMonth"
+        }).html('Months:'),
+        $fewa_num.clone().attr({
+          id: "fewaMonth",
+          max: "11"
+        })
+      );
+      var week = $fewa_div.clone().append(
+        $fewa_label.clone().attr({
+          for: "fewaWeek"
+        }).html('Weeks:'),
+        $fewa_num.clone().attr({
+          id: "fewaWeek",
+          max: "3"
+        })
+      );
+
+      var start = new Date();
+      start = (start.getMonth() < 9 ? '0' : '') + (start.getMonth() + 1) + ' ' + start.getFullYear();
+      $fewaTime = $('<div>').attr({
+        id: "fewaTime"
+      }).append(year, month, week);
+      $fewaEst = $('<div>').attr({
+        id: "fewaTimeEst",
+        class: "optionBlock"
+      }).append(
+        $('<span>').attr({
+          class: "sumTotal__label"
+        }).html('Suggested Date: '),
+        $('<span>').attr({
+          class: "sumTotal__value fewaValue"
+        }).html(start)
+      );
+
+      setTimeout(() => {
+        let $emp = $('div.formField--employmentStartDate').filter(':visible');
+        if ($emp.length) {
+          $emp.parent().before($fewaTime).before($fewaEst);
+        }
+      }, 0);
     }
   }, 'select[name="EmploymentType"]')
   .on({
@@ -195,9 +222,9 @@ function fewaUpdate(e) {
     today.setMonth(today.getMonth() - month.val);
     today.setDate(today.getDate() - week.val * 7);
     month.val = today.getMonth() + 1;
-    if (month.toString().length === 1) {
+    if (month.val < 9) {
       month.val = '0' + month.val;
     }
-    $('#fewaTimeEst').html(month.val + ' ' + today.getFullYear());
+    $('#fewaTimeEst .fewaValue').html(month.val + ' ' + today.getFullYear());
   }
 };
