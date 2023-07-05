@@ -1,8 +1,8 @@
 waitForElm('h1.heading--1').then(elm => {
   var $this = $(elm);
   var $html = $this.html();
-  chrome.storage.sync.get(['dealer']).then(result => {
-    $this.html($html + ' - ' + result.dealer);
+  chrome.storage.sync.get().then(result => {
+    $this.html($html + ' - ' + result.fewa.aqua.page_settings.dealer);
   });
 });
 

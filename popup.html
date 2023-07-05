@@ -1,9 +1,13 @@
 <html>
 
 <head>
-  <link rel="stylesheet" href="popup.css">
   <script type="text/javascript" src="scripts\external\jquery-3.7.0.min.js"></script>
+  <script type="text/javascript" src="scripts\external\jquery-ui-1.13.2.custom\jquery-ui.min.js"></script>
   <script type="text/javascript" src="popup.js"></script>
+  <link rel="stylesheet" href="scripts\external\jquery-ui-1.13.2.custom\jquery-ui.min.css">
+  <link rel="stylesheet" href="scripts\external\jquery-ui-1.13.2.custom\jquery-ui.structure.min.css">
+  <link rel="stylesheet" href="scripts\external\jquery-ui-1.13.2.custom\jquery-ui.theme.min.css">
+  <link rel="stylesheet" href="popup.css">
 </head>
 
 <body>
@@ -11,12 +15,17 @@
     No options found for this page!
   </div>
   <div id="slideshow" class="slideshow">
-    <h3>Spreadsheet Slideshow</h3>
-    <div class="btnSet">
-      <input type="button" id="slideshowStart" value="Start">
-      <input type="button" id="slideshowUpdate" value="Update" hidden>
-      <input type="button" id="slideshowStop" value="Stop" hidden>
+    <h1>Spreadsheet Slideshow</h1>
+    <div class="load">
+      <div class="load-label"></div>
     </div>
+    <div class="btnSet" hidden>
+      <input type="button" id="slideshowStart" value="Start">
+      <input type="button" id="slideshowRefresh" value="Refresh">
+      <input type="button" id="slideshowStop" value="Stop">
+    </div>
+    <div class="message" hidden></div>
+    <ol class="list" hidden></ol>
   </div>
 </body>
 

@@ -1,20 +1,67 @@
+:root {
+  font-size: 62.5%;
+}
+
 * {
   font-family: Play, Helvetica, Arial, sans-serif;
 }
 
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
+h1 {
+  white-space: nowrap;
+}
+
+input[type="number"] {
+  font-size: 1.4rem;
+  width: 4.2rem;
+  -moz-appearance: textfield;
+  padding: 0 0;
+  margin: 0 0.5rem;
+}
+
+input:invalid {
+  background-color: #FF5050;
+  color: #FFF;
+}
+
+input:valid:not(.empty) {
+  background-color: #66BB66;
+  color: #FFF;
+}
+
+input.empty {
+  background-color: #CCC;
+  color: #555;
+}
+
+.ui-button {
+  align-self: center;
+  display: inline-block;
+  font-size: 1.2rem;
+  white-space: nowrap;
+}
+
+.ui-sortable {
+  padding: 0;
+}
+
+::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
 
-input[type="number"] {
-  width: 3.5rem;
-  -moz-appearance: textfield;
+::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 .default {
-  width: 12rem;
+  white-space: nowrap;
+}
+
+.btnSet {
+  align-self: center;
+  display: flex;
+  margin: 0.7rem 0.4rem;
 }
 
 .slideshow {
@@ -27,27 +74,20 @@ input[type="number"] {
   display: flex;
 }
 
-.label {
-  font-variant: small-caps;
-  padding-left: 0.5rem;
-}
-
-.btnSet {
-  display: flex;
-  padding: 0.75rem 0.25rem;
-}
-
-.btnSet input {
-  align-self: center;
-  margin: 0.5rem;
+.order {
+  font-size: 1.6rem;
+  min-width: 3.2rem;
+  text-align: right;
 }
 
 .sheet-name {
-  font-size: 1.25rem;
+  font-size: 1.6rem;
+  font-variant: small-caps;
+  padding-left: 0.2rem;
+  white-space: nowrap;
 }
 
 .gid {
-  font-variant: none;
-  font-size: 1rem;
+  font-size: 1.2rem;
   font-style: italic;
 }

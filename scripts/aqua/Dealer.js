@@ -19,14 +19,16 @@ $(document)
       var $this = $(this);
       var $val = $this.val();
       var dealID = $this.children(`[value="${$val}"]`).eq(0).html();
+      var dealer;
       if (/002306/.test(dealID)) {
-        chrome.storage.sync.set({
-          dealer: "Water Treatment"
-        });
+        dealer = "Water Treatment";
       } else if (/532306/.test(dealID)) {
-        chrome.storage.sync.set({
-          dealer: "Home Improvement"
-        });
+        dealer = "Home Improvement";
       }
+      chrome.storage.sync.get().then(result => {
+        let page = result.fewa.aqua.page_settings;
+        page.dealer = dealer;
+        chrome.storage.sync.set(result);
+      });
     }
   }, '#selectDealerModal .selectField[name="dealers"]');

@@ -1,3 +1,113 @@
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.to !== 'popup') return;
+  var $load = $(request.target + ' .load');
+  var $loadLabel = $(request.target + '.load-label');
+  switch (request.target) {
+    case "#slideshow":
+      switch (request.type) {
+        case "max":
+          $load.progressbar("option", "max", request.value);
+          $loadLabel.text($load.progressbar("value") + " / " + $load.progressbar("option", "max"));
+          break;
+        case "1 sheet":
+          $load.progressbar("value", $load.progressbar("option", "max"));
+          $loadLabel.text("2 / 2");
+          $load.hide("fade");
+          $(request.target + ' .message').html("More than one sheet required.").show("fade");
+          break;
+        case "sheet":
+          $(request.target + ' .list').append(
+            $('<li>').attr({
+              class: "sheet"
+            }).append(
+              $('<div>').attr({
+                class: "order"
+              }),
+              $('<input>').attr({
+                id: request.value.id,
+                type: "number",
+                class: "empty",
+                min: 5,
+                max: 300,
+                placeholder: "300"
+              }),
+              $('<div>').attr({
+                class: "label"
+              }).append(
+                $('<div>').attr({
+                  class: "sheet-name"
+                }).html(request.value.name),
+                $('<div>').attr({
+                  class: "gid"
+                }).html('gid: ' + request.value.id)
+              )
+            )
+          );
+          $load.progressbar("value", $load.progressbar("value") + 1);
+          $loadLabel.text($load.progressbar("value") + '/' + $load.progressbar("option", "max"));
+          break;
+        case "sort":
+          var $list = $('#slideshow .list');
+          var $old = $('#slideshow .sheet');
+          var $new = [];
+          for (let i = 0; i < $old.length; i++) {
+            let $n = $old.eq(request.value[i]);
+            $n.find('.order').html(i + 1);
+            $new.push($n);
+          }
+          $load.progressbar("value", $load.progressbar("value") + 1);
+          $loadLabel.text($load.progressbar("value") + '/' + $load.progressbar("option", "max"));
+          $list.empty().append($new).sortable({
+            axis: "y",
+            containment: "parent",
+            revert: true,
+            stop: function() {
+              var $order = $('#slideshow .sheet');
+              for (let i = 0; i < $order.length; i++) {
+                $order.eq(i).find('.order').html(i + 1);
+              }
+            },
+            tolerance: "pointer"
+          }).on("sort", $list.sortable("option", "stop"));
+
+          chrome.tabs.query({
+            active: true,
+            currentWindow: true
+          }, (tabs) => {
+            let id = tabs[0].url.split(/\/d\//)[1].split(/\//)[0];
+            chrome.storage.sync.get().then(result => {
+              let page = result.fewa.sheets.page_settings;
+              if (id in page) {
+                let data = page[id].data;
+                console.log(data);
+                if (data.length) {
+                  for (let i = 0; i < data.length; i++) {
+                    let gid = '#' + data[i].id;
+                    let sel = `.sheet:has(${gid})`
+                    let sheet = $(sel);
+                    $(gid).val(data[i].time);
+                    $list.children().eq(i).before(sheet);
+                  }
+                }
+                if (page[id].active) {
+                  $('#slideshowRefresh').show();
+                  $('#slideshowStop').show();
+                  $('#slideshowStart').hide();
+                }
+              }
+            });
+          });
+          $load.hide("fade").queue(function(nxt) {
+            $('#slideshow input[type="number"]').trigger("change");
+            $list.trigger("sort").show("fade");
+            $('#slideshow .btnSet').show("fade");
+            nxt();
+          });
+          break;
+      }
+  }
+});
+
 $(document).ready(() => {
     chrome.tabs.query({
       active: true,
@@ -6,59 +116,26 @@ $(document).ready(() => {
       if (/.*docs\.google\.com\/spreadsheets\/d\/.*/.test(tabs[0].url)) {
         $('#default').hide();
         $('#slideshow').show();
-
-        chrome.tabs.sendMessage(tabs[0].id, {
-          type: 'getSheets'
-        }, (result) => {
-          let rows = [];
-          if (!result) return;
-          for (let i = 0; i < result.ids.length; i++) {
-            rows.push($('<div>').attr({
-              class: 'sheet'
-            }).append(
-              $('<input>').attr({
-                id: result.ids[i],
-                class: 'input',
-                type: 'number',
-                min: 3,
-                max: 300,
-                placeholder: '10-300'
-              }),
-              $('<div>').attr({
-                class: 'label'
-              }).append(
-                $('<div>').attr({
-                  class: 'sheet-name'
-                }).html(result.names[i]),
-                $('<div>').attr({
-                  class: 'gid',
-                  data: result.ids[i]
-                }).html('gid: ' + result.ids[i])
-              )
-            ));
-          }
-          $('#slideshow').append(...rows);
-
-          chrome.storage.sync.get(['slideshow_' + tabs[0].id])
-            .then(result => {
-              console.log(result['slideshow_' + tabs[0].id]);
-              if (result['slideshow_' + tabs[0].id]) {
-                $('#slideshowStart').attr({
-                  disabled: ""
-                });
-                $('#slideshowUpdate').show();
-                $('#slideshowStop').show();
-                chrome.storage.sync.get(['slideshowData_' + tabs[0].id])
-                  .then(result => {
-                    var data = result['slideshowData_' + tabs[0].id];
-                    for (let i = 0; i < data.length; i++) {
-                      $('#' + data[i].id).val(data[i].time);
-                    }
-                  });
-              }
-            });
+        $('#slideshow .load').progressbar({
+          value: 0
         });
-      }
+        $('#slideshow .btnSet').button().hide();
+        $('#slideshowStart').button({
+          icon: "ui-icon-play"
+        }).hide();
+        $('#slideshowRefresh').button({
+          icon: "ui-icon-arrowrefresh-1-w"
+        }).hide();
+        $('#slideshowStop').button({
+          icon: "ui-icon-stop"
+        }).hide();
+
+        var tabId = tabs[0].id;
+        var id = tabs[0].url.split(/\/d\//)[1].split(/\//)[0];
+        chrome.tabs.sendMessage(tabId, {
+          type: 'getSheets'
+        });
+      };
     });
   })
   .on({
@@ -67,31 +144,48 @@ $(document).ready(() => {
       var sheets = $('.sheet');
       var data = [];
       for (let i = 0; i < sheets.length; i++) {
-        let id = sheets.eq(i).find('.gid').eq(0).attr('data');
-        let time = $('#' + id).val();
-        data.push({
-          id,
-          time
-        });
+        let time = sheets.eq(i).find('input[type="number"]').eq(0);
+        let id = time.attr('id');
+        time = time.val();
+        if (time.length) {
+          data.push({
+            id,
+            time
+          });
+        }
       }
-      chrome.tabs.query({
-        active: true,
-        currentWindow: true
-      }, (tabs) => {
-        chrome.tabs.sendMessage(tabs[0].id, {
-          type: 'slideshowStart',
-          tabId: tabs[0].id,
-          data: data
+      if (data.length > 1) {
+        chrome.tabs.query({
+          active: true,
+          currentWindow: true
+        }, (tabs) => {
+          var tabId = tabs[0].id;
+          let obj = {};
+          let id = tabs[0].url.split(/\/d\//)[1].split(/\//)[0];
+          chrome.tabs.sendMessage(tabId, {
+            type: "slideshowStart",
+            tabId,
+            id,
+            data
+          });
+          chrome.storage.sync.get().then(result => {
+            let page = result.fewa.sheets.page_settings;
+            if (!(id in page)) {
+              page[id] = {
+                active: true,
+                data
+              }
+            } else {
+              page[id].active = true;
+              page[id].data = data;
+            }
+            chrome.storage.sync.set(result);
+          });
+          chrome.storage.sync.get().then(res => console.log(res));
         });
-        let obj = {};
-        obj['slideshowData_' + tabs[0].id] = data;
-        obj['slideshow_' + tabs[0].id] = true;
-        chrome.storage.sync.set(obj);
-      });
-      $this.attr({
-        disabled: ""
-      });
-      $('#slideshowUpdate, #slideshowStop').removeAttr("disabled").show();
+        $this.filter(':visible').hide();
+        $('#slideshowRefresh, #slideshowStop').filter(':hidden').show();
+      }
     }
   }, '#slideshowStart')
   .on({
@@ -99,27 +193,71 @@ $(document).ready(() => {
       $('#slideshowStop').trigger('click');
       setTimeout(() => $('#slideshowStart').trigger('click'), 10);
     }
-  }, '#slideshowUpdate')
+  }, '#slideshowRefresh')
   .on({
     click: function() {
       chrome.tabs.query({
         active: true,
         currentWindow: true
       }, (tabs) => {
-        chrome.storage.sync.get(['currentSlide_' + tabs[0].id])
-          .then(result => {
-            chrome.tabs.sendMessage(tabs[0].id, {
-              type: 'slideshowStop',
-              tabId: tabs[0].id
-            });
-            let obj = {};
-            obj['slideshow_' + tabs[0].id] = false;
-            chrome.storage.sync.set(obj);
-          });
+        var tabId = tabs[0].id;
+        let id = tabs[0].url.split(/\/d\//)[1].split(/\//)[0];
+        chrome.tabs.sendMessage(tabId, {
+          type: "slideshowStop",
+          tabId,
+          id
+        });
+        chrome.storage.sync.get().then(result => {
+          let page = result.fewa.sheets.page_settings[id];
+          page.active = false;
+          chrome.storage.sync.set(result);
+        });
       });
-      $('#slideshowStart').removeAttr("disabled");
-      $('#slideshowUpdate, #slideshowStop').attr({
-        disabled: ""
-      });
+
+      var ready = $('#slideshow .sheet input').filter((i, e) => e.value.toString().length);
+      if (ready.length > 1) {
+        $('#slideshowStart:hidden').show();
+      }
+      $('#slideshowRefresh, #slideshowStop').filter(':visible').hide();
     }
-  }, '#slideshowStop');
+  }, '#slideshowStop')
+  .on({
+    'change keydown keyup': function(e) {
+      var $this = $(this);
+      var $val = $this.val();
+      var $max = parseInt($this.attr("max"));
+      var $min = parseInt($this.attr("min"))
+      switch ($val.length) {
+        default:
+          $this.val(parseInt($val.substring(0, 3)));
+        case 3:
+        case 2:
+        case 1:
+          $val = parseInt($this.val());
+          if ($val > $max) {
+            $this.val($max);
+          } else if ($val < $min && !/key/.test(e.type)) {
+            $this.val($min);
+          }
+          $this.removeAttr("class");
+          break;
+        case 0:
+          $this.attr({
+            class: "empty"
+          });
+      }
+
+      var ready = $('#slideshow .sheet input').filter((i, e) => e.value.toString().length);
+      if (ready.length > 1) {
+        if ($('#slideshowStop:visible').length) {
+          $('#slideshowRefresh').show();
+        } else {
+          $('#slideshowStart').attr({
+            disabled: ""
+          });
+        }
+      } else {
+        $('#slideshowStart, #slideshowRefresh').filter(':visible').hide();
+      }
+    }
+  }, 'input[type="number"]');

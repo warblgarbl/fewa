@@ -1,15 +1,24 @@
 {
   "name": "FEWA Office",
   "description": "Autofill and functionality enhancements for FEWA offices",
-  "version": "0.4",
+  "version": "0.5.1",
   "manifest_version": 3,
+  "content_security_policy": {
+    "extension_pages": "default-src 'self' 'wasm-unsafe-eval';"
+  },
   "permissions": [
 		"storage",
 		"tabs"
 	],
+  "host_permissions": [
+    "https://script.google.com/macros/s/*"
+  ],
   "background": {
     "service_worker": "background.js",
     "type": "module"
+  },
+  "action": {
+    "default_popup": "popup.html"
   },
 	"icons": {
 		"16": "img/icon-16.png",
@@ -17,12 +26,6 @@
 		"48": "img/icon-48.png",
 		"128": "img/icon-128.png"
 	},
-  "action": {
-    "default_popup": "popup.html"
-  },
-  "content_security_policy": {
-    "extension_pages": "default-src 'self' 'wasm-unsafe-eval';"
-  },
   "content_scripts": [{
       "matches": ["https://cic.meridianlink.com/*ClientConsumer.aspx"],
       "js": ["scripts/external/jquery-3.7.0.min.js", "scripts/cic/New File.js"],
