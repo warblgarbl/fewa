@@ -81,7 +81,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
               let page = result.fewa.sheets.page_settings;
               if (id in page) {
                 let data = page[id].data;
-                console.log(data);
                 if (data.length) {
                   for (let i = 0; i < data.length; i++) {
                     let gid = '#' + data[i].id;
@@ -91,19 +90,21 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
                     $list.children().eq(i).before(sheet);
                   }
                 }
-                if (page[id].active) {
+              }
+              $load.hide("fade").queue(function(nxt) {
+                $('#slideshow input[type="number"]').trigger("change");
+                $list.trigger("sort").show("fade");
+                $('#slideshow .btnSet').show("fade");
+                nxt();
+              }).queue(function(nxt) {
+                if (id in page && page[id].active) {
                   $('#slideshowRefresh').show();
                   $('#slideshowStop').show();
                   $('#slideshowStart').hide();
                 }
-              }
+                nxt();
+              });
             });
-          });
-          $load.hide("fade").queue(function(nxt) {
-            $('#slideshow input[type="number"]').trigger("change");
-            $list.trigger("sort").show("fade");
-            $('#slideshow .btnSet').show("fade");
-            nxt();
           });
           break;
       }
@@ -133,7 +134,6 @@ $(document).ready(() => {
         }).hide();
 
         var tabId = tabs[0].id;
-        var id = tabs[0].url.split(/\/d\//)[1].split(/\//)[0];
         chrome.tabs.sendMessage(tabId, {
           type: 'getSheets'
         });
@@ -183,7 +183,6 @@ $(document).ready(() => {
             }
             storage.set(result);
           });
-          storage.get().then(res => console.log(res));
         });
         $this.filter(':visible').hide();
         $('#slideshowRefresh, #slideshowStop').filter(':hidden').show();
@@ -254,9 +253,7 @@ $(document).ready(() => {
         if ($('#slideshowStop:visible').length) {
           $('#slideshowRefresh').show();
         } else {
-          $('#slideshowStart').attr({
-            disabled: ""
-          });
+          $('#slideshowStart').show();
         }
       } else {
         $('#slideshowStart, #slideshowRefresh').filter(':visible').hide();

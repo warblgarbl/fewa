@@ -64,7 +64,7 @@ $(document)
       let id = $h.html().split(' ')[0];
       if (/(OPEN|CLOSED|DEROGATORY)/.test(id)) {
         $h.attr({
-          id: id
+          id
         });
         $h.next().attr({
           style: "text-align:center;"

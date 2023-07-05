@@ -1,7 +1,6 @@
-const storage = chrome.storage.sync;
-
 chrome.runtime.onInstalled
   .addListener((details) => {
+    const storage = chrome.storage.sync;
     if (details.reason == 'update') {
       let prev = details.previousVersion.split(/\./).map(i => parseInt(i));
       if (prev[0] < 1) {
@@ -55,6 +54,7 @@ chrome.runtime.onInstalled
       }
       storage.set(obj);
     });
+
     if (details.reason == "install") {
       chrome.tabs.create({
         url: chrome.runtime.getURL('options.html')
@@ -62,11 +62,16 @@ chrome.runtime.onInstalled
     } else if (details.reason == 'update') {
       let prev = details.previousVersion.split(/\./).map(i => parseInt(i));
       if (prev[0] < 1) {
-        if (prev[1] < 6 && prev[2] < 3) {
-          console.info('Updating storage to format introduced in ver. 0.5.3.0');
+        if (prev[1] < 5) {
           chrome.tabs.create({
             url: chrome.runtime.getURL('options.html')
-          });
+          }, saveDefault);
+        } else if (prev[1] < 6) {
+          if (prev[2] < 4) {
+            chrome.tabs.create({
+              url: chrome.runtime.getURL('options.html')
+            }, saveDefault);
+          }
         }
       }
     }
@@ -79,6 +84,13 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   switch (request.type) {}
 });
 
+function activeToggle() {
+  chrome.tabs.query({
+    active: true,
+    currentWindow: true
+  }, toggle);
+}
+
 function toggle(tabs) {
   if (tabs.length) {
     if (/.*docs\.google\.com\/spreadsheets\/d\/.*/.test(tabs[0].url)) {
@@ -89,9 +101,13 @@ function toggle(tabs) {
   }
 }
 
-function activeToggle() {
-  chrome.tabs.query({
-    active: true,
-    currentWindow: true
-  }, toggle);
+function saveDefault(tab) {
+  chrome.tabs.onUpdated.addListener((tabId, info) => {
+    if (tabId == tab.id && info.status == "complete") {
+      chrome.runtime.sendMessage({
+        to: "options",
+        type: "default-save"
+      });
+    }
+  });
 }

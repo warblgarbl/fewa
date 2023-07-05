@@ -1,5 +1,16 @@
 const storage = chrome.storage.sync;
 
+chrome.runtime.onMessage.addListener(request => {
+  if (request.to != 'options') {
+    return;
+  }
+  switch (request.type) {
+    case 'default-save':
+      $('#save').trigger('click');
+      break;
+  }
+});
+
 $(document).ready(restore)
   .on({
     'click': save
