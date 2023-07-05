@@ -1,3 +1,5 @@
+const storage = chrome.storage.sync;
+
 $(document).ready(() => {
     var $users = $('#BranchUser_cboUser > option');
     for (let i = 0; i < $users.length; i++) {
@@ -6,12 +8,13 @@ $(document).ready(() => {
         $user.attr({
           selected: ""
         });
-        if (/TINA/i.test($user.html())) {
-          $('#CurrentAddress_faUSA_rbnNormal').trigger('click');
-        }
         break;
       }
     }
+    storage.get().then(result => {
+      let options = result.fewa.cic.preferences;
+      $(options.address).trigger('click');
+    })
     $('#UIOptions_tuc_credit').trigger('click');
     $('#Borrower_txtFirstName').trigger('focus');
   })

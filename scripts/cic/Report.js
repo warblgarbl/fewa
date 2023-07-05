@@ -1,3 +1,4 @@
+const storage = chrome.storage.sync;
 var $fewaAlert = $('<audio>').attr({
   id: "fewaAlert",
   src: chrome.runtime.getURL("audio/bop.wav"),
@@ -5,15 +6,25 @@ var $fewaAlert = $('<audio>').attr({
 }).data({
   'fewa-play': ""
 });
-document.documentElement.appendChild($fewaAlert[0]);
+
+storage.get().then(result => {
+  let options = result.fewa.cic.preferences;
+  if (options.alert) {
+    document.documentElement.appendChild($fewaAlert[0]);
+  }
+})
 
 $(document)
   .on('click.f keydown.f', function() {
-    switch ($fewaAlert.data('fewa-play')) {
-      case 1:
-        $fewaAlert.trigger('play');
-      case 0:
-        $(this).off('.f');
+    if ($('audio').length) {
+      switch ($fewaAlert.data('fewa-play')) {
+        case 1:
+          $fewaAlert.trigger('play');
+        case 0:
+          $(this).off('.f');
+      }
+    } else {
+      $(this).off('.f');
     }
   })
   .ready(() => {

@@ -1,3 +1,5 @@
+const storage = chrome.storage.sync;
+
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.to !== 'popup') return;
   var $load = $(request.target + ' .load');
@@ -75,7 +77,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
             currentWindow: true
           }, (tabs) => {
             let id = tabs[0].url.split(/\/d\//)[1].split(/\//)[0];
-            chrome.storage.sync.get().then(result => {
+            storage.get().then(result => {
               let page = result.fewa.sheets.page_settings;
               if (id in page) {
                 let data = page[id].data;
@@ -168,7 +170,7 @@ $(document).ready(() => {
             id,
             data
           });
-          chrome.storage.sync.get().then(result => {
+          storage.get().then(result => {
             let page = result.fewa.sheets.page_settings;
             if (!(id in page)) {
               page[id] = {
@@ -179,9 +181,9 @@ $(document).ready(() => {
               page[id].active = true;
               page[id].data = data;
             }
-            chrome.storage.sync.set(result);
+            storage.set(result);
           });
-          chrome.storage.sync.get().then(res => console.log(res));
+          storage.get().then(res => console.log(res));
         });
         $this.filter(':visible').hide();
         $('#slideshowRefresh, #slideshowStop').filter(':hidden').show();
@@ -207,10 +209,10 @@ $(document).ready(() => {
           tabId,
           id
         });
-        chrome.storage.sync.get().then(result => {
+        storage.get().then(result => {
           let page = result.fewa.sheets.page_settings[id];
           page.active = false;
-          chrome.storage.sync.set(result);
+          storage.set(result);
         });
       });
 

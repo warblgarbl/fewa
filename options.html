@@ -1,0 +1,57 @@
+<html>
+
+<head>
+  <script type="text/javascript" src="scripts\external\jquery-3.7.0.min.js"></script>
+  <script type="text/javascript" src="scripts\external\jquery-ui-1.13.2.custom\jquery-ui.min.js"></script>
+  <script type="text/javascript" src="options.js"></script>
+  <link rel="stylesheet" href="scripts\external\jquery-ui-1.13.2.custom\jquery-ui.min.css">
+  <link rel="stylesheet" href="scripts\external\jquery-ui-1.13.2.custom\jquery-ui.structure.min.css">
+  <link rel="stylesheet" href="scripts\external\jquery-ui-1.13.2.custom\jquery-ui.theme.min.css">
+  <link rel="stylesheet" href="options.css">
+</head>
+
+<body>
+  <div id="header" class="header">
+    <h1>Preferences<input type="button" id="save" value="Save"></h1>
+    <h3>Change extension features to your preference.</h3>
+  </div>
+  <div class="preferences">
+    <div id="finance">
+      <fieldset id="cic">
+        <legend>CIC</legend>
+        <div class="select">
+          <label for="cic-address">Address parsing</label>
+          <span>Choose the default address form for new files.</span>
+          <select id="cic-address">
+          </select>
+        </div>
+        <div class="alert">
+          <label for="cic-alert">Alerts</label>
+          <span>Receive an audio alert for bad-match reports.</span>
+          <input type="checkbox" id="cic-alert">
+        </div>
+        <div class="auto-open">
+          <label for="cic-auto-open">Auto-open</label>
+          <span>Enables auto-open for new files.</span>
+          <input type="checkbox" id="cic-auto-open">
+        </div>
+      </fieldset>
+
+      <div id="aqua">
+      </div>
+
+      <div id="pci">
+      </div>
+    </div>
+
+    <div id="google">
+      <div id="sheets">
+      </div>
+    </div>
+  </div>
+</body>
+
+<footer>
+</footer>
+
+</html>

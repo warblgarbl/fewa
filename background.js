@@ -1,3 +1,5 @@
+const storage = chrome.storage.sync;
+
 chrome.runtime.onInstalled
   .addListener((details) => {
     if (details.reason == 'update') {
@@ -5,36 +7,69 @@ chrome.runtime.onInstalled
       if (prev[0] < 1) {
         if (prev[1] < 5) {
           console.info('Updating storage to format introduced in ver. 0.5.0.0');
-          chrome.storage.sync.clear();
+          storage.clear();
         }
       }
     }
 
-    chrome.storage.sync.get().then(results => {
+    storage.get().then(results => {
       let obj = {};
-      let doms = ['aqua', 'cic', 'pci', 'sheets'];
+      let doms = ['cic', 'aqua', 'pci', 'sheets'];
       let set = ['page_settings', 'preferences'];
       if (!('fewa' in results)) {
-        obj['fewa'] = {}
+        obj.fewa = {}
       } else {
-        obj['fewa'] = results['fewa'];
+        obj.fewa = results.fewa;
       }
       for (let a = 0; a < doms.length; a++) {
-        if (!(doms[a] in obj['fewa'])) {
-          obj['fewa'][doms[a]] = {}
+        if (!(doms[a] in obj.fewa)) {
+          obj.fewa[doms[a]] = {}
         } else {
-          obj['fewa'][doms[a]] = results['fewa'][doms[a]];
+          obj.fewa[doms[a]] = results.fewa[doms[a]];
         }
         for (let b = 0; b < set.length; b++) {
-          if (!(set[b] in obj['fewa'][doms[a]])) {
-            obj['fewa'][doms[a]][set[b]] = {}
+          if (!(set[b] in obj.fewa[doms[a]])) {
+            obj.fewa[doms[a]][set[b]] = {}
           } else {
-            obj['fewa'][doms[a]][set[b]] = results['fewa'][doms[a]][set[b]];
+            obj.fewa[doms[a]][set[b]] = results.fewa[doms[a]][set[b]];
           }
         }
       }
-      chrome.storage.sync.set(obj);
+      for (let key in obj.fewa) {
+        switch (key) {
+          case 'cic':
+            let pref = ['address', 'alert', 'auto_open'];
+            for (let i = 0; i < pref.length; i++) {
+              if (!(pref[i] in obj.fewa.cic.preferences)) {
+                obj.fewa.cic.preferences[pref[i]] = null;
+              }
+            }
+            break;
+          case 'aqua':
+            break;
+          case 'pci':
+            break;
+          case 'sheets':
+            break;
+        }
+      }
+      storage.set(obj);
     });
+    if (details.reason == "install") {
+      chrome.tabs.create({
+        url: chrome.runtime.getURL('options.html')
+      });
+    } else if (details.reason == 'update') {
+      let prev = details.previousVersion.split(/\./).map(i => parseInt(i));
+      if (prev[0] < 1) {
+        if (prev[1] < 6 && prev[2] < 3) {
+          console.info('Updating storage to format introduced in ver. 0.5.3.0');
+          chrome.tabs.create({
+            url: chrome.runtime.getURL('options.html')
+          });
+        }
+      }
+    }
   });
 
 chrome.tabs.onActivated.addListener(activeToggle);

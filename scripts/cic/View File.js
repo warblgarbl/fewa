@@ -1,3 +1,5 @@
+const storage = chrome.storage.sync;
+
 $(document).ready(() => {
   var $label = $('<label>').html('BOTH').attr({
     for: "fewa_bc"
@@ -26,11 +28,16 @@ $(document).ready(() => {
       $label
     )
   );
-  if (/ReportResult/.test(document.URL)) {
-    setTimeout(() => {
-      $('#btnCustom').trigger('click')
-    }, 1000);
-  }
+  storage.get().then(result => {
+    let options = result.fewa.cic.preferences;
+    if (options.auto_open) {
+      if (/ReportResult/.test(document.URL)) {
+        setTimeout(() => {
+          $('#btnCustom').trigger('click');
+        }, 1000);
+      }
+    }
+  })
 });
 
 function only(n) {

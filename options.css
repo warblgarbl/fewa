@@ -1,0 +1,59 @@
+:root {
+  font-size: 125%;
+}
+
+* {
+  font-family: Play, Helvetica, Arial, sans-serif;
+}
+
+body {
+  align-self: center;
+}
+
+h1 {
+  white-space: nowrap;
+  margin-bottom: 0.5rem;
+}
+
+h1 + h3 {
+  font-style: italic;
+  margin-top: 0;
+  margin-bottom: 1.25rem;
+  margin-left: 0.5rem;
+}
+
+#save {
+  margin-left: 0.5rem;
+}
+
+
+#save, .preferences * {
+  font-size: 1rem;
+}
+
+label + span {
+  font-size: 0.8rem!important;
+  font-style: italic;
+  padding-left: 0.5rem;
+}
+
+span + input,
+span + select {
+  margin-left: 0.5rem;
+}
+
+fieldset,
+fieldset > div {
+  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+}
+
+fieldset {
+  margin: 1rem 0;
+  max-width: 800px;
+}
+
+fieldset > div {
+  margin: 0.5rem 0;
+}
