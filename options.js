@@ -28,27 +28,27 @@ function restore() {
           let auto_open = $('#' + key + '-auto-open');
           address.append(() => {
             let ids = [{
-                val: '#CurrentAddress_faUSA_strUnparsedAutocomplete_txtFullAddress',
+                val: '#CurrentAddress_faUSA_rbnUnparsed',
                 name: 'Default'
               },
               {
-                val: '#CurrentAddress_faUSA_strNormal_txtStrNum',
+                val: '#CurrentAddress_faUSA_rbnNormal',
                 name: 'Parsed'
               },
               {
-                val: '#CurrentAddress_faUSA_strPOBox_txtPOBox_Input',
+                val: '#CurrentAddress_faUSA_rbnPOBox',
                 name: 'PO Box'
               },
               {
-                val: '#CurrentAddress_faUSA_strMilitary_ddlDesignation',
+                val: '#CurrentAddress_faUSA_rbnMilitary',
                 name: 'Military'
               },
               {
-                val: '#CurrentAddress_faUSA_strRRHC_ddlDesignation',
+                val: '#CurrentAddress_faUSA_rbnRRHC',
                 name: 'RR\/HC'
               },
               {
-                val: '#CurrentAddress_faUSA_strPuertoRico_ddlUrbanization',
+                val: '#CurrentAddress_faUSA_rbnPuertoRico',
                 name: 'Puerto Rico'
               }
             ];
