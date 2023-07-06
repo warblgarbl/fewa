@@ -1,21 +1,19 @@
 const storage = chrome.storage.sync;
 
 $(document).ready(() => {
-  var $label = $('<label>').html('BOTH').attr({
-    for: "fewa_bc"
-  });
+  var $label = $('<label>').html("BOTH").attr({ for: "fewa_bc" });
   var $appL = $('label[for="custom_pc"]');
   var $coL = $('label[for="custom_sc"]');
 
-  $label.wrapInner($('<a>').attr({
-    href: "javascript:void(0);"
-  }).on('click', () => only(0)));
-  $appL.wrapInner($('<a>').attr({
-    href: "javascript:void(0);"
-  }).on('click', () => only(1)));
-  $coL.wrapInner($('<a>').attr({
-    href: "javascript:void(0);"
-  }).on('click', () => only(2)));
+  $label.wrapInner($('<a>')
+    .attr({ href: "javascript:void(0);" })
+    .on('click', () => only(0)));
+  $appL.wrapInner($('<a>')
+    .attr({ href: "javascript:void(0);" })
+    .on('click', () => only(1)));
+  $coL.wrapInner($('<a>')
+    .attr({ href: "javascript:void(0);" })
+    .on('click', () => only(2)));
 
   $appL.parent('li').before(
     $('<li>').append(
@@ -37,7 +35,7 @@ $(document).ready(() => {
         }, 1000);
       }
     }
-  })
+  });
 });
 
 function only(n) {

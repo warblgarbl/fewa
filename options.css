@@ -10,6 +10,19 @@ body {
   align-self: center;
 }
 
+#save {
+  margin-left: 0.5rem;
+}
+
+#save, .preferences * {
+  font-size: 1rem;
+}
+
+.multi-choice {
+  display: flex;
+  flex-direction: column;
+}
+
 h1 {
   white-space: nowrap;
   margin-bottom: 0.5rem;
@@ -22,18 +35,14 @@ h1 + h3 {
   margin-left: 0.5rem;
 }
 
-#save {
-  margin-left: 0.5rem;
+h4 {
+  margin: 0;
 }
 
-#save, .preferences * {
-  font-size: 1rem;
-}
-
-label + span {
+h4 + span {
   font-size: 0.8rem!important;
   font-style: italic;
-  padding-left: 0.5rem;
+  padding-left: 0.3rem;
 }
 
 span + input,

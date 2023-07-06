@@ -5,42 +5,46 @@ $(document).ready(() => {
     for (let i = 0; i < $users.length; i++) {
       var $user = $users.eq(i);
       if (/color/.test($user.attr('style'))) {
-        $user.attr({
-          selected: ""
-        });
+        $user.attr({ selected: "" });
         break;
       }
     }
     storage.get().then(result => {
-      let options = result.fewa.cic.preferences;
-      $(options.address).trigger('click');
-    })
-    $('#UIOptions_tuc_credit').trigger('click');
-    $('#Borrower_txtFirstName').trigger('focus');
+      let pref = result.fewa.cic.preferences;
+      $(pref.address).trigger('click');
+      setTimeout(() => {
+        for (let key in pref.bureau) {
+          if (pref.bureau.key) $(pref.bureau.key + ':not(:checked)').trigger('click');
+        }
+      }, 3000);
+      if (pref.jump) skipCoapp();
+      $('#Borrower_txtFirstName').trigger('focus');
+    });
   })
   .on({
-    focusout: function() {
+    focusout: function () {
       var $this = $(this);
-      if (!$this.val().trim()) {
-        setTimeout(() => $('#CoBorrower_txtSurName').val(''), 0)
-      }
+      if (!$this.val().trim()) setTimeout(() => $('#CoBorrower_txtSurName').val(""), 0);
     }
-  }, '#CoBorrower_txtFirstName')
-  .on({
-    keyup: function(e) {
+  }, '#CoBorrower_txtFirstName');
+
+function skipCoapp() {
+  $(document).on({
+    keyup: function (e) {
       var $this = $(this);
       var $first = $('#CoBorrower_txtFirstName');
       var ids = [
-        '#CurrentAddress_faUSA_strUnparsedAutocomplete_txtFullAddress',
-        '#CurrentAddress_faUSA_strNormal_txtStrNum',
-        '#CurrentAddress_faUSA_strPOBox_txtPOBox_Input',
-        '#CurrentAddress_faUSA_strMilitary_ddlDesignation',
-        '#CurrentAddress_faUSA_strRRHC_ddlDesignation',
-        '#CurrentAddress_faUSA_strPuertoRico_ddlUrbanization'
+        "#CurrentAddress_faUSA_strUnparsedAutocomplete_txtFullAddress",
+        "#CurrentAddress_faUSA_strNormal_txtStrNum",
+        "#CurrentAddress_faUSA_strPOBox_txtPOBox_Input",
+        "#CurrentAddress_faUSA_strMilitary_ddlDesignation",
+        "#CurrentAddress_faUSA_strRRHC_ddlDesignation",
+        "#CurrentAddress_faUSA_strPuertoRico_ddlUrbanization"
       ];
 
       if (e.keyCode === 9 && !e.shiftKey && !$first.val()) {
-        $(ids.join(', ')).filter(':visible').trigger('focus');
+        $(ids.join(", ")).filter(':visible').trigger('focus');
       }
     }
   }, '#CoBorrower_txtSurName');
+}

@@ -54,10 +54,6 @@ input.empty {
   margin: 0;
 }
 
-.default {
-  white-space: nowrap;
-}
-
 .btnSet {
   align-self: center;
   display: flex;
@@ -90,4 +86,8 @@ input.empty {
 .gid {
   font-size: 1.2rem;
   font-style: italic;
+}
+
+#default {
+  white-space: nowrap;
 }

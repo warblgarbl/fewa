@@ -1,21 +1,17 @@
 const storage = chrome.storage.sync;
 var $fewaAlert = $('<audio>').attr({
   id: "fewaAlert",
-  src: chrome.runtime.getURL("audio/bop.wav"),
+  src: chrome.runtime.getURL('audio/bop.wav'),
   paused: ""
-}).data({
-  'fewa-play': ""
-});
+}).data({ 'fewa-play': "" });
 
 storage.get().then(result => {
   let options = result.fewa.cic.preferences;
-  if (options.alert) {
-    document.documentElement.appendChild($fewaAlert[0]);
-  }
-})
+  if (options.alert) document.documentElement.appendChild($fewaAlert[0]);
+});
 
 $(document)
-  .on('click.f keydown.f', function() {
+  .on('click.f keydown.f', function () {
     if ($('audio').length) {
       switch ($fewaAlert.data('fewa-play')) {
         case 1:
@@ -34,47 +30,33 @@ $(document)
       let $in = $ins.eq(i);
       let $out = $outs.eq(i);
       if ($in.html().substr(-4) != $out.html().substr(-4)) {
-        $in.parent().attr({
-          style: "background-color:palevioletred"
-        });
-        $out.attr({
-          style: "background-color:lightgreen;" + $out.attr('style')
-        });
-        $fewaAlert.data({
-          'fewa-play': 1
-        });
+        $in.parent().attr({ style: "background-color:palevioletred;" });
+        $out.attr({ style: "background-color:lightgreen;" + $out.attr('style') });
+        $fewaAlert.data({ 'fewa-play': 1 });
       }
     }
     if ($fewaAlert.data('fewa-play') != 1) {
-      $fewaAlert.data({
-        'fewa-play': 0
-      });
+      $fewaAlert.data({ 'fewa-play': 0 });
     }
 
     var num = new RegExp(/\d+/);
     var usd = new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
+      style: "currency",
+      currency: "USD",
       maximumFractionDigits: 0
     });
 
     var $headers = $('td.mcl2-report-section-header');
     for (let i = 0; i < $headers.length; i++) {
       let $h = $headers.eq(i);
-      let id = $h.html().split(' ')[0];
+      let id = $h.html().split(" ")[0];
       if (/(OPEN|CLOSED|DEROGATORY)/.test(id)) {
-        $h.attr({
-          id
-        });
-        $h.next().attr({
-          style: "text-align:center;"
-        }).append($('<a>').attr({
-          href: "#SUMMARY"
-        }).html('Back to summary'));
+        $h.attr({ id });
+        $h.next().attr({ style: "text-align:center;" }).append(
+          $('<a>').attr({ href: "#SUMMARY" }).html("Back to summary")
+        );
       } else if (/SCORE.*MODELS/.test($h.html())) {
-        $h.attr({
-          id: 'SUMMARY'
-        });
+        $h.attr({ id: "SUMMARY" });
       }
     }
     var $open = $('table:not(:has(#SUMMARY)):has(thead:has(#OPEN)) > tbody').find('tr td table tbody');
@@ -82,54 +64,40 @@ $(document)
     var $derog = $('table:not(:has(#SUMMARY)):has(thead:has(#DEROGATORY)) > tbody').find('tr td table tbody');
 
     var col = [];
-    var titles = ['ACCT TYPE', '#', 'BALANCE', 'HI CREDIT', 'PAYMENT', 'PAST DUE', '30 days', '60 days', '90+ days'];
+    var titles = ["ACCT TYPE", "#", "BALANCE", "HI CREDIT", "PAYMENT", "PAST DUE", "30 days", "60 days", "90+ days"];
     for (let i = 0; i < titles.length; i++) {
-      titles[i] = $('<td>').attr({
-        class: "mcl2-report-label"
-      }).html(titles[i]);
+      titles[i] = $('<td>').attr({ class: "mcl2-report-label" }).html(titles[i]);
       switch (i) {
         case 0:
-          col.push($('<col>').attr({
-            style: "width:8%;"
-          }));
+          col.push($('<col>').attr({ style: "width:8%;" }));
           break;
         case 1:
-          col.push($('<col>').attr({
-            style: "width:4%;"
-          }));
+          col.push($('<col>').attr({ style: "width:4%;" }));
           break;
         case 6:
         case 7:
-          col.push($('<col>').attr({
-            style: "width:6%;"
-          }));
+          col.push($('<col>').attr({ style: "width:6%;" }));
           break;
         case 8:
-          col.push($('<col>').attr({
-            style: "width:8%;"
-          }));
+          col.push($('<col>').attr({ style: "width:8%;" }));
           break;
         default:
-          col.push($('<col>').attr({
-            style: "width:17%;"
-          }));
+          col.push($('<col>').attr({ style: "width:17%;" }));
       }
     }
 
-    var $label = $('<div>').attr({
-      class: "mcl2-report-label"
-    });
+    var $label = $('<div>').attr({ class: "mcl2-report-label" });
     var $table = $('<table>').attr({
-      cellspacing: '0',
-      class: 'mcl2-report-body mcl2-cell-padding mcl2-cell-border mcl2-section-content-width mcl2-table-ie-compatibility',
-      align: 'center',
-      style: 'vertical-align:middle;'
+      cellspacing: "0",
+      class: "mcl2-report-body mcl2-cell-padding mcl2-cell-border mcl2-section-content-width mcl2-table-ie-compatibility",
+      align: "center",
+      style: "vertical-align:middle;"
     }).append(
       $('<colgroup>').append(col),
       $('<thead>').append(
         $('<tr>').attr({
-          class: 'mcl2-cell-shade',
-          style: 'text-align:center;'
+          class: "mcl2-cell-shade",
+          style: "text-align:center;"
         }).append(titles)
       )
     );
@@ -187,7 +155,7 @@ $(document)
 
         let $b = $('<tbody>');
         let types = [mtg, auto, edu, rev, inst, _open, leas, coll, other];
-        let names = ['mtg', 'auto', 'edu', 'rev', 'inst', 'open', 'leas', 'coll', 'other'];
+        let names = ["mtg", "auto", "edu", "rev", "inst", "open", "leas", "coll", "other"];
         for (let b = 0; b < types.length; b++) {
           if (types[b].length) {
             let accts = types[b];
@@ -210,9 +178,9 @@ $(document)
               let hi = row1.eq(4).text();
               let pd = row2.eq(4).text();
               let pay = row1.eq(5).text();
-              let pd30 = row1.eq(6).text().split('30')[1];
-              let pd60 = row1.eq(7).text().split('60')[1];
-              let pd90 = row1.eq(8).text().split('90')[1];
+              let pd30 = row1.eq(6).text().split("30")[1];
+              let pd60 = row1.eq(7).text().split("60")[1];
+              let pd90 = row1.eq(8).text().split("90")[1];
 
               row.bal += num.test(bal) ? parseInt(num.exec(bal)) : 0;
               row.hi += num.test(hi) ? parseInt(num.exec(hi)) : 0;
@@ -226,15 +194,11 @@ $(document)
               if (!/type/.test(key)) {
                 sum[key] += row[key];
                 total[key] += row[key];
-                if (!/(\d|count)/.test(key)) {
-                  row[key] = usd.format(row[key]);
-                }
+                if (!/(\d|count)/.test(key)) row[key] = usd.format(row[key]);
               }
             }
             $b.append(
-              $('<tr>').attr({
-                style: "text-align:center;"
-              }).append(
+              $('<tr>').attr({ style: "text-align:center;" }).append(
                 $('<td>').html(row.type),
                 $('<td>').html(row.count),
                 $('<td>').html(row.bal),
@@ -249,9 +213,7 @@ $(document)
           }
         }
         for (let key in sum) {
-          if (!/(\d|count|type)/.test(key)) {
-            sum[key] = usd.format(sum[key]);
-          }
+          if (!/(\d|count|type)/.test(key)) sum[key] = usd.format(sum[key]);
         }
         let $t = $table.clone();
         let $head = $t.find('thead tr td');
@@ -299,9 +261,7 @@ $(document)
     let $b = $('<tbody>');
     let $head = $t.find('thead tr td');
     for (let key in total) {
-      if (!/(\d|count|type)/.test(key)) {
-        total[key] = usd.format(total[key]);
-      }
+      if (!/(\d|count|type)/.test(key)) total[key] = usd.format(total[key]);
     }
     for (let b = 0; b < $head.length; b++) {
       let $h = $head.eq(b);
@@ -349,9 +309,7 @@ $(document)
         }).append(
           $('<thead>').append(
             $('<tr>').append(
-              $('<td>').attr({
-                style: "border-collapse:separate;"
-              }).append(
+              $('<td>').attr({ style: "border-collapse:separate;" }).append(
                 $('div.mcl2-section-content-space').eq(0).clone(),
                 $('<table>').attr({
                   class: "mcl2-table-ie-compatibility",
@@ -360,15 +318,9 @@ $(document)
                   align: "center"
                 }).append(
                   $('<colgroup>').append(
-                    $('<col>').attr({
-                      style: "width:12%"
-                    }),
-                    $('<col>').attr({
-                      style: "width:76%"
-                    }),
-                    $('<col>').attr({
-                      style: "width:12%"
-                    })
+                    $('<col>').attr({ style: "width:12%" }),
+                    $('<col>').attr({ style: "width:76%" }),
+                    $('<col>').attr({ style: "width:12%" })
                   ),
                   $('<tbody>').append(
                     $('<tr>').append(
@@ -376,10 +328,8 @@ $(document)
                       $('<td>').attr({
                         class: "mcl2-report-section-header",
                         style: "padding:2px"
-                      }).html('SUMMARY'),
-                      $('<td>').attr({
-                        style: "text-align:right;"
-                      })
+                      }).html("SUMMARY"),
+                      $('<td>').attr({ style: "text-align:right;" })
                     )
                   )
                 ),
