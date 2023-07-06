@@ -43,6 +43,7 @@ h4 + span {
   font-size: 0.8rem!important;
   font-style: italic;
   padding-left: 0.3rem;
+  padding-bottom: 0.3rem;
 }
 
 span + input,

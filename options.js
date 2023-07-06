@@ -93,10 +93,10 @@ function save() {
             tu: bureauTU.is(':checked:not(:disabled)') ? bureauTU.val() : false,
             xp: bureauXP.is(':checked:not(:disabled)') ? bureauXP.val() : false
           }
-          pref.address = address.val();
-          pref.address_jump = jump.val();
-          pref.alert = alert.val();
-          pref.auto_open = auto_open.val();
+          pref.address = address.attr('value') ? address.val() : (address.is(':checked') ? true : false);
+          pref.address_jump = jump.attr('value') ? jump.val() : (jump.is(':checked') ? true : false);
+          pref.alert = alert.attr('value') ? alert.val() : (alert.is(':checked') ? true : false);
+          pref.auto_open = auto_open.attr('value') ? auto_open.val() : (auto_open.is(':checked') ? true : false);
           pref.bureau = bureau;
           break;
         case "aqua":

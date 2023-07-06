@@ -68,6 +68,14 @@ function keyCheck(obj, _default, result) {
     if (!(key in obj)) {
       obj[key] = _default[key];
     } else if (typeof _default[key] == "object" && Object.keys(_default[key]).length) {
+      if (key == "preferences") {
+        for (let subKey in obj[key]) {
+          if (!(subKey in _default[key])) {
+            console.log("Deleted: " + subKey);
+            delete obj[key][subKey];
+          }
+        }
+      }
       keyCheck(obj[key], _default[key], result);
     }
   }

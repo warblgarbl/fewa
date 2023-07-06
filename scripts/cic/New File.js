@@ -14,10 +14,10 @@ $(document).ready(() => {
       $(pref.address).trigger('click');
       setTimeout(() => {
         for (let key in pref.bureau) {
-          if (pref.bureau.key) $(pref.bureau.key + ':not(:checked)').trigger('click');
+          if (pref.bureau[key]) $(pref.bureau[key] + ':not(:checked)').trigger('click');
         }
       }, 3000);
-      if (pref.jump) skipCoapp();
+      if (pref.skip) skipCoapp();
       $('#Borrower_txtFirstName').trigger('focus');
     });
   })
