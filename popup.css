@@ -6,37 +6,67 @@
   font-family: Play, Helvetica, Arial, sans-serif;
 }
 
+#default {
+  white-space: nowrap;
+}
+
+::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin            : 0;
+}
+
+::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin            : 0;
+}
+
 h1 {
   white-space: nowrap;
 }
 
 input[type="number"] {
-  font-size: 1.4rem;
-  width: 4.2rem;
   -moz-appearance: textfield;
-  padding: 0 0;
-  margin: 0 0.5rem;
+  width          : 4.2rem;
+  margin         : 0 0.5rem;
+  font-size      : 1.4rem;
+  text-align     : center;
 }
 
 input:invalid {
   background-color: #FF5050;
-  color: #FFF;
+  color           : #FFF;
 }
 
 input:valid:not(.empty) {
-  background-color: #66BB66;
-  color: #FFF;
+  background-color: #6eac2c;
+  color           : #FFF;
 }
 
 input.empty {
   background-color: #CCC;
-  color: #555;
+  color           : #555;
+}
+
+.ui-progressbar {
+  position: relative;
+}
+
+.load-label {
+  position   : absolute;
+  left       : 50%;
+  transform  : translate(-50%, 0);
+  font-size  : 1.4rem;
+  font-weight: bold;
+}
+
+.btnSet {
+  display        : flex;
+  justify-content: center;
+  margin         : 0.7rem 0.4rem;
 }
 
 .ui-button {
-  align-self: center;
-  display: inline-block;
-  font-size: 1.2rem;
+  font-size  : 1.2rem;
   white-space: nowrap;
 }
 
@@ -44,24 +74,12 @@ input.empty {
   padding: 0;
 }
 
-::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-.btnSet {
-  align-self: center;
-  display: flex;
-  margin: 0.7rem 0.4rem;
+.ui-sortable-helper {
+  background: #79c9ec;
 }
 
 .slideshow {
-  display: none;
+  display  : none;
   max-width: 400px;
   min-width: 100px;
 }
@@ -71,23 +89,19 @@ input.empty {
 }
 
 .order {
-  font-size: 1.6rem;
-  min-width: 3.2rem;
+  font-size : 1.6rem;
+  min-width : 3.2rem;
   text-align: right;
 }
 
 .sheet-name {
-  font-size: 1.6rem;
+  font-size   : 1.6rem;
   font-variant: small-caps;
   padding-left: 0.2rem;
-  white-space: nowrap;
+  white-space : nowrap;
 }
 
 .gid {
-  font-size: 1.2rem;
+  font-size : 1.2rem;
   font-style: italic;
-}
-
-#default {
-  white-space: nowrap;
 }

@@ -69,21 +69,21 @@ $(document)
       });
 
       var year = $fewa_div.clone().append(
-        $fewa_label.clone().attr({ for: "fewaYear" }).html("Years:"),
+        $fewa_label.clone().attr({ for: "fewaYear" }).html("Years"),
         $fewa_num.clone().attr({
           id: "fewaYear",
           max: "80"
         })
       );
       var month = $fewa_div.clone().append(
-        $fewa_label.clone().attr({ for: "fewaMonth" }).html("Months:"),
+        $fewa_label.clone().attr({ for: "fewaMonth" }).html("Months"),
         $fewa_num.clone().attr({
           id: "fewaMonth",
           max: "11"
         })
       );
       var week = $fewa_div.clone().append(
-        $fewa_label.clone().attr({ for: "fewaWeek" }).html("Weeks:"),
+        $fewa_label.clone().attr({ for: "fewaWeek" }).html("Weeks"),
         $fewa_num.clone().attr({
           id: "fewaWeek",
           max: "3"

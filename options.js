@@ -81,20 +81,22 @@ function save() {
       var pref = options[key].preferences;
       switch (key) {
         case "cic":
+          let skip = $(`#${key}-coapp-skip`);
           let address = $(`#${key}-address`);
-          let jump = $(`#${key}-address-jump`);
-          let alert = $(`#${key}-alert`);
-          let auto_open = $(`#${key}-auto-open`);
           let bureauEF = $(`#${key}-bureau-ef`);
           let bureauTU = $(`#${key}-bureau-tu`);
           let bureauXP = $(`#${key}-bureau-xp`);
+          let auto_open = $(`#${key}-auto-open`);
+          let alert = $(`#${key}-alert`);
+
           let bureau = {
             ef: bureauEF.is(':checked:not(:disabled)') ? bureauEF.val() : false,
             tu: bureauTU.is(':checked:not(:disabled)') ? bureauTU.val() : false,
             xp: bureauXP.is(':checked:not(:disabled)') ? bureauXP.val() : false
           }
+
           pref.address = address.attr('value') ? address.val() : (address.is(':checked') ? true : false);
-          pref.address_jump = jump.attr('value') ? jump.val() : (jump.is(':checked') ? true : false);
+          pref.skip = skip.attr('value') ? skip.val() : (skip.is(':checked') ? true : false);
           pref.alert = alert.attr('value') ? alert.val() : (alert.is(':checked') ? true : false);
           pref.auto_open = auto_open.attr('value') ? auto_open.val() : (auto_open.is(':checked') ? true : false);
           pref.bureau = bureau;

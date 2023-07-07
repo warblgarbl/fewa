@@ -1,6 +1,14 @@
+const storage = chrome.storage.sync;
+
 $(document).ready(() => {
-  chrome.runtime.sendMessage(null, { type: "slideshowReset" });
+  chrome.runtime.sendMessage({
+    to: "background",
+    type: "deleteKey",
+    target: "tabID",
+    keyPath: ["fewa", "sheets", "page_settings", "active"]
+  });
 });
+
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   switch (request.type) {
     case "getSheets":
@@ -16,7 +24,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       var ptrn = /(?<=\[null,\[\\")\d+/g;
       var $src = $('script').filter((i, e) => ptrn.test(e.innerHTML));
       var names = [];
-      var ids = $src.html().match(ptrn).filter((e, i, a) => {
+      var gids = $src.html().match(ptrn).filter((e, i, a) => {
         return a.indexOf(e) === i;
       }).sort((a, b) => {
         if (a.length > b.length) return 1
@@ -25,21 +33,21 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       });
 
       // Check for multiple sheets
-      if (ids.length < 2) return chrome.runtime.sendMessage({
+      if (gids.length < 2) return chrome.runtime.sendMessage({
         to: "popup",
         target: "#slideshow",
         type: "1 sheet"
       });
 
       // Find first visible sheet
-      window.location.hash = "gid=" + ids[0];
+      window.location.hash = "gid=" + gids[0];
       var start = $('.docs-sheet-active-tab .docs-sheet-tab-name').html();
-      for (let i = 1; i < ids.length; i++) {
-        window.location.hash = "gid=" + ids[i];
+      for (let i = 1; i < gids.length; i++) {
+        window.location.hash = "gid=" + gids[i];
         if (start != $('.docs-sheet-active-tab .docs-sheet-tab-name').html()) {
-          window.location.hash = "gid=" + ids[--i];
+          window.location.hash = "gid=" + gids[--i];
           if (start != $('.docs-sheet-active-tab .docs-sheet-tab-name').html()) {
-            window.location.hash = "gid=" + ids[++i];
+            window.location.hash = "gid=" + gids[++i];
             start = $('.docs-sheet-active-tab .docs-sheet-tab-name').html();
           }
           chrome.runtime.sendMessage({
@@ -48,7 +56,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
             type: "sheet",
             value: {
               name: start,
-              id: ids[i]
+              gid: gids[i]
             }
           });
           names.push(start);
@@ -57,9 +65,9 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         }
       }
       // Find remaining visible sheets
-      for (let i = start + 1; i < ids.length; i++) {
-        window.location.hash = "gid=" + ids[i];
-        let id = ids[i];
+      for (let i = start + 1; i < gids.length; i++) {
+        window.location.hash = "gid=" + gids[i];
+        let gid = gids[i];
         let name = $('.docs-sheet-active-tab .docs-sheet-tab-name').html();
         if (names[names.length - 1] != name) {
           names.push(name);
@@ -68,7 +76,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
             target: "#slideshow",
             type: "sheet",
             value: {
-              id,
+              gid,
               name
             }
           });
@@ -92,23 +100,25 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       });
       break;
     case "slideshowStart":
+      window.location.hash = "gid=" + request.data[0].gid;
       nextSlide(0, request);
       break;
     case "slideshowStop":
-      chrome.storage.sync.get().then(result => {
-        clearTimeout(result.fewa.sheets.page_settings[request.id].currentSlide);
+      storage.get().then(result => {
+        var page = result.fewa.sheets.page_settings;
+        clearTimeout(page.active[request.tabID]);
       });
   }
 });
 
 function nextSlide(i, set) {
-  chrome.storage.sync.get().then(result => {
-    let page = result.fewa.sheets.page_settings[set.id];
-    page.currentSlide = setTimeout(() => {
+  storage.get().then(result => {
+    let page = result.fewa.sheets.page_settings;
+    page.active[set.tabID] = setTimeout(() => {
       if (i === set.data.length) { i = 0 }
-      window.location.hash = "gid=" + set.data[i].id;
+      window.location.hash = "gid=" + set.data[i].gid;
       return nextSlide(i, set);
     }, 1000 * parseInt(set.data[i++].time));
-    chrome.storage.sync.set(result);
+    storage.set(result);
   });
 }

@@ -1,23 +1,31 @@
-.fewa--div {
-	padding: 5px 0;
-}
-
-.fewa--label {
-	display: inline-block;
-	width: 4rem;
-	text-align: right;
-	padding: 0.5rem 0;
-}
-
-.fewa--num {
-	width: 2rem;
-}
-
 #fewaTime {
-	background-color: #f5640933;
-	width: 200px;
+  background-color: #f5640933;
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem;
+  max-width: 150px;
 }
 
 #fewaTimeEst {
-	width: calc(400px - 24px * 2)
+  max-width: calc(400px - 24px * 2);
+}
+
+.fewa--div {
+  padding: 0.25rem 0;
+}
+
+.fewa--label {
+  float: right;
+  padding: 0 0.25rem;
+  position: relative;
+  left: -50%;
+  text-align: right;
+  width: 4rem;
+}
+
+.fewa--num {
+  float: left;
+  position: relative;
+  right: -50%;
+  width: 2rem;
 }

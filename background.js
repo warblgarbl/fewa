@@ -9,7 +9,7 @@ const _default = {
         auto_open: true,
         bureau: {
           ef: false,
-          tu: "#UIOptions_tuc_credit",
+          tu: '#UIOptions_tuc_credit',
           xp: false
         },
         skip: true
@@ -26,24 +26,55 @@ const _default = {
       preferences: {}
     },
     sheets: {
-      page_settings: {},
+      page_settings: {
+        active: {}
+      },
       preferences: {}
     }
   }
 }
 chrome.runtime.onInstalled.addListener(details => {
-  if (details.reason == 'update') {
+  if (details.reason == "update") {
     storage.get().then(result => storage.set(keyCheck(result, _default, result)));
   }
   if (details.reason == "install") {
-    chrome.tabs.create({ url: chrome.runtime.getURL('options.html') });
+    chrome.tabs.create({ url: chrome.runtime.getURL("options.html") });
   }
 });
 chrome.tabs.onActivated.addListener(activeToggle);
 chrome.tabs.onUpdated.addListener(activeToggle);
+chrome.tabs.onRemoved.addListener((tabID, info) => {
+  storage.get().then(result => {
+    for (let dom in result.fewa) {
+      let page = result.fewa[dom].page_settings;
+      for (let id in page.active) {
+        if (id == tabID) delete page.active[id];
+      }
+    }
+    storage.set(result);
+  });
+});
+
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.to !== "background") return;
-  switch (request.type) {}
+  switch (request.type) {
+    case "deleteKey":
+      switch (request.target) {
+        case "tabID":
+          chrome.tabs.query({
+            active: true,
+            currentWindow: true
+          }, (tabs) => {
+            storage.get().then(result => {
+              let key = result;
+              for (let i = 0; i < request.keyPath.length; i++) {
+                key = key[request.keyPath[i]];
+              }
+              if (tabs[0].id in key) delete key[tabs[0].id];
+            });
+          });
+      }
+  }
 });
 
 function activeToggle() {
@@ -55,24 +86,21 @@ function activeToggle() {
 
 function toggle(tabs) {
   if (tabs.length) {
-    if (/.*docs\.google\.com\/spreadsheets\/d\/.*/.test(tabs[0].url)) {
+    if (/^http.+?spreadsheets\/d\/.+?\//.test(tabs[0].url)) {
       chrome.action.enable();
-    } else {
-      chrome.action.disable();
-    }
+    } else chrome.action.disable();
   }
 }
 
 function keyCheck(obj, _default, result) {
   for (let key in _default) {
-    if (!(key in obj)) {
-      obj[key] = _default[key];
-    } else if (typeof _default[key] == "object" && Object.keys(_default[key]).length) {
+    if (!(key in obj)) obj[key] = _default[key]
+    else if (typeof _default[key] == "object" && Object.keys(_default[key]).length) {
       if (key == "preferences") {
         for (let subKey in obj[key]) {
           if (!(subKey in _default[key])) {
-            console.log("Deleted: " + subKey);
             delete obj[key][subKey];
+            console.log("Deleted: " + subKey);
           }
         }
       }

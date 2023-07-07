@@ -32,7 +32,7 @@ $(document).ready(() => {
       if (/ReportResult/.test(document.URL)) {
         setTimeout(() => {
           $('#btnCustom').trigger('click');
-        }, 1000);
+        }, 3000);
       }
     }
   });
