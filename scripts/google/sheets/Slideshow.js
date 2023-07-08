@@ -14,9 +14,10 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     case "getSheets":
       chrome.runtime.sendMessage({
         to: "popup",
-        target: "#slideshow",
-        type: "max",
-        value: $('.docs-sheet-tab:visible').length + 1
+        target: ".spreadsheet",
+        type: "init",
+        name: $('meta[property="og:title"]').attr("content"),
+        max: $('.docs-sheet-tab:visible').length + 1
       });
       // Current view
       var hash = window.location.hash;
@@ -35,7 +36,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       // Check for multiple sheets
       if (gids.length < 2) return chrome.runtime.sendMessage({
         to: "popup",
-        target: "#slideshow",
+        target: ".spreadsheet",
         type: "1 sheet"
       });
 
@@ -52,11 +53,11 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
           }
           chrome.runtime.sendMessage({
             to: "popup",
-            target: "#slideshow",
+            target: ".spreadsheet",
             type: "sheet",
             value: {
-              name: start,
-              gid: gids[i]
+              gid: gids[i],
+              name: start
             }
           });
           names.push(start);
@@ -73,7 +74,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
           names.push(name);
           chrome.runtime.sendMessage({
             to: "popup",
-            target: "#slideshow",
+            target: ".spreadsheet",
             type: "sheet",
             value: {
               gid,
@@ -84,7 +85,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       }
       // Get sheet order
       var sort = [];
-      var sheets = $('.docs-sheet-tab:visible').find('.docs-sheet-tab-name');
+      var sheets = $('.docs-sheet-tab:visible .docs-sheet-tab-name');
       for (let i = 0; i < sheets.length; i++) {
         let name = sheets.eq(i).html();
         let index = names.indexOf(name);
@@ -94,7 +95,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       window.location.hash = hash;
       chrome.runtime.sendMessage({
         to: "popup",
-        target: "#slideshow",
+        target: ".spreadsheet",
         type: "sort",
         value: sort
       });

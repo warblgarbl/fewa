@@ -12,30 +12,37 @@
 
 <body>
   <div id="header" class="header">
-    <h1>Preferences<input type="button" id="save" value="Save"></h1>
+    <h1>Preferences
+      <div class="buttons">
+        <button id="save">Save changes</button>
+        <button id="undo">Discard changes</button>
+        <button id="default">Restore default</button>
+        <button id="temp">Clear cache</button>
+      </div>
+    </h1>
     <h3>Change extension features to your preference.</h3>
   </div>
   <div class="preferences">
-    <div id="finance">
-      <fieldset id="cic">
+    <div class="finance">
+      <fieldset>
         <legend>CIC</legend>
-        <div class="check">
+        <div>
           <h4>Co-app skip</h4>
-          <span>Jump to the address field if co-applicant's name is left blank.</span>
+          <span>Jump to the address field if co-applicant's name is left blank. Default: enabled</span>
           <div>
             <input type="checkbox" id="cic-coapp-skip">
             <label for="cic-coapp-skip">Enable</label>
           </div>
         </div>
-        <div class="select">
+        <div>
           <h4>Address parsing</h4>
-          <span>Choose the default address form for new files.</span>
+          <span>Choose the default address form for new files. Default: Single line</span>
           <select id="cic-address">
           </select>
         </div>
-        <div class="check">
+        <div>
           <h4>Auto-select bureau</h4>
-          <span>Automatically select bureaus for new files.</span>
+          <span>Automatically select bureaus for new files. Default: TransUnion</span>
           <div class="multi-check">
             <div>
               <input type="checkbox" id="cic-bureau-ef" value='#UIOptions_eqf_credit' disabled>
@@ -51,17 +58,17 @@
             </div>
           </div>
         </div>
-        <div class="check">
+        <div>
           <h4>Auto-open</h4>
-          <span>Enables auto-open for new files.</span>
+          <span>Enables auto-open for new files. Default: enabled</span>
           <div>
             <input type="checkbox" id="cic-auto-open">
             <label for="cic-coapp-skip">Enable</label>
           </div>
         </div>
-        <div class="check">
+        <div>
           <h4>Alerts</h4>
-          <span>Receive an audio alert for bad-match reports.</span>
+          <span>Receive an audio alert for bad-match reports. Default: enabled</span>
           <div>
             <input type="checkbox" id="cic-alert">
             <label for="cic-coapp-skip">Enable</label>
@@ -76,9 +83,11 @@
       </div>
     </div>
 
-    <div id="google">
-      <div id="sheets">
-      </div>
+    <div class="google sheets">
+    </div>
+  </div>
+  <div class="page_settings">
+    <div class="google sheets">
     </div>
   </div>
 </body>

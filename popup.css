@@ -20,8 +20,13 @@
   margin            : 0;
 }
 
-h1 {
+h1,
+h2 {
   white-space: nowrap;
+}
+
+h2 {
+  margin-left: 0.5rem;
 }
 
 input[type="number"] {
@@ -32,17 +37,17 @@ input[type="number"] {
   text-align     : center;
 }
 
-input:invalid {
+input[type="number"]:invalid {
   background-color: #FF5050;
   color           : #FFF;
 }
 
-input:valid:not(.empty) {
+input[type="number"]:valid:not(.empty) {
   background-color: #6eac2c;
   color           : #FFF;
 }
 
-input.empty {
+input[type="number"].empty {
   background-color: #CCC;
   color           : #555;
 }
@@ -63,11 +68,17 @@ input.empty {
   display        : flex;
   justify-content: center;
   margin         : 0.7rem 0.4rem;
+  transform      : scale(125%, 125%);
 }
 
-.ui-button {
+.ui-icon {
   font-size  : 1.2rem;
   white-space: nowrap;
+  transform  : scale(125%, 125%);
+}
+
+.ui-icon-stop {
+  transform: scale(150%, 150%);
 }
 
 .ui-sortable {
@@ -78,8 +89,7 @@ input.empty {
   background: #79c9ec;
 }
 
-.slideshow {
-  display  : none;
+.spreadsheet {
   max-width: 400px;
   min-width: 100px;
 }

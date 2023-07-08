@@ -55,27 +55,34 @@ chrome.tabs.onRemoved.addListener((tabID, info) => {
   });
 });
 
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.to !== "background") return;
-  switch (request.type) {
-    case "deleteKey":
-      switch (request.target) {
-        case "tabID":
-          chrome.tabs.query({
-            active: true,
-            currentWindow: true
-          }, (tabs) => {
-            storage.get().then(result => {
-              let key = result;
-              for (let i = 0; i < request.keyPath.length; i++) {
-                key = key[request.keyPath[i]];
-              }
-              if (tabs[0].id in key) delete key[tabs[0].id];
+chrome.runtime.onMessage
+  .addListener((request, sender, sendResponse) => {
+    if (request.to !== "background") return;
+    console.log('message')
+    switch (request.type) {
+      case "deleteKey":
+        console.log('del')
+        switch (request.target) {
+          case "tabID":
+            chrome.tabs.query({
+              active: true,
+              currentWindow: true
+            }, (tabs) => {
+              storage.get().then(result => {
+                let key = result;
+                for (let i = 0; i < request.keyPath.length; i++) {
+                  key = key[request.keyPath[i]];
+                }
+                if (tabs[0].id in key) delete key[tabs[0].id];
+              });
             });
-          });
-      }
-  }
-});
+        }
+        break;
+      case "defaultStorage":
+        storage.set(_default);
+        sendResponse();
+    }
+  });
 
 function activeToggle() {
   chrome.tabs.query({

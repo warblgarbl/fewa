@@ -2,24 +2,27 @@ const storage = chrome.storage.sync;
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.to !== "popup") return;
-  var $load = $(request.target + " .load");
+  var $load = $(request.target + " " + '.load');
   switch (request.target) {
-    case "#slideshow":
+    case ".spreadsheet":
       switch (request.type) {
-        case "max":
-          $load.progressbar('option', 'max', request.value);
+        case "init":
+          $('.spreadsheet').attr({ name: request.name });
+          $('.spreadsheet .name').html(request.name);
+          $load.progressbar('option', 'max', request.max);
           break;
         case "1 sheet":
           $load.progressbar('value', $load.progressbar('option', 'max'));
           $load.hide('fade');
-          $(request.target + " .message").html("More than one sheet required.").show('fade');
+          $(request.target + " " + '.message').html("More than one sheet required.").show('fade');
           break;
         case "sheet":
-          $(request.target + " .list").append(
+          $(request.target + " " + '.list').append(
             $('<li>').addClass('sheet').append(
               $('<div>').addClass('order'),
               $('<input>').attr({
                 id: request.value.gid,
+                name: request.value.name,
                 type: "number",
                 class: "empty",
                 min: 5,
@@ -35,8 +38,8 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
           $load.progressbar('value', $load.progressbar('value') + 1);
           break;
         case "sort":
-          var $list = $('#slideshow .list');
-          var $old = $('#slideshow .sheet');
+          var $list = $('.spreadsheet .list');
+          var $old = $('.spreadsheet .sheet');
           var $new = [];
           for (let i = 0; i < $old.length; i++) {
             let $n = $old.eq(request.value[i]);
@@ -49,13 +52,13 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
             containment: "parent",
             revert: true,
             stop: function () {
-              var $sort = $('#slideshow .sheet:not(.ui-sortable-helper)');
+              var $sort = $('.spreadsheet .sheet:not(.ui-sortable-helper)');
               var $place = $('.ui-sortable-placeholder');
               var $help = $('.ui-sortable-helper');
               for (let i = 0; i < $sort.length; i++) {
                 $sort.eq(i).find('.order').html(i + 1);
               }
-              $help.find('.order').html($place.index('#slideshow .sheet:not(.ui-sortable-helper)') + 1);
+              $help.find('.order').html($place.index('.spreadsheet .sheet:not(.ui-sortable-helper)') + 1);
             },
             tolerance: "pointer"
           }).on('sort', $list.sortable('option', 'stop'));
@@ -68,13 +71,13 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
             var sheetID = tabs[0].url.match(/^http.+?spreadsheets\/d\/(.+?)\//)[1];
             storage.get().then(result => {
               var page = result.fewa.sheets.page_settings;
-              if (sheetID in page && page[sheetID].length) {
+              if (sheetID in page) {
                 var sheet = page[sheetID];
-                for (let i = 0; i < sheet.length; i++) {
-                  let gid = "#" + sheet[i].gid;
+                for (let i = 0; i < sheet.data.length; i++) {
+                  let gid = "#" + sheet.data[i].gid;
                   let sel = `.sheet:has(${gid})`
                   let $sheet = $(sel);
-                  $(gid).val(sheet[i].time);
+                  $(gid).val(sheet.data[i].time);
                   $list.children().eq(i).before($sheet);
                 }
               }
@@ -89,6 +92,8 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
                 $('#slideshow .btnSet').show('fade');
                 $('#slideshow input[type="number"]').trigger('change');
                 nxt();
+              }).queue(function (nxt) {
+                $list.width($list.width());
               });
             });
           });
@@ -127,13 +132,16 @@ $(document).ready(() => {
   .on({
     click: function () {
       var $this = $(this);
+      var name = $('.spreadsheet .name').html();
       var sheets = $('.sheet');
       var data = [];
       for (let i = 0; i < sheets.length; i++) {
-        let time = sheets.eq(i).find('input[type="number"]').eq(0);
+        let sheet = sheets.eq(i);
+        let time = sheet.find('input[type="number"]').eq(0);
         let gid = time.attr('id');
+        let name = time.attr('name');
         time = time.val();
-        if (time.length) data.push({ gid, time });
+        if (time.length) data.push({ gid, name, time });
       }
       if (data.length > 1) {
         chrome.tabs.query({
@@ -144,17 +152,20 @@ $(document).ready(() => {
           var sheetID = tabs[0].url.match(/^http.+?spreadsheets\/d\/(.+?)\//)[1];
           storage.get().then(result => {
             var page = result.fewa.sheets.page_settings;
-            if (!(sheetID in page)) page[sheetID] = [];
-            if (data.length != page[sheetID].length) {
-              page[sheetID] = data;
-              storage.set(result);
-            } else
+            if (!(sheetID in page)) page[sheetID] = { name: "", data: [] };
+            if (name != page[sheetID].name || data.length != page[sheetID].length) {
+              page[sheetID] = { name, data }
+              storage.set(result)
+            } else {
               for (let i = 0; i < data.length; i++) {
-                if (data[i].gid != page[sheetID][i].gid || data[i].time != page[sheetID][i].time) {
-                  page[sheetID] = data;
+                if (data[i].gid != page[sheetID][i].gid ||
+                  data[i].name != page[sheetID][i].name ||
+                  data[i].time != page[sheetID][i].time) {
+                  page[sheetID] = { name, data }
                   storage.set(result);
                 }
               }
+            }
           });
           chrome.tabs.sendMessage(tabID, {
             type: "slideshowStart",
@@ -201,8 +212,6 @@ $(document).ready(() => {
         });
       });
 
-      var ready = $('#slideshow .sheet input').filter((i, e) => e.value.toString().length);
-      if (ready.length > 1) $('#slideshowStart').removeClass('ui-state-disabled');
       $('#slideshowStop').addClass('ui-state-disabled');
       $('input[type="number"]').eq(0).trigger('change');
     }
@@ -211,6 +220,7 @@ $(document).ready(() => {
     'change keydown keyup': function (e) {
       var $this = $(this);
       var $val = $this.val();
+      var $parent = $this.parents('.spreadsheet');
       var $max = parseInt($this.attr('max'));
       var $min = parseInt($this.attr('min'));
       switch ($val.length) {
@@ -228,7 +238,7 @@ $(document).ready(() => {
           $this.addClass('empty');
       }
 
-      var ready = $('#slideshow .sheet input').filter((i, e) => e.value.toString().length);
+      var ready = $parent.find('.sheet input:valid:not(.empty)');
       if (ready.length > 1) {
         if ($('#slideshowStop.ui-state-disabled').length) $('#slideshowStart').removeClass('ui-state-disabled')
         else $('#slideshowRefresh').removeClass('ui-state-disabled');

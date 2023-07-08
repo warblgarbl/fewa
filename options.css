@@ -10,29 +10,30 @@ body {
   align-self: center;
 }
 
-#save {
+.buttons {
   margin-left: 0.5rem;
 }
 
-#save, .preferences * {
+.page_settings *,
+.preferences * {
   font-size: 1rem;
 }
 
-.multi-choice {
-  display: flex;
-  flex-direction: column;
-}
-
 h1 {
-  white-space: nowrap;
+  white-space  : nowrap;
   margin-bottom: 0.5rem;
 }
 
+h1 .buttons * {
+  font-family: Play, Helvetica, Arial, sans-serif;
+  font-size  : 0.75rem;
+}
+
 h1 + h3 {
-  font-style: italic;
-  margin-top: 0;
+  font-style   : italic;
+  margin-top   : 0;
   margin-bottom: 1.25rem;
-  margin-left: 0.5rem;
+  margin-left  : 0.5rem;
 }
 
 h4 {
@@ -40,10 +41,43 @@ h4 {
 }
 
 h4 + span {
-  font-size: 0.8rem!important;
-  font-style: italic;
-  padding-left: 0.3rem;
+  font-size     : 0.8rem!important;
+  font-style    : italic;
+  padding-left  : 0.3rem;
   padding-bottom: 0.3rem;
+}
+
+::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin            : 0;
+}
+
+::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin            : 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+  width          : 3rem;
+  margin         : 0 0.25rem;
+  font-size      : 1rem;
+  text-align     : center;
+}
+
+input[type="number"]:invalid {
+  background-color: #FF5050;
+  color           : #FFF;
+}
+
+input[type="number"]:valid:not(.empty) {
+  background-color: #6eac2c;
+  color           : #FFF;
+}
+
+input[type="number"].empty {
+  background-color: #CCC;
+  color           : #555;
 }
 
 span + input,
@@ -53,16 +87,60 @@ span + select {
 
 fieldset,
 fieldset > div {
-  align-items: flex-start;
-  display: flex;
+  align-items   : flex-start;
+  display       : flex;
   flex-direction: column;
 }
 
 fieldset {
-  margin: 1rem 0;
+  margin   : 1rem 0;
   max-width: 800px;
 }
 
 fieldset > div {
   margin: 0.5rem 0;
+}
+
+.multi-choice {
+  display       : flex;
+  flex-direction: column;
+}
+
+.page_settings .sheets {
+  display: flex;
+}
+
+.ui-sortable {
+  padding: 0;
+}
+
+.ui-sortable-helper {
+  background: #79c9ec;
+}
+
+.spreadsheet {
+  max-width: 400px;
+  min-width: 100px;
+}
+
+.sheet {
+  display: flex;
+}
+
+.order {
+  font-size : 1.2rem;
+  min-width : 3.2rem;
+  text-align: right;
+}
+
+.sheet-name {
+  font-size   : 1.2rem;
+  font-variant: small-caps;
+  padding-left: 0.2rem;
+  white-space : nowrap;
+}
+
+.gid {
+  font-size : 1rem;
+  font-style: italic;
 }
