@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "FEWA Office",
-  "version": "0.5.4.0",
+  "version": "0.5.5.0",
 
   "action": {
     "default_popup": "popup.html"
@@ -18,8 +18,7 @@
     "service_worker": "background.js",
     "type": "module"
   },
-  "content_scripts": [
-    {
+  "content_scripts": [{
       "matches": ["https://cic.meridianlink.com/*ClientConsumer.aspx"],
       "js": ["scripts/external/jquery-3.7.0.min.js", "scripts/cic/New File.js"],
       "run_at": "document_start"
@@ -35,6 +34,7 @@
     {
       "matches": ["https://cic.meridianlink.com/*reports/print_htm.aspx"],
       "js": ["scripts/external/jquery-3.7.0.min.js", "scripts/cic/Report.js"],
+      "css": ["scripts/cic/Report.css"],
       "run_at": "document_start"
     },
     {

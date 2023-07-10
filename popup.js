@@ -29,6 +29,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
                 max: 300,
                 placeholder: "300"
               }),
+              $('<label>').html("s"),
               $('<div>').addClass('label').append(
                 $('<div>').addClass('sheet-name').html(request.value.name),
                 $('<div>').addClass('gid').html("gid: " + request.value.gid)
@@ -88,12 +89,13 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
               } else $('#slideshowStart, #slideshowRefresh, #slideshowStop').addClass('ui-state-disabled');
 
               $load.hide('fade').queue(function (nxt) {
-                $list.trigger('sort').show('fade');
+                $list.trigger('sort').show('fade').queue(function (nxt2) {
+                  $list.width($list.width());
+                  nxt2();
+                });
                 $('#slideshow .btnSet').show('fade');
                 $('#slideshow input[type="number"]').trigger('change');
                 nxt();
-              }).queue(function (nxt) {
-                $list.width($list.width());
               });
             });
           });

@@ -1,0 +1,11 @@
+.freeze {
+  background: #9FE2F3;
+}
+
+.bad-input {
+  background: palevioletred;
+}
+
+.bad-match {
+  background: lightgreen;
+}

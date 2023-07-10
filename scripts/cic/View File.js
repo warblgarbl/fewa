@@ -1,38 +1,22 @@
 const storage = chrome.storage.sync;
 
 $(document).ready(() => {
-  var $label = $('<label>').html("BOTH").attr({ for: "fewa_bc" });
+  var $label = $('<label>').html("BOTH").attr({ 'for': "fewa_bc" });
   var $appL = $('label[for="custom_pc"]');
   var $coL = $('label[for="custom_sc"]');
 
-  $label.wrapInner($('<a>')
-    .attr({ href: "javascript:void(0);" })
-    .on('click', () => only(0)));
-  $appL.wrapInner($('<a>')
-    .attr({ href: "javascript:void(0);" })
-    .on('click', () => only(1)));
-  $coL.wrapInner($('<a>')
-    .attr({ href: "javascript:void(0);" })
-    .on('click', () => only(2)));
+  $label.wrapInner($('<a>').attr({ href: "javascript:void(0);" }).on('click', () => only(0)));
+  $appL.wrapInner($('<a>').attr({ href: "javascript:void(0);" }).on('click', () => only(1)));
+  $coL.wrapInner($('<a>').attr({ href: "javascript:void(0);" }).on('click', () => only(2)));
 
-  $appL.parent('li').before(
-    $('<li>').append(
-      $('<input>').attr({
-        type: "checkbox",
-        id: "fewa_bc",
-        name: "fewa_bc",
-        disabled: ""
-      }),
-      $label
-    )
-  );
+  $appL.parent('li').before($('<li>').append($('<input>').attr({ type: "checkbox", id: "fewa_bc", name: "fewa_bc", disabled: "" }), $label));
   storage.get().then(result => {
     let options = result.fewa.cic.preferences;
     if (options.auto_open) {
       if (/ReportResult/.test(document.URL)) {
         setTimeout(() => {
           $('#btnCustom').trigger('click');
-        }, 3000);
+        }, 1000 * options.auto_open_delay);
       }
     }
   });
@@ -44,18 +28,24 @@ function only(n) {
 
   switch (n) {
     case 0: {
-      if ($app.filter(':checked').length === 0) $app.trigger('click');
-      if ($co.filter(':checked').length === 0) $co.trigger('click');
+      if ($app.filter(':checked').length === 0)
+        $app.trigger('click');
+      if ($co.filter(':checked').length === 0)
+        $co.trigger('click');
     }
     break;
     case 1: {
-      if ($app.filter(':checked').length === 0) $app.trigger('click');
-      if ($co.filter(':checked').length !== 0) $co.trigger('click');
+      if ($app.filter(':checked').length === 0)
+        $app.trigger('click');
+      if ($co.filter(':checked').length !== 0)
+        $co.trigger('click');
     }
     break;
     case 2: {
-      if ($app.filter(':checked').length !== 0) $app.trigger('click');
-      if ($co.filter(':checked').length === 0) $co.trigger('click');
+      if ($app.filter(':checked').length !== 0)
+        $app.trigger('click');
+      if ($co.filter(':checked').length === 0)
+        $co.trigger('click');
     }
     break;
   }

@@ -7,11 +7,13 @@ const _default = {
         address: '#CurrentAddress_faUSA_rbnUnparsed',
         alert: true,
         auto_open: true,
+        auto_open_delay: 3,
         bureau: {
           ef: false,
           tu: '#UIOptions_tuc_credit',
           xp: false
         },
+        markup: true,
         skip: true
       }
     },
@@ -19,11 +21,17 @@ const _default = {
       page_settings: {
         dealer: ""
       },
-      preferences: {}
+      preferences: {
+        time: true
+      }
     },
     pci: {
       page_settings: {},
-      preferences: {}
+      preferences: {
+        decCode: true,
+        report: true,
+        time: true
+      }
     },
     sheets: {
       page_settings: {
@@ -58,10 +66,8 @@ chrome.tabs.onRemoved.addListener((tabID, info) => {
 chrome.runtime.onMessage
   .addListener((request, sender, sendResponse) => {
     if (request.to !== "background") return;
-    console.log('message')
     switch (request.type) {
       case "deleteKey":
-        console.log('del')
         switch (request.target) {
           case "tabID":
             chrome.tabs.query({

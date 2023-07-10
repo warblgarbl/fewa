@@ -1,9 +1,9 @@
 #fewaTime {
   background-color: #f5640933;
-  display: flex;
-  flex-direction: column;
-  padding: 0.5rem;
-  max-width: 150px;
+  display         : flex;
+  flex-direction  : column;
+  padding         : 0.5rem;
+  max-width       : 150px;
 }
 
 #fewaTimeEst {
@@ -15,17 +15,17 @@
 }
 
 .fewa--label {
-  float: right;
-  padding: 0 0.25rem;
-  position: relative;
-  left: -50%;
+  float     : right;
+  padding   : 0 0.25rem;
+  position  : relative;
+  left      : -50%;
   text-align: right;
-  width: 4rem;
+  width     : 4rem;
 }
 
 .fewa--num {
-  float: left;
+  float   : left;
   position: relative;
-  right: -50%;
-  width: 2rem;
+  right   : -50%;
+  width   : 2rem;
 }

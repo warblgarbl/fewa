@@ -34,22 +34,41 @@ input[type="number"] {
   width          : 4.2rem;
   margin         : 0 0.5rem;
   font-size      : 1.4rem;
-  text-align     : center;
+  text-align     : right;
+  padding-right  : 1rem;
+}
+
+input + label {
+  margin-top    : 1rem;
+  margin-left   : -1.5rem;
+  margin-right  : 1.5rem;
+  font-size     : 1.4rem;
+  text-align    : left;
+  vertical-align: bottom;
+}
+
+input[type="number"]:invalid,
+input[type="number"]:invalid + label,
+input[type="number"]:valid:not(.empty),
+input[type="number"]:valid:not(.empty) + label {
+  color: #FFF;
+}
+
+input[type="number"].empty,
+input[type="number"].empty + label {
+  color: #555;
 }
 
 input[type="number"]:invalid {
   background-color: #FF5050;
-  color           : #FFF;
 }
 
 input[type="number"]:valid:not(.empty) {
-  background-color: #6eac2c;
-  color           : #FFF;
+  background-color: #6EAC2C;
 }
 
 input[type="number"].empty {
   background-color: #CCC;
-  color           : #555;
 }
 
 .ui-progressbar {

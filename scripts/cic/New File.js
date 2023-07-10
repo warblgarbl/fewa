@@ -1,32 +1,39 @@
 const storage = chrome.storage.sync;
 
 $(document).ready(() => {
-    var $users = $('#BranchUser_cboUser > option');
-    for (let i = 0; i < $users.length; i++) {
-      var $user = $users.eq(i);
-      if (/color/.test($user.attr('style'))) {
-        $user.attr({ selected: "" });
-        break;
-      }
+  var $users = $('#BranchUser_cboUser > option');
+  for (let i = 0; i < $users.length; i++) {
+    var $user = $users.eq(i);
+    if (/color/.test($user.attr('style'))) {
+      $user.attr({selected: ""});
+      break;
     }
+  }
+  storage.get().then(result => {
+    let pref = result.fewa.cic.preferences;
+    $(pref.address).trigger('click');
+    if (pref.skip) 
+      skipCoapp();
+    $('#Borrower_txtFirstName').trigger('focus');
+  });
+}).on({
+  focusout: function () {
+    var $this = $(this);
+    if (!$this.val().trim()) 
+      setTimeout(() => $('#CoBorrower_txtSurName').val(""), 0);
+    }
+  }, '#CoBorrower_txtFirstName').one({
+  focus: function () {
+    var $this = $(this);
     storage.get().then(result => {
       let pref = result.fewa.cic.preferences;
-      $(pref.address).trigger('click');
-      setTimeout(() => {
-        for (let key in pref.bureau) {
-          if (pref.bureau[key]) $(pref.bureau[key] + ':not(:checked)').trigger('click');
+      for (let key in pref.bureau) {
+        if (pref.bureau[key]) 
+          $(pref.bureau[key] + ':not(:checked)').trigger('click');
         }
-      }, 3000);
-      if (pref.skip) skipCoapp();
-      $('#Borrower_txtFirstName').trigger('focus');
-    });
-  })
-  .on({
-    focusout: function () {
-      var $this = $(this);
-      if (!$this.val().trim()) setTimeout(() => $('#CoBorrower_txtSurName').val(""), 0);
-    }
-  }, '#CoBorrower_txtFirstName');
+      });
+  }
+}, '#CoBorrower_txtSurName');
 
 function skipCoapp() {
   $(document).on({

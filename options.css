@@ -2,51 +2,6 @@
   font-size: 125%;
 }
 
-* {
-  font-family: Play, Helvetica, Arial, sans-serif;
-}
-
-body {
-  align-self: center;
-}
-
-.buttons {
-  margin-left: 0.5rem;
-}
-
-.page_settings *,
-.preferences * {
-  font-size: 1rem;
-}
-
-h1 {
-  white-space  : nowrap;
-  margin-bottom: 0.5rem;
-}
-
-h1 .buttons * {
-  font-family: Play, Helvetica, Arial, sans-serif;
-  font-size  : 0.75rem;
-}
-
-h1 + h3 {
-  font-style   : italic;
-  margin-top   : 0;
-  margin-bottom: 1.25rem;
-  margin-left  : 0.5rem;
-}
-
-h4 {
-  margin: 0;
-}
-
-h4 + span {
-  font-size     : 0.8rem!important;
-  font-style    : italic;
-  padding-left  : 0.3rem;
-  padding-bottom: 0.3rem;
-}
-
 ::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin            : 0;
@@ -57,48 +12,102 @@ h4 + span {
   margin            : 0;
 }
 
-input[type="number"] {
-  -moz-appearance: textfield;
-  width          : 3rem;
-  margin         : 0 0.25rem;
-  font-size      : 1rem;
-  text-align     : center;
+.ui-widget {
+  font-family: Play, Helvetica, Arial, sans-serif;
+  font-size  : 0.75rem;
 }
 
-input[type="number"]:invalid {
-  background-color: #FF5050;
-  color           : #FFF;
+.ui-button.activated {
+  border     : 1px solid #acdd4a;
+  background : #6eac2c url("images/ui-bg_gloss-wave_50_6eac2c_500x100.png") 50% 50% repeat-x;
+  font-weight: normal;
+  color      : #fff;
 }
 
-input[type="number"]:valid:not(.empty) {
-  background-color: #6eac2c;
-  color           : #FFF;
+* {
+  font-family: Play, Helvetica, Arial, sans-serif;
 }
 
-input[type="number"].empty {
-  background-color: #CCC;
-  color           : #555;
+body * {
+  max-width: 675px;
 }
 
-span + input,
-span + select {
+h1 {
+  white-space  : nowrap;
+  margin-bottom: 0.5rem;
+}
+
+h1 + h3 {
+  font-style   : italic;
+  margin-top   : 0;
+  margin-bottom: 1.25rem;
+  margin-left  : 0.5rem;
+}
+
+h2 {
+  margin-bottom: 0.5rem;
+}
+
+.buttons {
   margin-left: 0.5rem;
 }
 
-fieldset,
-fieldset > div {
+fieldset {
+  margin: 0 0 1rem;
+}
+
+.page_settings *,
+.preferences * {
+  font-size: 1rem;
+}
+
+.preferences fieldset,
+.preferences fieldset > div {
   align-items   : flex-start;
   display       : flex;
   flex-direction: column;
 }
 
-fieldset {
-  margin   : 1rem 0;
-  max-width: 800px;
+.page_settings .spreadsheet {
+  vertical-align: top;
+  display       : inline-block;
 }
 
-fieldset > div {
-  margin: 0.5rem 0;
+.option h4,
+.spreadsheet h4 {
+  margin: 0;
+}
+
+.option span {
+  font-size  : 0.8rem;
+  margin-left: 0.3rem;
+}
+
+.option span span {
+  font-style: italic;
+}
+
+.option input[type="number"],
+.option > span + div,
+.option > span + input,
+.option > span + select {
+  margin   : 0.3rem 0 0.3rem 0.5rem;
+  font-size: 0.8rem;
+}
+
+.suboption {
+  display       : flex;
+  flex-direction: column;
+  margin        : 0 0.5rem;
+}
+
+.suboption span {
+  margin-top: 0.3rem;
+}
+
+.suboption input + label {
+  margin-left: -1rem;
+  font-size  : 0.8rem;
 }
 
 .multi-choice {
@@ -106,8 +115,46 @@ fieldset > div {
   flex-direction: column;
 }
 
-.page_settings .sheets {
-  display: flex;
+input[type="number"] {
+  -moz-appearance: textfield;
+  width          : 3rem;
+  margin         : 0 0.25rem;
+  font-size      : 1rem;
+  text-align     : right;
+  padding-right  : 0.75rem;
+}
+
+.spreadsheet input[type="number"] + label {
+  margin-top    : 0.65rem;
+  margin-left   : -1rem;
+  margin-right  : 0.75rem;
+  font-size     : 1rem;
+  text-align    : left;
+  vertical-align: bottom;
+}
+
+input[type="number"]:invalid,
+input[type="number"]:invalid + label,
+input[type="number"]:valid:not(.empty),
+input[type="number"]:valid:not(.empty) + label {
+  color: #FFF;
+}
+
+input[type="number"].empty,
+input[type="number"].empty + label {
+  color: #555;
+}
+
+input[type="number"]:invalid {
+  background-color: #FF5050;
+}
+
+input[type="number"]:valid:not(.empty) {
+  background-color: #6EAC2C;
+}
+
+input[type="number"].empty {
+  background-color: #CCC;
 }
 
 .ui-sortable {
@@ -115,12 +162,7 @@ fieldset > div {
 }
 
 .ui-sortable-helper {
-  background: #79c9ec;
-}
-
-.spreadsheet {
-  max-width: 400px;
-  min-width: 100px;
+  background: #79C9EC;
 }
 
 .sheet {
@@ -129,7 +171,7 @@ fieldset > div {
 
 .order {
   font-size : 1.2rem;
-  min-width : 3.2rem;
+  min-width : 1.5rem;
   text-align: right;
 }
 

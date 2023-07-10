@@ -12,83 +12,147 @@
 
 <body>
   <div id="header" class="header">
-    <h1>Preferences
+    <h1>Options
       <div class="buttons">
-        <button id="save">Save changes</button>
-        <button id="undo">Discard changes</button>
-        <button id="default">Restore default</button>
+        <button id="save">Save</button>
+        <button id="undo">Discard</button>
+        <button id="default">Default</button>
         <button id="temp">Clear cache</button>
       </div>
     </h1>
-    <h3>Change extension features to your preference.</h3>
   </div>
+
+  <div class="dom buttons">
+    <button id="cic">CIC</button>
+    <button id="aqua">Aqua</button>
+    <button id="pci">PCI</button>
+    <button id="sheets">Google Sheets</button>
+  </div>
+  <br><br>
+  <div class="cat buttons">
+    <button id="preferences">Preferences</button>
+    <button id="page_settings">Page Settings</button>
+  </div>
+
   <div class="preferences">
-    <div class="finance">
-      <fieldset>
-        <legend>CIC</legend>
+    <h2>Preferences</h2>
+    <fieldset class="cic">
+      <div class="option">
+        <h4>Co-app skip</h4>
+        <span>Jump to the address field if co-applicant's name is left blank.<br><span>Default: enabled</span></span>
         <div>
-          <h4>Co-app skip</h4>
-          <span>Jump to the address field if co-applicant's name is left blank. Default: enabled</span>
-          <div>
-            <input type="checkbox" id="cic-coapp-skip">
-            <label for="cic-coapp-skip">Enable</label>
-          </div>
+          <input type="checkbox" id="cic-coapp-skip">
+          <label for="cic-coapp-skip">Enable</label>
         </div>
-        <div>
-          <h4>Address parsing</h4>
-          <span>Choose the default address form for new files. Default: Single line</span>
-          <select id="cic-address">
-          </select>
-        </div>
-        <div>
-          <h4>Auto-select bureau</h4>
-          <span>Automatically select bureaus for new files. Default: TransUnion</span>
-          <div class="multi-check">
-            <div>
-              <input type="checkbox" id="cic-bureau-ef" value='#UIOptions_eqf_credit' disabled>
-              <label for="cic-bureau-ef">EQ: Equifax</label>
-            </div>
-            <div>
-              <input type="checkbox" id="cic-bureau-tu" value='#UIOptions_tuc_credit'>
-              <label for="cic-bureau-tu">TU: TransUnion</label>
-            </div>
-            <div>
-              <input type="checkbox" id="cic-bureau-xp" value='#UIOptions_exp_credit' disabled>
-              <label for="cic-bureau-xp">XP: Experian</label>
-            </div>
-          </div>
-        </div>
-        <div>
-          <h4>Auto-open</h4>
-          <span>Enables auto-open for new files. Default: enabled</span>
-          <div>
-            <input type="checkbox" id="cic-auto-open">
-            <label for="cic-coapp-skip">Enable</label>
-          </div>
-        </div>
-        <div>
-          <h4>Alerts</h4>
-          <span>Receive an audio alert for bad-match reports. Default: enabled</span>
-          <div>
-            <input type="checkbox" id="cic-alert">
-            <label for="cic-coapp-skip">Enable</label>
-          </div>
-        </div>
-      </fieldset>
-
-      <div id="aqua">
       </div>
-
-      <div id="pci">
+      <div class="option">
+        <h4>Address parsing</h4>
+        <span>Choose the default address form for new files.<br><span>Default: Single line</span></span>
+        <select id="cic-address">
+        </select>
       </div>
-    </div>
+      <div class="option">
+        <h4>Auto-select bureau</h4>
+        <span>Automatically select bureaus for new files.<br><span>Default: TransUnion</span></span>
+        <div class="multi-check">
+          <div>
+            <input type="checkbox" id="cic-bureau-ef" value='#UIOptions_eqf_credit' disabled>
+            <label for="cic-bureau-ef">EQ: Equifax</label>
+          </div>
+          <div>
+            <input type="checkbox" id="cic-bureau-tu" value='#UIOptions_tuc_credit'>
+            <label for="cic-bureau-tu">TU: TransUnion</label>
+          </div>
+          <div>
+            <input type="checkbox" id="cic-bureau-xp" value='#UIOptions_exp_credit' disabled>
+            <label for="cic-bureau-xp">XP: Experian</label>
+          </div>
+        </div>
+      </div>
+      <div class="option">
+        <h4>Auto-open</h4>
+        <span>Enables auto-open for new files.<br><span>Default: enabled</span></span>
+        <div>
+          <input type="checkbox" id="cic-auto-open">
+          <label for="cic-auto-open">Enable</label>
+          <div class="suboption" for="cic-auto-open-delay">
+            <span>Delay the report pop-up window.<br><span>Default: 3 seconds</span></span>
+            <div>
+              <input type="number" id="cic-auto-open-delay" min="0" max="10" placeholder="3">
+              <label>s</label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="option">
+        <h4>Alert - Markup</h4>
+        <span>Highlight alerts such as bad-matches and credit freezes.<br><span>Default: enabled</span></span>
+        <div>
+          <input type="checkbox" id="cic-markup">
+          <label for="cic-markup">Enable</label>
+        </div>
+      </div>
+      <div class="option">
+        <h4>Alert - Audio</h4>
+        <span>Audio alert for bad-matches.<br><span>Default: enabled</span></span>
+        <div>
+          <input type="checkbox" id="cic-alert">
+          <label for="cic-alert">Enable</label>
+        </div>
+      </div>
+    </fieldset>
 
-    <div class="google sheets">
-    </div>
+    <fieldset class="aqua">
+      <div class="option">
+        <h4>Employment Start Date</h4>
+        <span>Add a calculator for converting job time to a start date.<br><span>Default: enabled</span></span>
+        <div>
+          <input type="checkbox" id="aqua-time">
+          <label for="aqua-time">Enable</label>
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset class="pci">
+      <div class="option">
+        <h4>Convert timestamps</h4>
+        <span>Convert Online Application timestamps to local time.<br><span>Default: enabled</span></span>
+        <div>
+          <input type="checkbox" id="pci-time">
+          <label for="pci-time">Enable</label>
+        </div>
+      </div>
+      <div class="option">
+        <h4>Convert decision codes</h4>
+        <span>Convert Decision Codes to percentages.<br><span>Default: enabled</span></span>
+        <div>
+          <input type="checkbox" id="pci-dec-code">
+          <label for="pci-dec-code">Enable</label>
+        </div>
+      </div>
+      <div class="option">
+        <h4>STAReport shading</h4>
+        <span>Shade table rows, grouped by date.<br><span>Default: enabled</span>
+          <div>
+            <input type="checkbox" id="pci-report">
+            <label for="pci-report">Enable</label>
+          </div>
+      </div>
+    </fieldset>
+
+    <fieldset class="sheets">
+    </fieldset>
   </div>
   <div class="page_settings">
-    <div class="google sheets">
-    </div>
+    <h2>Page Settings</h2>
+    <fieldset class="cic">
+    </fieldset>
+    <fieldset class="aqua">
+    </fieldset>
+    <fieldset class="pci">
+    </fieldset>
+    <fieldset class="sheets">
+    </fieldset>
   </div>
 </body>
 
