@@ -11,12 +11,12 @@ $(document).ready(() => {
 
   $appL.parent('li').before($('<li>').append($('<input>').attr({ type: "checkbox", id: "fewa_bc", name: "fewa_bc", disabled: "" }), $label));
   storage.get().then(result => {
-    let options = result.fewa.cic.preferences;
-    if (options.auto_open) {
+    var pref = result.fewa.preferences.cic;
+    if (pref.auto_open) {
       if (/ReportResult/.test(document.URL)) {
         setTimeout(() => {
           $('#btnCustom').trigger('click');
-        }, 1000 * options.auto_open_delay);
+        }, 1000 * pref.auto_open_delay);
       }
     }
   });

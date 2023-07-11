@@ -71,7 +71,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
             var tabID = tabs[0].id;
             var sheetID = tabs[0].url.match(/^http.+?spreadsheets\/d\/(.+?)\//)[1];
             storage.get().then(result => {
-              var page = result.fewa.sheets.page_settings;
+              var page = result.fewa.page_settings.sheets;
               if (sheetID in page) {
                 var sheet = page[sheetID];
                 for (let i = 0; i < sheet.data.length; i++) {
@@ -153,7 +153,7 @@ $(document).ready(() => {
           var tabID = tabs[0].id;
           var sheetID = tabs[0].url.match(/^http.+?spreadsheets\/d\/(.+?)\//)[1];
           storage.get().then(result => {
-            var page = result.fewa.sheets.page_settings;
+            var page = result.fewa.page_settings.sheets;
             if (!(sheetID in page)) page[sheetID] = { name: "", data: [] };
             if (name != page[sheetID].name || data.length != page[sheetID].length) {
               page[sheetID] = { name, data }
@@ -194,7 +194,7 @@ $(document).ready(() => {
       }, (tabs) => {
         var tabID = tabs[0].id;
         storage.get().then(result => {
-          var page = result.fewa.sheets.page_settings;
+          var page = result.fewa.page_settings.sheets;
           var timeoutID = page[tabID];
           chrome.tabs.sendMessage(tabID, {
             type: "slideshowStop",
@@ -207,7 +207,7 @@ $(document).ready(() => {
           tabID
         }).then(() => {
           storage.get().then(result => {
-            let page = result.fewa.sheets.page_settings;
+            let page = result.fewa.page_settings.sheets;
             delete page.active[tabID];
             storage.set(result);
           });

@@ -5,33 +5,33 @@ $(document).ready(() => {
   for (let i = 0; i < $users.length; i++) {
     var $user = $users.eq(i);
     if (/color/.test($user.attr('style'))) {
-      $user.attr({selected: ""});
+      $user.attr({ selected: "" });
       break;
     }
   }
   storage.get().then(result => {
-    let pref = result.fewa.cic.preferences;
+    let pref = result.fewa.preferences.cic;
     $(pref.address).trigger('click');
-    if (pref.skip) 
+    if (pref.skip)
       skipCoapp();
     $('#Borrower_txtFirstName').trigger('focus');
   });
 }).on({
   focusout: function () {
     var $this = $(this);
-    if (!$this.val().trim()) 
+    if (!$this.val().trim())
       setTimeout(() => $('#CoBorrower_txtSurName').val(""), 0);
-    }
-  }, '#CoBorrower_txtFirstName').one({
+  }
+}, '#CoBorrower_txtFirstName').one({
   focus: function () {
     var $this = $(this);
     storage.get().then(result => {
-      let pref = result.fewa.cic.preferences;
+      let pref = result.fewa.preferences.cic;
       for (let key in pref.bureau) {
-        if (pref.bureau[key]) 
+        if (pref.bureau[key])
           $(pref.bureau[key] + ':not(:checked)').trigger('click');
-        }
-      });
+      }
+    });
   }
 }, '#CoBorrower_txtSurName');
 

@@ -4,7 +4,7 @@ waitForElm('h1.heading--1').then(elm => {
   var $this = $(elm);
   var $html = $this.html();
   storage.get().then(result => {
-    $this.html($html + " - " + result.fewa.aqua.page_settings.dealer);
+    $this.html($html + " - " + result.fewa.page_settings.aqua.dealer);
   });
 });
 
@@ -48,7 +48,7 @@ $(document).on({
 }, 'input.react-datepicker-ignore-onclickoutside').on({
   change: function () {
     storage.get().then(result => {
-      var pref = result.fewa.aqua.preferences;
+      var pref = result.fewa.preferences.aqua;
       if (pref.time) {
         var $val = $(this).val();
         var $fewaTime = $('#fewaTime');

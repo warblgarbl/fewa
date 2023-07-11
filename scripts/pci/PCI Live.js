@@ -2,7 +2,7 @@ const storage = chrome.storage.sync;
 
 $(document).ready(() => {
   storage.get().then(result => {
-    var pref = result.fewa.pci.preferences;
+    var pref = result.fewa.preferences.pci;
     if (pref.decCode) {
       let observer = new MutationObserver(mutations => {
         mutations.forEach(mutationRecord => {
