@@ -39,25 +39,56 @@ chrome.runtime.onInstalled.addListener(details => {
   if (details.reason == "update") {
     var prev = details.previousVersion.split(/\./);
     if (prev[0] < 1) {
-      if (prev[1] < 5 || prev[1] == 5 && prev[2] < 6) {
+      if (prev[1] < 5 || prev[1] == 5 && prev[2] < 6 || prev[1] == 5 && prev[2] == 6 && prev[3] < 1) {
         storage.get().then(result => {
           var oldResult = result.fewa;
           var newResult = {
-            fewa: {
-              page_settings: {},
-              preferences: {}
+            page_settings: {},
+            preferences: {}
+          }
+          for (let key in oldResult) {
+            switch (key) {
+              case "page_settings":
+                for (let subKey in oldResult[key]) {
+                  if (/aqua|sheets/i.test(subKey))
+                    newResult.page_settings[subKey] = oldResult[key][subKey];
+                }
+                break;
+              case "preferences":
+                for (let subKey in oldResult[key]) {
+                  if (/cic|aqua|pci/i.test(subKey))
+                    newResult.preferences[subKey] = oldResult[key][subKey];
+                }
+                break;
+              case "cic":
+                for (let subKey in oldResult[key]) {
+                  if (/preferences/i.test(subKey))
+                    newResult.preferences[subKey] = oldResult[key][subKey];
+                }
+                break;
+              case "aqua":
+                for (let subKey in oldResult[key]) {
+                  if (/preferences/i.test(subKey))
+                    newResult.preferences[subKey] = oldResult[key][subKey];
+                  if (/page_settings/i.test(subKey))
+                    newResult.page_settings[subKey] = { dealer: undefined }
+                }
+                break;
+              case "pci":
+                for (let subKey in oldResult[key]) {
+                  if (/preferences/i.test(subKey))
+                    newResult.preferences[subKey] = oldResult[key][subKey];
+                }
+                break;
+              case "sheets":
+                for (let subKey in oldResult[key]) {
+                  if (/page_settings/i.test(subKey))
+                    newResult.page_settings[subKey] = oldResult[key][subKey];
+                }
+                break;
             }
           }
 
-          for (let dom in oldResult) {
-            for (let cat in oldResult[dom]) {
-              for (let key in oldResult[dom][cat]) {
-                if (/page_settings/.test(cat) || key in _default.fewa[cat][dom]) {
-                  newResult[cat][dom][key] = oldResult[cat][dom][key];
-                }
-              }
-            }
-          }
           storage.set({ fewa: newResult });
         });
       }
