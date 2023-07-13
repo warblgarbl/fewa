@@ -6,7 +6,7 @@ $(document).ready(() => {
     to: "background",
     type: "deleteKey",
     target: "tabID",
-    keyPath: ["fewa", "page_settings", "sheets", "active"]
+    keyPath: ["page_settings", "sheets", "active"]
   }, () => storage.get().then(result => console.log(result)));
 });
 
@@ -107,7 +107,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       break;
     case "slideshowStop":
       storage.get().then(result => {
-        var page = result.fewa.page_settings.sheets;
+        var page = result.page_settings.sheets;
         clearTimeout(page.active[request.tabID]);
       });
   }
@@ -115,7 +115,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
 function nextSlide(i, set) {
   storage.get().then(result => {
-    var page = result.fewa.page_settings.sheets;
+    var page = result.page_settings.sheets;
     page.active[set.tabID] = setTimeout(() => {
       if (i === set.data.length) { i = 0 }
       window.location.hash = "gid=" + set.data[i].gid;

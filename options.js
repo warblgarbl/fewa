@@ -23,7 +23,7 @@ $(document).ready(() => {
 }, "#default").on({
   click: function () {
     storage.get().then(result => {
-      var page = result.fewa.page_settings;
+      var page = result.page_settings;
       for (let dom in page) {
         for (let key in page[dom]) {
           switch (key) {
@@ -135,8 +135,8 @@ $(document).ready(() => {
 
 function restore() {
   storage.get().then(result => {
-    var page = result.fewa.page_settings;
-    var pref = result.fewa.preferences;
+    var page = result.page_settings;
+    var pref = result.preferences;
     for (let dom in page) {
       switch (dom) {
         case "sheets":
@@ -259,8 +259,8 @@ function restore() {
 
 function save() {
   storage.get().then(result => {
-    var page = result.fewa.page_settings;
-    var pref = result.fewa.preferences;
+    var page = result.page_settings;
+    var pref = result.preferences;
     for (let dom in page) {
       switch (dom) {
         case "sheets":

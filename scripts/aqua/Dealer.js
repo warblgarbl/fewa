@@ -22,7 +22,7 @@ $(document).on({
     else if (/532306/.test(dealID))
       dealer = "Home Improvement";
     chrome.storage.sync.get().then(result => {
-      let page = result.fewa.page_settings.aqua;
+      let page = result.page_settings.aqua;
       page.dealer = dealer;
       chrome.storage.sync.set(result);
     });

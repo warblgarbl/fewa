@@ -2,7 +2,7 @@ const storage = chrome.storage.sync;
 var $fewaAlert = $('<audio>').attr({ id: "fewaAlert", src: chrome.runtime.getURL('audio/bop.wav'), paused: "" }).data({ 'fewa-play': "" });
 
 storage.get().then(result => {
-  let options = result.fewa.preferences.cic;
+  let options = result.preferences.cic;
   if (options.alert)
     document.documentElement.appendChild($fewaAlert[0]);
 });
@@ -20,7 +20,7 @@ $(document).on('click.f keydown.f', function () {
   }
 }).ready(() => {
   storage.get().then(result => {
-    var pref = result.fewa.preferences.cic;
+    var pref = result.preferences.cic;
     if (pref.markup) {
       var $el = $('tbody span table *');
       var regFreeze = /FR(O|EE)ZEN?|SUPPRESS(ION|ED)/i;

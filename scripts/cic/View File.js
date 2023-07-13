@@ -11,7 +11,7 @@ $(document).ready(() => {
 
   $appL.parent('li').before($('<li>').append($('<input>').attr({ type: "checkbox", id: "fewa_bc", name: "fewa_bc", disabled: "" }), $label));
   storage.get().then(result => {
-    var pref = result.fewa.preferences.cic;
+    var pref = result.preferences.cic;
     if (pref.auto_open) {
       if (/ReportResult/.test(document.URL)) {
         setTimeout(() => {

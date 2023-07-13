@@ -18,7 +18,7 @@ $(document).ready(() => {
     }
   }
   storage.get().then(result => {
-    let pref = result.fewa.preferences.cic;
+    let pref = result.preferences.cic;
     $(pref.address).trigger('click');
     if (pref.skip)
       skipCoapp();
@@ -34,7 +34,7 @@ $(document).ready(() => {
   focus: function () {
     var $this = $(this);
     storage.get().then(result => {
-      var pref = result.fewa.preferences.cic;
+      var pref = result.preferences.cic;
       for (let key in pref.bureau) {
         if (pref.bureau[key])
           $(pref.bureau[key] + ':not(:checked)').trigger('click');

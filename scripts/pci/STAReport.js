@@ -1,11 +1,11 @@
 const storage = chrome.storage.sync;
 storage.get().then(result => {
-  window.pref = result.fewa.preferences.pci;
+  window.pref = result.preferences.pci;
 })
 
 $(document).ready(() => {
   storage.get().then(result => {
-    var pref = result.fewa.preferences.pci;
+    var pref = result.preferences.pci;
     var pend = $('#stareport-pending-loading');
     var pd = $('#stareport-pastdue-loading');
     var observer = (tar) => {
