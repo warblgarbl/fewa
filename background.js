@@ -37,9 +37,10 @@ chrome.runtime.onInstalled.addListener(details => {
   switch (details.reason) {
     case "install":
       storage.get().then(result => {
-        storage.set(keyCheck(result, _default, result)).then(() => {
-          chrome.tabs.create({ url: chrome.runtime.getURL("options.html") });
-        });
+        if (!Object.keys(result).length)
+          storage.set(_default).then(() => {
+            chrome.tabs.create({ url: chrome.runtime.getURL("options.html") });
+          });
       });
       break;
     case "update":
