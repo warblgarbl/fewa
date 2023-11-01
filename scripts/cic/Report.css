@@ -9,3 +9,43 @@
 .bad-match {
   background: lightgreen;
 }
+
+.label-mtg,
+.label-mtg * {
+  background: #9F00FF20;
+}
+
+.label-auto,
+.label-auto * {
+  background: #0000ff20;
+}
+
+.label-edu,
+.label-edu * {
+  background: #54baff30;
+}
+
+.label-rev,
+.label-rev * {
+  background: #00ff0030;
+}
+
+.label-inst,
+.label-inst * {
+  background: #ffff0030;
+}
+
+.label-open,
+.label-open * {
+  background: #ff800030;
+}
+
+.label-coll,
+.label-coll * {
+  background: #ff000030;
+}
+
+.label-other,
+.label-other * {
+  background: #80000020;
+}

@@ -45,11 +45,15 @@
     {
       "matches": ["https://portal.aquafinance.com/*applications/new*"],
       "js": ["scripts/external/jquery-3.7.0.min.js", "scripts/aqua/New Application.js"],
-      "css": ["scripts/aqua/New Application.css"],
       "run_at": "document_start"
     },
     {
-      "matches": ["https://clientportal.preferredcredit.com/OnlineApplication"],
+      "matches": ["https://clientportal.preferredcredit.com/OnlineApplicationLong"],
+      "js": ["scripts/external/jquery-3.7.0.min.js", "scripts/pci/Application List.js"],
+      "run_at": "document_start"
+    },
+    {
+      "matches": ["https://clientportal.preferredcredit.com/OnlineApplicationLong/New"],
       "js": ["scripts/external/jquery-3.7.0.min.js", "scripts/pci/Online Application.js"],
       "run_at": "document_start"
     },

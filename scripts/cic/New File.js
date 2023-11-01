@@ -35,10 +35,9 @@ $(document).ready(() => {
     var $this = $(this);
     storage.get().then(result => {
       var pref = result.preferences.cic;
-      for (let key in pref.bureau) {
+      for (let key in pref.bureau)
         if (pref.bureau[key])
           $(pref.bureau[key] + ':not(:checked)').trigger('click');
-      }
     });
   }
 }, addressIDs.join(", "));
@@ -47,10 +46,8 @@ function skipCoapp() {
   $(document).on({
     keyup: function (e) {
       var $first = $('#CoBorrower_txtFirstName');
-
-      if (e.keyCode === 9 && !e.shiftKey && !$first.val()) {
+      if (e.keyCode === 9 && !e.shiftKey && !$first.val())
         $(addressIDs.join(", ")).filter(':visible').trigger('focus');
-      }
     }
   }, '#CoBorrower_txtSurName');
 }

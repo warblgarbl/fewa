@@ -1,7 +1,8 @@
 const storage = chrome.storage.sync;
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.to !== "popup") return;
+  if (request.to !== "popup")
+    return;
   var $load = $(request.target + " " + '.load');
   switch (request.target) {
     case ".spreadsheet":
@@ -56,9 +57,8 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
               var $sort = $('.spreadsheet .sheet:not(.ui-sortable-helper)');
               var $place = $('.ui-sortable-placeholder');
               var $help = $('.ui-sortable-helper');
-              for (let i = 0; i < $sort.length; i++) {
+              for (let i = 0; i < $sort.length; i++)
                 $sort.eq(i).find('.order').html(i + 1);
-              }
               $help.find('.order').html($place.index('.spreadsheet .sheet:not(.ui-sortable-helper)') + 1);
             },
             tolerance: "pointer"
@@ -143,7 +143,8 @@ $(document).ready(() => {
         let gid = time.attr('id');
         let name = time.attr('name');
         time = time.val();
-        if (time.length) data.push({ gid, name, time });
+        if (time.length)
+          data.push({ gid, name, time });
       }
       if (data.length > 1) {
         chrome.tabs.query({
@@ -154,20 +155,17 @@ $(document).ready(() => {
           var sheetID = tabs[0].url.match(/^http.+?spreadsheets\/d\/(.+?)\//)[1];
           storage.get().then(result => {
             var page = result.page_settings.sheets;
-            if (!(sheetID in page)) page[sheetID] = { name: "", data: [] };
+            if (!(sheetID in page))
+              page[sheetID] = { name: "", data: [] };
             if (name != page[sheetID].name || data.length != page[sheetID].length) {
               page[sheetID] = { name, data }
               storage.set(result)
-            } else {
-              for (let i = 0; i < data.length; i++) {
-                if (data[i].gid != page[sheetID][i].gid ||
-                  data[i].name != page[sheetID][i].name ||
-                  data[i].time != page[sheetID][i].time) {
+            } else
+              for (let i = 0; i < data.length; i++)
+                if (data[i].gid != page[sheetID][i].gid || data[i].name != page[sheetID][i].name || data[i].time != page[sheetID][i].time) {
                   page[sheetID] = { name, data }
                   storage.set(result);
                 }
-              }
-            }
           });
           chrome.tabs.sendMessage(tabID, {
             type: "slideshowStart",
@@ -232,8 +230,10 @@ $(document).ready(() => {
         case 2:
         case 1:
           $val = parseInt($this.val());
-          if ($val > $max) $this.val($max)
-          else if ($val < $min && !/key/.test(e.type)) $this.val($min);
+          if ($val > $max)
+            $this.val($max);
+          else if ($val < $min && !/key/.test(e.type))
+            $this.val($min);
           $this.removeClass('empty');
           break;
         case 0:
@@ -242,8 +242,10 @@ $(document).ready(() => {
 
       var ready = $parent.find('.sheet input:valid:not(.empty)');
       if (ready.length > 1) {
-        if ($('#slideshowStop.ui-state-disabled').length) $('#slideshowStart').removeClass('ui-state-disabled')
-        else $('#slideshowRefresh').removeClass('ui-state-disabled');
+        if ($('#slideshowStop.ui-state-disabled').length)
+          $('#slideshowStart').removeClass('ui-state-disabled');
+        else
+          $('#slideshowRefresh').removeClass('ui-state-disabled');
       } else $('#slideshowStart, #slideshowRefresh').addClass('ui-state-disabled');
     }
   }, 'input[type="number"]');

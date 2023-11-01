@@ -23,10 +23,17 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       // Current view
       var hash = window.location.hash;
       // Unique sheet IDs (gid)
-      var ptrn = /(?<=\[null,\[\\")\d+/g;
-      var $src = $('script').filter((i, e) => ptrn.test(e.innerHTML));
+      var ptrn1 = /(?<=\[null,\[\\")\d+/g;
+      var ptrn2 = /(?<="\[\[\\")\d+/g;
+      var ptrn3 = /(?<=\:\\")\d+/g;
+      var $src1 = $('script').filter((i, e) => ptrn1.test(e.innerHTML));
+      var $src2 = $('script').filter((i, e) => ptrn2.test(e.innerHTML));
+      var $src3 = $('script').filter((i, e) => ptrn3.test(e.innerHTML));
       var names = [];
-      var gids = $src.html().match(ptrn).filter((e, i, a) => {
+      var gid1 = $src1.html().match(ptrn1);
+      var gid2 = $src2.html().match(ptrn2);
+      var gid3 = $src3.html().match(ptrn3);
+      var gids = [...gid1, ...gid2, ...gid3].filter((e, i, a) => {
         return a.indexOf(e) === i;
       }).sort((a, b) => {
         if (a.length > b.length) return 1

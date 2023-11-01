@@ -12,14 +12,12 @@ $(document).ready(() => {
   $appL.parent('li').before($('<li>').append($('<input>').attr({ type: "checkbox", id: "fewa_bc", name: "fewa_bc", disabled: "" }), $label));
   storage.get().then(result => {
     var pref = result.preferences.cic;
-    if (pref.auto_open) {
-      if (/ReportResult/.test(document.URL)) {
-        setTimeout(() => {
-          $('#btnCustom').trigger('click');
-        }, 1000 * pref.auto_open_delay);
-      }
-    }
+    if (pref.auto_open && /ReportResult/.test(document.URL))
+      setTimeout(() => {
+        $('#btnCustom').trigger('click');
+      }, 1000 * pref.auto_open_delay);
   });
+  $('#custom_pc, #custom_sc, #fewa_bc').attr({ disabled: "" });
 });
 
 function only(n) {
@@ -27,28 +25,26 @@ function only(n) {
   var $co = $('#custom_sc');
 
   switch (n) {
-    case 0: {
+    case 0:
       if ($app.filter(':checked').length === 0)
-        $app.trigger('click');
+        $app.removeAttr('disabled').trigger('click');
       if ($co.filter(':checked').length === 0)
-        $co.trigger('click');
-    }
-    break;
-    case 1: {
+        $co.removeAttr('disabled').trigger('click');
+      break;
+    case 1:
       if ($app.filter(':checked').length === 0)
-        $app.trigger('click');
+        $app.removeAttr('disabled').trigger('click');
       if ($co.filter(':checked').length !== 0)
-        $co.trigger('click');
-    }
-    break;
-    case 2: {
+        $co.removeAttr('disabled').trigger('click');
+      break;
+    case 2:
       if ($app.filter(':checked').length !== 0)
-        $app.trigger('click');
+        $app.removeAttr('disabled').trigger('click');
       if ($co.filter(':checked').length === 0)
-        $co.trigger('click');
-    }
-    break;
+        $co.removeAttr('disabled').trigger('click');
+      break;
   }
 
   $('#btnCustom').trigger('click');
+  $('#custom_pc, #custom_sc').attr({ disabled: "" });
 }

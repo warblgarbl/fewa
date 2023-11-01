@@ -46,10 +46,10 @@ chrome.runtime.onInstalled.addListener(details => {
     case "update":
       storage.get().then(result => {
         var update = structuredClone(_default);
-        if ('fewa' in result) {
-          if ('page_settings' in result && 'preferences' in result) {
+        if ('fewa' in result)
+          if ('page_settings' in result && 'preferences' in result)
             storage.remove('fewa');
-          } else {
+          else {
             var fewa = result.fewa;
             var deepPage = true;
             var deepPref = true;
@@ -58,10 +58,9 @@ chrome.runtime.onInstalled.addListener(details => {
               var page = fewa.page_settings;
               if ('sheets' in page) {
                 var sheets = page.sheets;
-                for (let sheet in sheets) {
+                for (let sheet in sheets)
                   if (!/active/i.test(sheet))
                     update.page_settings.sheets[sheet] = sheets[sheet];
-                }
               }
             }
             if ('preferences' in fewa) {
@@ -70,32 +69,28 @@ chrome.runtime.onInstalled.addListener(details => {
               if ('cic' in pref) {
                 var cic = pref.cic;
                 for (let key in cic) {
-                  if (/bureau/i.test(key)) {
-                    if (Object.keys(cic[key]).length) {
+                  if (/bureau/i.test(key))
+                    if (Object.keys(cic[key]).length)
                       for (let key2 in cic[key]) {
                         let type = typeof cic[key][key2];
                         if (type === "string" || type === "boolean")
                           update.preferences.cic[key][key2] = cic[key][key2];
                       }
-                    }
-                  } else if (typeof cic[key] === typeof update.preferences.cic[key]) {
+                  else if (typeof cic[key] === typeof update.preferences.cic[key])
                     update.preferences.cic[key] = cic[key];
-                  }
                 }
               }
               if ('aqua' in pref) {
                 var aqua = pref.aqua;
-                for (let key in aqua) {
+                for (let key in aqua)
                   if (typeof aqua[key] === typeof update.preferences.aqua[key])
                     update.preferences.aqua[key] = aqua[key];
-                }
               }
               if ('pci' in pref) {
                 var pci = pref.pci;
-                for (let key in pci) {
+                for (let key in pci)
                   if (typeof pci[key] === typeof update.preferences.pci[key])
                     update.preferences.pci[key] = pci[key];
-                }
               }
             }
             if (deepPage || deepPref) {
@@ -104,17 +99,15 @@ chrome.runtime.onInstalled.addListener(details => {
                 if (deepPref && 'preferences' in cic) {
                   var pref = cic.preferences;
                   for (let key in pref) {
-                    if (/bureau/i.test(key)) {
-                      if (Object.keys(cic[key]).length) {
+                    if (/bureau/i.test(key))
+                      if (Object.keys(cic[key]).length)
                         for (let key2 in cic[key]) {
                           let type = typeof cic[key][key2];
                           if (type === "string" || type === "boolean")
                             update.preferences.cic[key][key2] = cic[key][key2];
                         }
-                      }
-                    } else if (typeof cic[key] === typeof update.preferences.cic[key]) {
+                    else if (typeof cic[key] === typeof update.preferences.cic[key])
                       update.preferences.cic[key] = cic[key];
-                    }
                   }
                 }
               }
@@ -122,37 +115,33 @@ chrome.runtime.onInstalled.addListener(details => {
                 var aqua = fewa.aqua;
                 if (deepPref && 'preferences' in aqua) {
                   var pref = aqua.preferences;
-                  for (let key in pref) {
+                  for (let key in pref)
                     if (typeof pref[key] === typeof update.preferences.aqua[key])
                       update.preferences.aqua[key] = pref[key];
-                  }
                 }
               }
               if ('pci' in fewa) {
                 var pci = fewa.pci;
                 if (deepPref && 'preferences' in pci) {
                   var pref = pci.preferences;
-                  for (let key in pref) {
+                  for (let key in pref)
                     if (typeof pref[key] === typeof update.preferences.pci[key])
                       update.preferences.pci[key] = pref[key];
-                  }
                 }
               }
               if ('sheets' in fewa) {
                 var sheets = fewa.sheets;
                 if (deepPage && 'page_settings' in sheets) {
                   var page = sheets.page_settings;
-                  for (let key in page) {
+                  for (let key in page)
                     if (!/active/i.test(key))
                       update.page_settings.sheets[key] = page[key];
-                  }
                 }
               }
             }
             storage.set(update);
             storage.remove('fewa');
           }
-        }
       });
       break;
   }
@@ -164,10 +153,9 @@ chrome.tabs.onRemoved.addListener((tabID, info) => {
   storage.get().then(result => {
     for (let dom in result.page_settings) {
       let page = result.page_settings[dom];
-      for (let id in page.active) {
+      for (let id in page.active)
         if (id == tabID)
           delete page.active[id];
-      }
     }
     storage.set(result);
   });
@@ -186,12 +174,10 @@ chrome.runtime.onMessage
             }, (tabs) => {
               storage.get().then(result => {
                 let key = result;
-                for (let i = 0; i < request.keyPath.length; i++) {
+                for (let i = 0; i < request.keyPath.length; i++)
                   key = key[request.keyPath[i]];
-                }
-                if (tabs[0].id in key) {
+                if (tabs[0].id in key)
                   delete key[tabs[0].id];
-                }
                 storage.set(result);
               });
             });
@@ -215,8 +201,9 @@ function activeToggle() {
 
 function toggle(tabs) {
   if (tabs.length) {
-    if (/^http.+?spreadsheets\/d\/.+?\//.test(tabs[0].url)) {
+    if (/^http.+?spreadsheets\/d\/.+?\//.test(tabs[0].url))
       chrome.action.enable();
-    } else chrome.action.disable();
+    else
+      chrome.action.disable();
   }
 }

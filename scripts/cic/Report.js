@@ -8,16 +8,10 @@ storage.get().then(result => {
 });
 
 $(document).on('click.f keydown.f', function () {
-  if ($('audio').length) {
-    switch ($fewaAlert.data('fewa-play')) {
-      case 1:
-        $fewaAlert.trigger('play');
-      case 0:
-        $(this).off('.f');
-    }
-  } else {
+  if ($('audio').length && $fewaAlert.data('fewa-play') === 1)
+    $fewaAlert.trigger('play');
+  else
     $(this).off('.f');
-  }
 }).ready(() => {
   storage.get().then(result => {
     var pref = result.preferences.cic;
@@ -27,9 +21,8 @@ $(document).on('click.f keydown.f', function () {
       for (let i = 0; i < $el.length; i++) {
         let el = $el.eq(i);
         let desc = el.children().toArray();
-        if (regFreeze.test(el.html()) && desc.every(e => !regFreeze.test(e.innerHTML))) {
+        if (regFreeze.test(el.html()) && desc.every(e => !regFreeze.test(e.innerHTML)))
           el.addClass('freeze');
-        }
       }
 
       var $ins = $('td.mcl2-report-body').filter((i, e) => /\*{3}-\*{2}/.test(e.innerHTML));
@@ -43,11 +36,10 @@ $(document).on('click.f keydown.f', function () {
           $fewaAlert.data({ 'fewa-play': 1 });
         }
       }
-      if ($fewaAlert.data('fewa-play') != 1) {
+      if ($fewaAlert.data('fewa-play') != 1)
         $fewaAlert.data({ 'fewa-play': 0 });
-      }
     }
-  })
+  });
 
   var num = new RegExp(/\d+/);
   var usd = new Intl.NumberFormat('en-US', {
@@ -63,9 +55,8 @@ $(document).on('click.f keydown.f', function () {
     if (/(OPEN|CLOSED|DEROGATORY)/.test(id)) {
       $h.attr({ id });
       $h.next().attr({ style: "text-align:center;" }).append($('<a>').attr({ href: "#SUMMARY" }).html("Back to summary"));
-    } else if (/SCORE.*MODELS/.test($h.html())) {
+    } else if (/SCORE.*MODELS/.test($h.html()))
       $h.attr({ id: "SUMMARY" });
-    }
   }
 
   var $open = $('table:not(:has(#SUMMARY)):has(thead:has(#OPEN)) > tbody').find('tr td table tbody');
@@ -144,19 +135,19 @@ $(document).on('click.f keydown.f', function () {
           sum['type'] = '<a href="#DEROGATORY">DEROG</a>';
       }
 
+      let mtg = sec.filter((i, e) => /ACCT TYPE.*MTG/.test($(e).children('tr').eq(1).children('td').eq(2).html()));
+      let auto = sec.filter((i, e) => /ACCT TYPE.*AUTO/.test($(e).children('tr').eq(1).children('td').eq(2).html()));
+      let edu = sec.filter((i, e) => /ACCT TYPE.*EDU/.test($(e).children('tr').eq(1).children('td').eq(2).html()));
       let rev = sec.filter((i, e) => /ACCT TYPE.*REV/.test($(e).children('tr').eq(1).children('td').eq(2).html()));
       let inst = sec.filter((i, e) => /ACCT TYPE.*INST/.test($(e).children('tr').eq(1).children('td').eq(2).html()));
       let _open = sec.filter((i, e) => /ACCT TYPE.*OPEN/.test($(e).children('tr').eq(1).children('td').eq(2).html()));
-      let mtg = sec.filter((i, e) => /ACCT TYPE.*MTG/.test($(e).children('tr').eq(1).children('td').eq(2).html()));
       let leas = sec.filter((i, e) => /ACCT TYPE.*LEAS/.test($(e).children('tr').eq(1).children('td').eq(2).html()));
-      let auto = sec.filter((i, e) => /ACCT TYPE.*AUTO/.test($(e).children('tr').eq(1).children('td').eq(2).html()));
-      let edu = sec.filter((i, e) => /ACCT TYPE.*EDU/.test($(e).children('tr').eq(1).children('td').eq(2).html()));
       let coll = sec.filter((i, e) => /ACCT TYPE.*COLL/.test($(e).children('tr').eq(1).children('td').eq(2).html()));
       let other = sec.filter((i, e) => {
         let test = $(e).children('tr').eq(1).children('td').eq(2).html();
-        if (/ACCT TYPE/.test(test) && !/(REV|INST|OPEN|MTG|LEAS|AUTO|EDU|COLL)/.test(test)) {
+        if (/ACCT TYPE/.test(test) && !/(REV|INST|OPEN|MTG|LEAS|AUTO|EDU|COLL)/.test(test))
           return 1;
-        } else
+        else
           return 0;
       });
 
@@ -183,7 +174,7 @@ $(document).on('click.f keydown.f', function () {
         "coll",
         "other"
       ];
-      for (let b = 0; b < types.length; b++) {
+      for (let b = 0; b < types.length; b++)
         if (types[b].length) {
           let accts = types[b];
           let row = {
@@ -231,21 +222,21 @@ $(document).on('click.f keydown.f', function () {
               parseInt(num.exec(pd90)) :
               0;
           }
-          for (let key in row) {
+          for (let key in row)
             if (!/type/.test(key)) {
               sum[key] += row[key];
               total[key] += row[key];
               if (!/(\d|count)/.test(key))
                 row[key] = usd.format(row[key]);
             }
-          }
-          $b.append($('<tr>').attr({ style: "text-align:center;" }).append($('<td>').html(row.type), $('<td>').html(row.count), $('<td>').html(row.bal), $('<td>').html(row.hi), $('<td>').html(row.pay), $('<td>').html(row.pd), $('<td>').html(row.pd30), $('<td>').html(row.pd60), $('<td>').html(row.pd90)))
+
+          $b.append($('<tr>').attr({ style: "text-align:center;" }).addClass(`label-${row.type.toLowerCase()}`).append($('<td>').html(row.type), $('<td>').html(row.count), $('<td>').html(row.bal), $('<td>').html(row.hi), $('<td>').html(row.pay), $('<td>').html(row.pd), $('<td>').html(row.pd30), $('<td>').html(row.pd60), $('<td>').html(row.pd90)))
         }
-      }
-      for (let key in sum) {
+
+      for (let key in sum)
         if (!/(\d|count|type)/.test(key))
           sum[key] = usd.format(sum[key]);
-      }
+
       let $t = $table.clone();
       let $head = $t.find('thead tr td');
       for (let b = 0; b < $head.length; b++) {
@@ -288,10 +279,10 @@ $(document).on('click.f keydown.f', function () {
   let $t = $table.clone();
   let $b = $('<tbody>');
   let $head = $t.find('thead tr td');
-  for (let key in total) {
+  for (let key in total)
     if (!/(\d|count|type)/.test(key))
       total[key] = usd.format(total[key]);
-  }
+
   for (let b = 0; b < $head.length; b++) {
     let $h = $head.eq(b);
     let $l = $label.clone();
@@ -359,4 +350,29 @@ $(document).on('click.f keydown.f', function () {
                     })))),
               $('div.mcl2-section-content-space').eq(0).clone()))),
         $tbody)));
+  let $lblRev = $('td > .mcl2-tradeline-label');
+  for (let l = 0; l < $lblRev.length; l++) {
+    let $el = $lblRev.eq(l);
+    let $lbl = $el.parent();
+    if (/TYPE/.test($el.html())) {
+      if (/MTG/.test($lbl.html()))
+        $lbl.addClass('label-mtg');
+      else if (/AUTO/.test($lbl.html()))
+        $lbl.addClass('label-auto');
+      else if (/EDU/.test($lbl.html()))
+        $lbl.addClass('label-edu');
+      else if (/REV/.test($lbl.html()))
+        $lbl.addClass('label-rev');
+      else if (/INST/.test($lbl.html()))
+        $lbl.addClass('label-inst');
+      else if (/OPEN/.test($lbl.html()))
+        $lbl.addClass('label-open');
+      else if (/LEAS/.test($lbl.html()))
+        $lbl.addClass('label-lease');
+      else if (/COLL/.test($lbl.html()))
+        $lbl.addClass('label-coll');
+      else
+        $lbl.addClass('label-other');
+    }
+  }
 });

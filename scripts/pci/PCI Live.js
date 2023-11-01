@@ -6,15 +6,18 @@ $(document).ready(() => {
     if (pref.decCode) {
       let observer = new MutationObserver(mutations => {
         mutations.forEach(mutationRecord => {
-          if (mutationRecord.target.style.display != "none") return;
+          if (mutationRecord.target.style.display != "none")
+            return;
           var $head = $('.datatable thead th');
           var dec;
-          for (let a = 0; a < $head.length; a++) {
+          for (let a = 0; a < $head.length; a++)
             if (/Dec Code/i.test($head.eq(a).html())) {
               dec = a;
               break;
             }
-          }
+          if (dec === undefined)
+            return;
+
           var $rows = $('.datatable tbody tr[role=row]');
           for (let i = 0; i < $rows.length; i++) {
             var $row = $rows.eq(i);

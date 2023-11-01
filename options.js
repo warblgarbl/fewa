@@ -24,8 +24,8 @@ $(document).ready(() => {
   click: function () {
     storage.get().then(result => {
       var page = result.page_settings;
-      for (let dom in page) {
-        for (let key in page[dom]) {
+      for (let dom in page)
+        for (let key in page[dom])
           switch (key) {
             default:
               page[dom][key] = undefined;
@@ -34,8 +34,7 @@ $(document).ready(() => {
               page[dom][key] = {};
               break;
           }
-        }
-      }
+
       storage.set(result);
       restore();
     });
@@ -102,11 +101,10 @@ $(document).ready(() => {
   click: function () {
     var $this = $(this);
     var $delay = $('div[for="cic-auto-open-delay"]');
-    if ($this.is(':checked')) {
+    if ($this.is(':checked'))
       $delay.show();
-    } else {
+    else
       $delay.hide();
-    }
   }
 }, "#cic-auto-open").on({
   "change keydown keyup": function (e) {
@@ -156,9 +154,8 @@ function restore() {
                     var $sort = ui.item.parent().children(':not(.ui-sortable-helper)');
                     var $place = ui.item.parent().children('.ui-sortable-placeholder');
                     var $help = ui.item.parent().children('.ui-sortable-helper');
-                    for (let i = 0; i < $sort.length; i++) {
+                    for (let i = 0; i < $sort.length; i++)
                       $sort.eq(i).find('.order').html(i + 1);
-                    }
                     $help.find('.order').html($sort.index($place) + 1);
                   },
                   tolerance: "pointer"
@@ -190,7 +187,7 @@ function restore() {
           break;
       }
     }
-    for (let dom in pref) {
+    for (let dom in pref)
       switch (dom) {
         case "cic":
           var skip = $(`#${dom}-coapp-skip`);
@@ -222,9 +219,8 @@ function restore() {
               val: "#CurrentAddress_faUSA_rbnPuertoRico",
               name: "Puerto Rico"
             }];
-            for (let i = 0; i < ids.length; i++) {
+            for (let i = 0; i < ids.length; i++)
               ids[i] = $("<option>").val(ids[i].val).html(ids[i].name);
-            }
             return ids;
           });
 
@@ -240,20 +236,17 @@ function restore() {
           break;
         case "aqua":
           var time = $(`#${dom}-time`);
-
           time.prop({ checked: pref[dom].time });
           break;
         case "pci":
           var time = $(`#${dom}-time`);
           var decCode = $(`#${dom}-dec-code`);
           var report = $(`#${dom}-report`);
-
           time.prop({ checked: pref[dom].time });
           decCode.prop({ checked: pref[dom].decCode });
           report.prop({ checked: pref[dom].report });
           break;
       }
-    }
   });
 }
 
@@ -264,10 +257,9 @@ function save() {
     for (let dom in page) {
       switch (dom) {
         case "sheets":
-          for (let id in page[dom]) {
+          for (let id in page[dom])
             if (!/active/i.test(id))
               delete page[dom][id];
-          }
           var spreadsheets = $(`.page_settings .${dom} .spreadsheet`);
           for (let a = 0; a < spreadsheets.length; a++) {
             let ss = spreadsheets.eq(a);
@@ -288,7 +280,7 @@ function save() {
           break;
       }
     }
-    for (let dom in pref) {
+    for (let dom in pref)
       switch (dom) {
         case "cic":
           var skip = $(`#${dom}-coapp-skip`);
@@ -316,14 +308,12 @@ function save() {
           break;
         case "aqua":
           var time = $(`#${dom}-time`);
-
           pref.time = time.is(":checked");
           break;
         case "pci":
           var time = $(`#${dom}-time`);
           var decCode = $(`#${dom}-dec-code`);
           var report = $(`#${dom}-report`);
-
           pref[dom].time = time.is(":checked");
           pref[dom].decCode = decCode.is(":checked");
           pref[dom].report = report.is(":checked");
@@ -331,7 +321,6 @@ function save() {
         case "sheets":
           break;
       }
-    }
     storage.set(result).then(() => alert("Preferences updated"));
   });
 }

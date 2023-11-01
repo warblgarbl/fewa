@@ -22,7 +22,10 @@ $(document).on({
     else if (/532306/.test(dealID))
       dealer = "Home Improvement";
     chrome.storage.sync.get().then(result => {
-      let page = result.page_settings.aqua;
+      let page = result.page_settings;
+      if (!('aqua' in page))
+        page.aqua = {};
+      page = page.aqua;
       page.dealer = dealer;
       chrome.storage.sync.set(result);
     });

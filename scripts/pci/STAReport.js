@@ -1,14 +1,11 @@
 const storage = chrome.storage.sync;
-storage.get().then(result => {
-  window.pref = result.preferences.pci;
-})
+storage.get().then(result => window.pref = result.preferences.pci);
 
 $(document).ready(() => {
   storage.get().then(result => {
-    var pref = result.preferences.pci;
     var pend = $('#stareport-pending-loading');
     var pd = $('#stareport-pastdue-loading');
-    var observer = (tar) => {
+    var observer = tar => {
       return new MutationObserver(mutations => {
         mutations.forEach(mutationRecord => {
           if (mutationRecord.target.style.display != "none") return;
@@ -18,7 +15,7 @@ $(document).ready(() => {
             class: buttons.children('button').eq(0).attr('class')
           });
           buttons.append(btn.on('click', null, tar, decision).append($('<span>').html("Decision %")));
-          decision(null, tar, pref);
+          decision(null, tar);
         });
       });
     }
@@ -33,7 +30,7 @@ $(document).ready(() => {
   })
 });
 
-function decision(e, tar, pref = window.pref) {
+function decision(e, tar) {
   var $head = $(`#stareport-${tar}-datatable thead th`);
   var ind = {
     date: "",
@@ -42,9 +39,12 @@ function decision(e, tar, pref = window.pref) {
   };
   for (let a = 0; a < $head.length; a++) {
     let head = $head.eq(a).html();
-    if (/Date/i.test(head)) ind.date = a;
-    if (/Caller/i.test(head)) ind.rep = a;
-    if (/Dec.*Code/i.test(head)) ind.dec = a;
+    if (/Date/i.test(head))
+      ind.date = a;
+    if (/Caller/i.test(head))
+      ind.rep = a;
+    if (/Dec.*Code/i.test(head))
+      ind.dec = a;
   }
   var date;
   var swap = 1;
@@ -56,7 +56,7 @@ function decision(e, tar, pref = window.pref) {
     let $date = $child.eq(ind.date);
     let $rep = $child.eq(ind.rep);
     let $dec = $child.eq(ind.dec);
-    if (pref.report) {
+    if (window.pref.report) {
       if (date != $date.html()) {
         date = $date.html();
         switch (swap) {
@@ -70,8 +70,9 @@ function decision(e, tar, pref = window.pref) {
       }
       $row.attr({ style: "background-color:" + shade[swap] });
     }
-    if (/TIM/i.test($rep.html())) $rep.empty();
-    if (pref.decCode) {
+    if (/TIM/i.test($rep.html()))
+      $rep.empty();
+    if (window.pref.decCode)
       switch ($dec.html()) {
         case "A+":
           $dec.html($dec.html() + ": <b>100%</b>");
@@ -104,7 +105,6 @@ function decision(e, tar, pref = window.pref) {
           $dec.html($dec.html() + ": <b>58%</b>");
           break;
       }
-    }
   }
   window.dispatchEvent(new Event('resize'));
   $(`#stareport-${tar}-datatable th[aria-label="Date: activate to sort column descending"]`).trigger('click');
