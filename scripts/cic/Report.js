@@ -21,18 +21,19 @@ $(document).on('click.f keydown.f', function () {
       for (let i = 0; i < $el.length; i++) {
         let el = $el.eq(i);
         let desc = el.children().toArray();
-        if (regFreeze.test(el.html()) && desc.every(e => !regFreeze.test(e.innerHTML)))
+        if (regFreeze.test(el.html()) && !desc.some(e => regFreeze.test(e.innerHTML)))
           el.addClass('freeze');
       }
 
-      var $ins = $('td.mcl2-report-body').filter((i, e) => /\*{3}-\*{2}/.test(e.innerHTML));
-      var $outs = $('td.mcl2-report-body').filter((i, e) => /\*{5}/.test(e.innerHTML));
-      for (let i = 0; i < $outs.length; i++) {
-        let $in = $ins.eq(i);
-        let $out = $outs.eq(i);
-        if ($in.html().substr(-4) != $out.html().substr(-4)) {
+      var $ins = $('thead:has("#APPLICANTINFORMATION")').parent('table').find('tbody tbody tr');
+      var $outs = $('thead:has("#SCOREMODELS")').parent('table').find('tbody table tbody');
+      $ins = $ins.filter(i => i < $ins.length - 1);
+      for (let i = 0; i < $ins.length; i++) {
+        let $in = $ins.eq(i).children().filter((i, e) => /\*{3}-\*{2}-\d{4}/.test(e.innerHTML));
+        let $out = $outs.eq(i).find('td').filter((i, e) => /\*{5}\d{4}/.test(e.innerHTML));
+        if ($out.length === 1 && $in.html().substr(-4) != $out.html().substr(-4)) {
           $in.parent().addClass('bad-input');
-          $out.html($out.html().replace()).addClass('bad-match');
+          $out.parent().addClass('bad-match');
           $fewaAlert.data({ 'fewa-play': 1 });
         }
       }
@@ -52,16 +53,24 @@ $(document).on('click.f keydown.f', function () {
   for (let i = 0; i < $headers.length; i++) {
     let $h = $headers.eq(i);
     let id = $h.html().split(" ")[0];
-    if (/(OPEN|CLOSED|DEROGATORY)/.test(id)) {
-      $h.attr({ id });
-      $h.next().attr({ style: "text-align:center;" }).append($('<a>').attr({ href: "#SUMMARY" }).html("Back to summary"));
-    } else if (/SCORE.*MODELS/.test($h.html()))
-      $h.attr({ id: "SUMMARY" });
+    switch (id) {
+      case "OPEN":
+      case "CLOSED":
+      case "DEROGATORY":
+        $h.next().attr({ style: "text-align:center;" }).append($('<a>').attr({ href: "#SUMMARY" }).html("Back to summary"));
+      case "SUMMARY":
+        $h.parentsUntil('span>table>tbody>tr>td').eq(-1).attr({ id })
+        break;
+      default:
+        $h.attr({ id: $h.html().replace(/\s*/g, "") });
+        $h.parentsUntil('span>table>tbody>tr>td').eq(-1).attr({ id: $h.html().replace(/\s*/g, "") })
+        break;
+    }
   }
 
-  var $open = $('table:not(:has(#SUMMARY)):has(thead:has(#OPEN)) > tbody').find('tr td table tbody');
-  var $closed = $('table:not(:has(#SUMMARY)):has(thead:has(#CLOSED)) > tbody').find('tr td table tbody');
-  var $derog = $('table:not(:has(#SUMMARY)):has(thead:has(#DEROGATORY)) > tbody').find('tr td table tbody');
+  var $open = $('#OPEN tbody').find('tr td table tbody'); // $('table:not(:has(#SCOREMODELS)):has(thead:has(#OPEN)) > tbody').find('tr td table tbody');
+  var $closed = $('#CLOSED tbody').find('tr td table tbody');
+  var $derog = $('#DEROGATORY tbody').find('tr td table tbody');
 
   var col = [];
   var titles = [
@@ -321,8 +330,8 @@ $(document).on('click.f keydown.f', function () {
   $tbody.children().eq(0)
     .before($t.append($b))
     .before($('div.mcl2-section-content-space').eq(0).clone());
-  $('table span:has(#SUMMARY)').after(
-    $('<span>').append(
+  $('#SCOREMODELS').after(
+    $('<span>').attr({ id: "SUMMARY" }).append(
       $('<table>').attr({ style: "width:100%;border-collapse:collapse;", cellspacing: "0", cellpadding: "0" }).append(
         $('<thead>').append(
           $('<tr>').append(
