@@ -13,6 +13,37 @@ $(document).on('click.f keydown.f', function () {
   else
     $(this).off('.f');
 }).ready(() => {
+  var num = new RegExp(/\d+/);
+  var usd = new Intl.NumberFormat('en-US', {
+    style: "currency",
+    currency: "USD",
+    maximumFractionDigits: 0
+  });
+
+  var $headers = $('td.mcl2-report-section-header');
+  for (let i = 0; i < $headers.length; i++) {
+    let $h = $headers.eq(i);
+    let id = $h.html().split(" ")[0];
+    switch (id) {
+      case "OPEN":
+      case "CLOSED":
+      case "DEROGATORY":
+        $h.next().attr({ style: "text-align:center;" }).append($('<a>').attr({ href: "#SUMMARY" }).html("Back to summary"));
+      case "SUMMARY":
+        $h.parentsUntil('span>table>tbody>tr>td').eq(-1).attr({ id })
+        break;
+      default:
+        $h.attr({ id: $h.html().replace(/\s*/g, "") });
+        $h.parentsUntil('span>table>tbody>tr>td').eq(-1).attr({ id: $h.html().replace(/\s*/g, "") })
+        break;
+    }
+  }
+
+  $('#DISCLAIMER').parentsUntil('form').eq(-1).after($('span:has(.AssureTable)').eq(0));
+  $('#SCOREMODELS').after($('#ALERT'), $('#TUIDVISIONALERT'));
+  $('#INQUIRIES').after($('#CREDITORS'));
+  $('#SOURCEOFINFORMATION').after($('#ALIASVARIATIONS'));
+
   storage.get().then(result => {
     var pref = result.preferences.cic;
     if (pref.markup) {
@@ -42,33 +73,7 @@ $(document).on('click.f keydown.f', function () {
     }
   });
 
-  var num = new RegExp(/\d+/);
-  var usd = new Intl.NumberFormat('en-US', {
-    style: "currency",
-    currency: "USD",
-    maximumFractionDigits: 0
-  });
-
-  var $headers = $('td.mcl2-report-section-header');
-  for (let i = 0; i < $headers.length; i++) {
-    let $h = $headers.eq(i);
-    let id = $h.html().split(" ")[0];
-    switch (id) {
-      case "OPEN":
-      case "CLOSED":
-      case "DEROGATORY":
-        $h.next().attr({ style: "text-align:center;" }).append($('<a>').attr({ href: "#SUMMARY" }).html("Back to summary"));
-      case "SUMMARY":
-        $h.parentsUntil('span>table>tbody>tr>td').eq(-1).attr({ id })
-        break;
-      default:
-        $h.attr({ id: $h.html().replace(/\s*/g, "") });
-        $h.parentsUntil('span>table>tbody>tr>td').eq(-1).attr({ id: $h.html().replace(/\s*/g, "") })
-        break;
-    }
-  }
-
-  var $open = $('#OPEN tbody').find('tr td table tbody'); // $('table:not(:has(#SCOREMODELS)):has(thead:has(#OPEN)) > tbody').find('tr td table tbody');
+  var $open = $('#OPEN tbody').find('tr td table tbody');
   var $closed = $('#CLOSED tbody').find('tr td table tbody');
   var $derog = $('#DEROGATORY tbody').find('tr td table tbody');
 
@@ -330,7 +335,7 @@ $(document).on('click.f keydown.f', function () {
   $tbody.children().eq(0)
     .before($t.append($b))
     .before($('div.mcl2-section-content-space').eq(0).clone());
-  $('#SCOREMODELS').after(
+  $('#OPEN').before(
     $('<span>').attr({ id: "SUMMARY" }).append(
       $('<table>').attr({ style: "width:100%;border-collapse:collapse;", cellspacing: "0", cellpadding: "0" }).append(
         $('<thead>').append(
