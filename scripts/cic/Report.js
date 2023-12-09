@@ -40,7 +40,7 @@ $(document).on('click.f keydown.f', function () {
   }
 
   $('#DISCLAIMER').parentsUntil('form').eq(-1).after($('span:has(.AssureTable)').eq(0));
-  $('#SCOREMODELS').after($('#ALERT'), $('#TUIDVISIONALERT'));
+  $('#SCOREMODELS').after($('#ALERT'), $('#TUIDVISIONALERT'), $('#PUBLICRECORDS'));
   $('#INQUIRIES').after($('#CREDITORS'));
   $('#SOURCEOFINFORMATION').after($('#ALIASVARIATIONS'));
 

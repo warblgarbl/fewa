@@ -44,7 +44,7 @@ function only(n) {
         $co.removeAttr('disabled').trigger('click');
       break;
   }
-
+  $('#custom_pc, #custom_sc').removeAttr('disabled');
   $('#btnCustom').trigger('click');
   $('#custom_pc, #custom_sc').attr({ disabled: "" });
 }
