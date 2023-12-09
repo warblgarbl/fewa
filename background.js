@@ -46,102 +46,11 @@ chrome.runtime.onInstalled.addListener(details => {
     case "update":
       storage.get().then(result => {
         var update = structuredClone(_default);
-        if ('fewa' in result)
-          if ('page_settings' in result && 'preferences' in result)
-            storage.remove('fewa');
-          else {
-            var fewa = result.fewa;
-            var deepPage = true;
-            var deepPref = true;
-            if ('page_settings' in fewa) {
-              deepPage = false;
-              var page = fewa.page_settings;
-              if ('sheets' in page) {
-                var sheets = page.sheets;
-                for (let sheet in sheets)
-                  if (!/active/i.test(sheet))
-                    update.page_settings.sheets[sheet] = sheets[sheet];
-              }
-            }
-            if ('preferences' in fewa) {
-              deepPref = false;
-              var pref = fewa.preferences;
-              if ('cic' in pref) {
-                var cic = pref.cic;
-                for (let key in cic) {
-                  if (/bureau/i.test(key))
-                    if (Object.keys(cic[key]).length)
-                      for (let key2 in cic[key]) {
-                        let type = typeof cic[key][key2];
-                        if (type === "string" || type === "boolean")
-                          update.preferences.cic[key][key2] = cic[key][key2];
-                      }
-                  else if (typeof cic[key] === typeof update.preferences.cic[key])
-                    update.preferences.cic[key] = cic[key];
-                }
-              }
-              if ('aqua' in pref) {
-                var aqua = pref.aqua;
-                for (let key in aqua)
-                  if (typeof aqua[key] === typeof update.preferences.aqua[key])
-                    update.preferences.aqua[key] = aqua[key];
-              }
-              if ('pci' in pref) {
-                var pci = pref.pci;
-                for (let key in pci)
-                  if (typeof pci[key] === typeof update.preferences.pci[key])
-                    update.preferences.pci[key] = pci[key];
-              }
-            }
-            if (deepPage || deepPref) {
-              if ('cic' in fewa) {
-                var cic = fewa.cic;
-                if (deepPref && 'preferences' in cic) {
-                  var pref = cic.preferences;
-                  for (let key in pref) {
-                    if (/bureau/i.test(key))
-                      if (Object.keys(cic[key]).length)
-                        for (let key2 in cic[key]) {
-                          let type = typeof cic[key][key2];
-                          if (type === "string" || type === "boolean")
-                            update.preferences.cic[key][key2] = cic[key][key2];
-                        }
-                    else if (typeof cic[key] === typeof update.preferences.cic[key])
-                      update.preferences.cic[key] = cic[key];
-                  }
-                }
-              }
-              if ('aqua' in fewa) {
-                var aqua = fewa.aqua;
-                if (deepPref && 'preferences' in aqua) {
-                  var pref = aqua.preferences;
-                  for (let key in pref)
-                    if (typeof pref[key] === typeof update.preferences.aqua[key])
-                      update.preferences.aqua[key] = pref[key];
-                }
-              }
-              if ('pci' in fewa) {
-                var pci = fewa.pci;
-                if (deepPref && 'preferences' in pci) {
-                  var pref = pci.preferences;
-                  for (let key in pref)
-                    if (typeof pref[key] === typeof update.preferences.pci[key])
-                      update.preferences.pci[key] = pref[key];
-                }
-              }
-              if ('sheets' in fewa) {
-                var sheets = fewa.sheets;
-                if (deepPage && 'page_settings' in sheets) {
-                  var page = sheets.page_settings;
-                  for (let key in page)
-                    if (!/active/i.test(key))
-                      update.page_settings.sheets[key] = page[key];
-                }
-              }
-            }
-            storage.set(update);
-            storage.remove('fewa');
-          }
+        if (!('page_settings' in result))
+          result.page_settings = update.page_settings;
+        if (!('preferences' in result))
+          result.preferences = update.preferences;
+        storage.set(result);
       });
       break;
   }
