@@ -13,7 +13,7 @@ $(document).on('click.f keydown.f', function () {
   else
     $(this).off('.f');
 }).ready(() => {
-  var num = new RegExp(/\d+/);
+  var num = new RegExp(/\d+(\.\d+)?/);
   var usd = new Intl.NumberFormat('en-US', {
     style: "currency",
     currency: "USD",
@@ -215,25 +215,25 @@ $(document).on('click.f keydown.f', function () {
             let pd90 = row1.eq(8).text().split("90")[1];
 
             row.bal += num.test(bal) ?
-              parseInt(num.exec(bal)) :
+              parseFloat(num.exec(bal)) * (/M$/.test(bal) ? 1000000 : 1) :
               0;
             row.hi += num.test(hi) ?
-              parseInt(num.exec(hi)) :
+              parseFloat(num.exec(hi)) * (/M$/.test(hi) ? 1000000 : 1) :
               0;
             row.pay += num.test(pay) ?
-              parseInt(num.exec(pay)) :
+              parseFloat(num.exec(pay)) * (/M$/.test(pay) ? 1000000 : 1) :
               0;
             row.pd += num.test(pd) ?
-              parseInt(num.exec(pd)) :
+              parseFloat(num.exec(pd)) * (/M$/.test(pd) ? 1000000 : 1) :
               0;
             row.pd30 += num.test(pd30) ?
-              parseInt(num.exec(pd30)) :
+              parseFloat(num.exec(pd30)) * (/M$/.test(pd30) ? 1000000 : 1) :
               0;
             row.pd60 += num.test(pd60) ?
-              parseInt(num.exec(pd60)) :
+              parseFloat(num.exec(pd60)) * (/M$/.test(pd60) ? 1000000 : 1) :
               0;
             row.pd90 += num.test(pd90) ?
-              parseInt(num.exec(pd90)) :
+              parseFloat(num.exec(pd90)) * (/M$/.test(pd90) ? 1000000 : 1) :
               0;
           }
           for (let key in row)
