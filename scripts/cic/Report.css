@@ -49,3 +49,28 @@
 .label-other * {
   background: #80000020;
 }
+
+a.collapse {
+  background          : darkcyan;
+  color               : white;
+  cursor              : pointer;
+  font-family         : Arial;
+  font-size           : 12px;
+  font-weight         : 700;
+  padding             : 2px;
+  text-decoration-line: none;
+}
+
+a.show:after {
+  content: " +";
+  padding: 2px;
+}
+
+a.hide:after {
+  content: " -";
+  padding: 2px;
+}
+
+#TopToolbar_toolbarControl {
+  display: none!important;
+}

@@ -12,7 +12,21 @@ $(document).on('click.f keydown.f', function () {
     $fewaAlert.trigger('play');
   else
     $(this).off('.f');
-}).ready(() => {
+}).on({
+  click: function () {
+    var $this = $(this);
+    var $html = $this.html();
+    var $parent = $this.parentsUntil('span>table').eq(-1);
+    var $body = $parent.next();
+    if (/HIDE/i.test($html)) {
+      $this.removeClass('hide').addClass('show').html("SHOW");
+      $body.hide();
+    } else if (/SHOW/i.test($html)) {
+      $this.removeClass('show').addClass('hide').html("HIDE");
+      $body.show();
+    }
+  }
+}, 'a.collapse').ready(() => {
   var num = new RegExp(/\d+(\.\d+)?/);
   var usd = new Intl.NumberFormat('en-US', {
     style: "currency",
@@ -29,20 +43,33 @@ $(document).on('click.f keydown.f', function () {
       case "CLOSED":
       case "DEROGATORY":
         $h.next().attr({ style: "text-align:center;" }).append($('<a>').attr({ href: "#SUMMARY" }).html("Back to summary"));
-      case "SUMMARY":
-        $h.parentsUntil('span>table>tbody>tr>td').eq(-1).attr({ id })
+        $h.prev().attr({ style: "text-align:center;" }).html($('<a>').attr({
+          href: "javascript:void(0)",
+          class: "collapse hide",
+          style: "text-align:center;"
+        }).html("HIDE"));
+        $h.parentsUntil('span>table>tbody>tr>td').eq(-1).attr({ id });
         break;
       default:
-        $h.attr({ id: $h.html().replace(/\s*/g, "") });
-        $h.parentsUntil('span>table>tbody>tr>td').eq(-1).attr({ id: $h.html().replace(/\s*/g, "") })
+        $h.prev().attr({ style: "text-align:center;" }).html($('<a>').attr({
+          href: "javascript:void(0)",
+          class: "collapse hide",
+          style: "text-align:center;"
+        }).html("HIDE"));
+        $h.parentsUntil('span>table>tbody>tr>td').eq(-1).attr({ id: $h.html().replace(/\s*/g, "") });
         break;
     }
   }
 
+  $('#TopToolbar_toolbarControl').attr({ style: 'display:none;' });
   $('#DISCLAIMER').parentsUntil('form').eq(-1).after($('span:has(.AssureTable)').eq(0));
   $('#SCOREMODELS').after($('#ALERT'), $('#TUIDVISIONALERT'), $('#PUBLICRECORDS'));
   $('#INQUIRIES').after($('#CREDITORS'));
-  $('#SOURCEOFINFORMATION').after($('#ALIASVARIATIONS'));
+  $('#APPLICANTINFORMATION').after($('#ALIASVARIATIONS'), $('#ADDRESSVARIATIONS'), $('#EMPLOYMENTVARIATIONS'), $('#SOURCEOFINFORMATION'));
+
+  var $hide = [$('#ALIASVARIATIONS'), $('#ADDRESSVARIATIONS'), $('#EMPLOYMENTVARIATIONS'), $('#SOURCEOFINFORMATION')];
+  for (let h = 0; h < $hide.length; h++)
+    $hide[h].find('a.collapse').click();
 
   storage.get().then(result => {
     var pref = result.preferences.cic;
@@ -244,7 +271,7 @@ $(document).on('click.f keydown.f', function () {
                 row[key] = usd.format(row[key]);
             }
 
-          $b.append($('<tr>').attr({ style: "text-align:center;" }).addClass(`label-${row.type.toLowerCase()}`).append($('<td>').html(row.type), $('<td>').html(row.count), $('<td>').html(row.bal), $('<td>').html(row.hi), $('<td>').html(row.pay), $('<td>').html(row.pd), $('<td>').html(row.pd30), $('<td>').html(row.pd60), $('<td>').html(row.pd90)))
+          $b.append($('<tr>').attr({ style: "text-align:center;" }).addClass(`label-${row.type.toLowerCase()}`).append($('<td>').html(row.type), $('<td>').html(row.count), $('<td>').html(row.bal), $('<td>').html(row.hi), $('<td>').html(row.pay), $('<td>').html(row.pd), $('<td>').html(row.pd30), $('<td>').html(row.pd60), $('<td>').html(row.pd90)));
         }
 
       for (let key in sum)
@@ -354,7 +381,12 @@ $(document).on('click.f keydown.f', function () {
                   $('<col>').attr({ style: "width:12%" })),
                 $('<tbody>').append(
                   $('<tr>').append(
-                    $('<td>'),
+                    $('<td>').attr({ style: "text-align:center;" }).append(
+                      $('<a>').attr({
+                        href: "javascript:void(0)",
+                        class: "collapse",
+                        style: "text-align:center;"
+                      }).html("HIDE")),
                     $('<td>').attr({
                       class: "mcl2-report-section-header",
                       style: "padding:2px"
@@ -389,4 +421,5 @@ $(document).on('click.f keydown.f', function () {
         $lbl.addClass('label-other');
     }
   }
+  $('#SUMMARY a.collapse').click().click();
 });
