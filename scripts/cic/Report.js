@@ -51,12 +51,13 @@ $(document).on('click.f keydown.f', function () {
         $h.parentsUntil('span>table>tbody>tr>td').eq(-1).attr({ id });
         break;
       default:
+        id = $h.html().replace(/-*/g, "");
         $h.prev().attr({ style: "text-align:center;" }).html($('<a>').attr({
           href: "javascript:void(0)",
           class: "collapse hide",
           style: "text-align:center;"
         }).html("HIDE"));
-        $h.parentsUntil('span>table>tbody>tr>td').eq(-1).attr({ id: $h.html().replace(/\s*/g, "") });
+        $h.html(id).parentsUntil('span>table>tbody>tr>td').eq(-1).attr({ id: id.replace(/\s*/g, "") });
         break;
     }
   }
