@@ -25,7 +25,7 @@ $(document).ready(() => {
   });
 }).on({
   focus: function () {
-    if ($('#Borrower_txtFirstName').val().length === 0)
+    if ($('#Borrower_txtDOB').val().length === 0)
       $('#Borrower_txtFirstName').trigger('focus');
   }
 }, '#btnOrder').on({
