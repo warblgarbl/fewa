@@ -19,12 +19,16 @@ $(document).ready(() => {
   }
   storage.get().then(result => {
     let pref = result.preferences.cic;
-    $(pref.address).trigger('click');
     if (pref.skip)
       skipCoapp();
-    $('#Borrower_txtFirstName').trigger('focus');
+    $(pref.address).trigger('click');
   });
 }).on({
+  focus: function () {
+    if ($('#Borrower_txtFirstName').val().length === 0)
+      $('#Borrower_txtFirstName').trigger('focus');
+  }
+}, '#btnOrder').on({
   focusout: function () {
     var $this = $(this);
     if (!$this.val().trim())
