@@ -84,8 +84,8 @@ $(document).on('click.f keydown.f', function () {
           el.addClass('freeze');
       }
 
-      var $ins = $('thead:has("#APPLICANTINFORMATION")').parent('table').find('tbody tbody tr');
-      var $outs = $('thead:has("#SCOREMODELS")').parent('table').find('tbody table tbody');
+      var $ins = $('#APPLICANTINFORMATION>table').find('tbody tbody tr');
+      var $outs = $('#SCOREMODELS>table').find('tbody table tbody');
       $ins = $ins.filter(i => i < $ins.length - 1);
       for (let i = 0; i < $ins.length; i++) {
         let $in = $ins.eq(i).children().filter((i, e) => /\*{3}-\*{2}-\d{4}/.test(e.innerHTML));
