@@ -77,11 +77,19 @@ $(document).on('click.f keydown.f', function () {
     if (pref.markup) {
       var $el = $('tbody span table *');
       var regFreeze = /FR(O|EE)ZEN?|SUPPRESS(ION|ED)/i;
+      var regMatch = /INPUT SSN ASSOCIATED WITH ADDITIONAL SUBJECT/i;
       for (let i = 0; i < $el.length; i++) {
         let el = $el.eq(i);
         let desc = el.children().toArray();
         if (regFreeze.test(el.html()) && !desc.some(e => regFreeze.test(e.innerHTML)))
           el.addClass('freeze');
+        if (regMatch.test(el.html()) && !desc.some(e => regMatch.test(e.innerHTML))) {
+          let lines = el.html().split('<br>');
+          for (let l = 0; l < lines.length; l++)
+            if (regMatch.test(lines[l]))
+              lines[l] = '<span style="font-size:0.8rem;"><span class="bad-input">' + lines[l].split(" - ")[0] + '</span> - ' + lines[l].split(" - ")[1] + '</span>';
+          el.html(lines.join('<br>'));
+        }
       }
 
       var $ins = $('#APPLICANTINFORMATION>table').find('tbody tbody tr');
