@@ -67,6 +67,7 @@ $(document).on('click.f keydown.f', function () {
   $('#SCOREMODELS').after($('#ALERT'), $('#TUIDVISIONALERT'), $('#PUBLICRECORDS'));
   $('#INQUIRIES').after($('#CREDITORS'));
   $('#APPLICANTINFORMATION').after($('#ALIASVARIATIONS'), $('#ADDRESSVARIATIONS'), $('#EMPLOYMENTVARIATIONS'), $('#SOURCEOFINFORMATION'));
+  $('#OPEN').after($('#DEROGATORY'));
 
   var $hide = [$('#ALIASVARIATIONS'), $('#ADDRESSVARIATIONS'), $('#EMPLOYMENTVARIATIONS'), $('#SOURCEOFINFORMATION')];
   for (let h = 0; h < $hide.length; h++)
@@ -110,8 +111,8 @@ $(document).on('click.f keydown.f', function () {
   });
 
   var $open = $('#OPEN tbody').find('tr td table tbody');
-  var $closed = $('#CLOSED tbody').find('tr td table tbody');
   var $derog = $('#DEROGATORY tbody').find('tr td table tbody');
+  var $closed = $('#CLOSED tbody').find('tr td table tbody');
 
   var col = [];
   var titles = [
@@ -161,7 +162,7 @@ $(document).on('click.f keydown.f', function () {
     pd90: 0
   }
 
-  var section = [$open, $closed, $derog];
+  var section = [$open, $derog, $closed];
   for (let a = 0; a < section.length; a++) {
     let sec = section[a];
     if (sec.eq(0).children().length > 1) {
@@ -179,10 +180,10 @@ $(document).on('click.f keydown.f', function () {
           sum['type'] = '<a href="#OPEN">OPEN</a>';
           break;
         case 1:
-          sum['type'] = '<a href="#CLOSED">CLOSED</a>';
+          sum['type'] = '<a href="#DEROGATORY">DEROG</a>';
           break;
         case 2:
-          sum['type'] = '<a href="#DEROGATORY">DEROG</a>';
+          sum['type'] = '<a href="#CLOSED">CLOSED</a>';
       }
 
       let mtg = sec.filter((i, e) => /ACCT TYPE.*MTG/.test($(e).children('tr').eq(1).children('td').eq(2).html()));
@@ -242,6 +243,7 @@ $(document).on('click.f keydown.f', function () {
             let acct = accts.eq(c);
             let row1 = acct.children('tr').eq(1).children('td');
             let row2 = acct.children('tr').eq(2).children('td');
+            let name = row1.eq(1);
             let bal = row2.eq(3).text();
             let hi = row1.eq(4).text();
             let pd = row2.eq(4).text();
@@ -249,6 +251,9 @@ $(document).on('click.f keydown.f', function () {
             let pd30 = row1.eq(6).text().split("30")[1];
             let pd60 = row1.eq(7).text().split("60")[1];
             let pd90 = row1.eq(8).text().split("90")[1];
+
+            if (/rev/.test(names[b]) && !/\//.test(name.children('a').text()))
+              name.addClass('label-cc');
 
             row.bal += num.test(bal) ?
               parseFloat(num.exec(bal)) * (/M$/.test(bal) ? 1000000 : 1) :
