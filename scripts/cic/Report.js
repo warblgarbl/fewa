@@ -252,7 +252,7 @@ $(document).on('click.f keydown.f', function () {
             let pd60 = row1.eq(7).text().split("60")[1];
             let pd90 = row1.eq(8).text().split("90")[1];
 
-            if (/rev/.test(names[b]) && !/\//.test(name.children('a').text()))
+            if (/rev/.test(names[b]) && (!/\//.test(name.children('a').text()) || /^THD/.test(name.children('a').text())))
               name.addClass('label-cc');
 
             row.bal += num.test(bal) ?
