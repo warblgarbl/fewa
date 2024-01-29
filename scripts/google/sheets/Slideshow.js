@@ -26,14 +26,20 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       var ptrn1 = /(?<=\[null,\[\\")\d+/g;
       var ptrn2 = /(?<="\[\[\\")\d+/g;
       var ptrn3 = /(?<=\:\\")\d+/g;
+      var ptrn4 = /(?<="\[\d,\d,\\")\d+/g;
+      var ptrn5 = /(?<=\[\\")\d+(?=\\",\d)/g;
       var $src1 = $('script').filter((i, e) => ptrn1.test(e.innerHTML));
       var $src2 = $('script').filter((i, e) => ptrn2.test(e.innerHTML));
       var $src3 = $('script').filter((i, e) => ptrn3.test(e.innerHTML));
+      var $src4 = $('script').filter((i, e) => ptrn4.test(e.innerHTML));
+      var $src5 = $('script').filter((i, e) => ptrn5.test(e.innerHTML));
       var names = [];
       var gid1 = $src1.html().match(ptrn1);
       var gid2 = $src2.html().match(ptrn2);
       var gid3 = $src3.html().match(ptrn3);
-      var gids = [...gid1, ...gid2, ...gid3].filter((e, i, a) => {
+      var gid4 = $src4.html().match(ptrn4);
+      var gid5 = $src5.html().match(ptrn5);
+      var gids = [...gid1, ...gid2, ...gid3, ...gid4, ...gid5].filter((e, i, a) => {
         return a.indexOf(e) === i;
       }).sort((a, b) => {
         if (a.length > b.length) return 1
