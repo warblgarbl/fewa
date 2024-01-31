@@ -25,6 +25,31 @@
   background: #54baff30;
 }
 
+.label-sync-hd {
+  background: #4f3772;
+  color     : white;
+  text-align: left;
+}
+
+.label-sync-hd div {
+  font-style: italic;
+  text-align: right;
+}
+
+.label-sync-hd a {
+  color: white;
+}
+
+.label-sync-kc {
+  background: #2e539e;
+  color     : white;
+  text-align: left;
+}
+
+.label-sync-kc a {
+  color: white;
+}
+
 .label-cc,
 .label-rev,
 .label-rev * {

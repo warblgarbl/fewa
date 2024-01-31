@@ -27,6 +27,7 @@ $(document).on('click.f keydown.f', function () {
     }
   }
 }, 'a.collapse').ready(() => {
+  console.time("finish");
   var num = new RegExp(/\d+(\.\d+)?/);
   var usd = new Intl.NumberFormat('en-US', {
     style: "currency",
@@ -252,8 +253,16 @@ $(document).on('click.f keydown.f', function () {
             let pd60 = row1.eq(7).text().split("60")[1];
             let pd90 = row1.eq(8).text().split("90")[1];
 
-            if (/rev/.test(names[b]) && (!/\//.test(name.children('a').text()) || /^THD/.test(name.children('a').text())))
-              name.addClass('label-cc');
+            if (/rev/.test(names[b])) {
+              if (!/\//.test(name.children('a').text()) || /^THD/.test(name.children('a').text()))
+                name.addClass('label-cc');
+              else if (/^SYNCB\/HD/.test(name.children('a').text())) {
+                name.removeAttr("style").removeProp("style").addClass('label-sync-hd');
+                if (/^SYNCB\/HDRAIN/.test(name.children('a').text()))
+                  name.prepend("&nbsp;", $("<br>")).append($("<br>"), $("<div>").html("Possible FEWA account"));
+              } else if (/^SYNCB\/K(C|WIK)/.test(name.children('a').text()))
+                name.addClass('label-sync-kc');
+            }
 
             row.bal += num.test(bal) ?
               parseFloat(num.exec(bal)) * (/M$/.test(bal) ? 1000000 : 1) :
@@ -436,4 +445,5 @@ $(document).on('click.f keydown.f', function () {
     }
   }
   $('#SUMMARY a.collapse').click().click();
+  console.timeEnd("finish");
 });
