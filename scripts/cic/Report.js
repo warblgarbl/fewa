@@ -253,15 +253,43 @@ $(document).on('click.f keydown.f', function () {
             let pd60 = row1.eq(7).text().split("60")[1];
             let pd90 = row1.eq(8).text().split("90")[1];
 
-            if (/rev/.test(names[b])) {
-              if (!/\//.test(name.children('a').text()) || /^THD/.test(name.children('a').text()))
-                name.addClass('label-cc');
-              else if (/^SYNCB\/HD/.test(name.children('a').text())) {
-                name.removeAttr("style").removeProp("style").addClass('label-sync-hd');
-                if (/^SYNCB\/HDRAIN/.test(name.children('a').text()))
-                  name.prepend("&nbsp;", $("<br>")).append($("<br>"), $("<div>").html("Possible FEWA account"));
-              } else if (/^SYNCB\/K(C|WIK)/.test(name.children('a').text()))
-                name.addClass('label-sync-kc');
+            let strName = name.children('a').text();
+            if (/AQUA FINANCE/.test(strName)) {
+              name.addClass('label-aqua')
+                .prepend("&nbsp;", $("<br>"))
+                .append($("<br>"), $("<div>").html($("<span>").html("FEWA lender")));
+            } else if (/FOUNDATION F/.test(strName)) {
+              name.addClass('label-ff')
+                .prepend("&nbsp;", $("<br>"))
+                .append($("<br>"), $("<div>").html($("<span>").html("FEWA lender")));
+            } else if (/PREFERRED CR/.test(strName)) {
+              name.addClass('label-pci')
+                .prepend("&nbsp;", $("<br>"))
+                .append($("<br>"), $("<div>").html($("<span>").html("FEWA lender")));
+            } else if (/rev/.test(names[b])) {
+              if (!/\//.test(strName)) {
+                name.addClass('label-cc')
+                  .prepend("&nbsp;", $("<br>"))
+                  .append($("<br>"), $("<div>").html($("<span>").html("Major CC")));
+              } else if (/^THD/.test(strName)) {
+                name.addClass('label-thd')
+                  .prepend("&nbsp;", $("<br>"))
+                  .append($("<br>"), $("<div>").html($("<span>").html("FEWA lender")));
+              } else if (/^SYNCB\/HD/.test(strName)) {
+                name.addClass('label-sync-hd')
+                  .removeProp("style");
+                if (/^SYNCB\/HDRAIN/.test(strName)) {
+                  name.prepend($("<div>").html($("<span>").html("Possible FEWA account")))
+                    .append($("<br>"), $("<div>").html($("<span>").html("FEWA lender")));
+                } else {
+                  name.prepend("&nbsp;", $("<br>"))
+                    .append($("<br>"), $("<div>").html($("<span>").html("FEWA lender")));
+                }
+              } else if (/^SYNCB\/K(C|WIK)/.test(strName)) {
+                name.addClass('label-sync-kc')
+                  .prepend("&nbsp;", $("<br>"))
+                  .append($("<br>"), $("<div>").html($("<span>").html("FEWA lender")));
+              }
             }
 
             row.bal += num.test(bal) ?

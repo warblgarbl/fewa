@@ -25,32 +25,54 @@
   background: #54baff30;
 }
 
-.label-sync-hd {
-  background: #4f3772;
-  color     : white;
-  text-align: left;
-}
-
-.label-sync-hd div {
+.label-aqua div,
+.label-cc div,
+.label-ff div,
+.label-pci div,
+.label-sync-hd div,
+.label-sync-kc div,
+.label-thd div {
   font-style: italic;
   text-align: right;
 }
 
-.label-sync-hd a {
-  color: white;
+.label-aqua div span,
+.label-cc div span,
+.label-ff div span,
+.label-pci div span,
+.label-sync-hd div span,
+.label-sync-kc div span,
+.label-thd div span {
+  padding: 2px 3px;
 }
 
-.label-sync-kc {
+.label-aqua div span,
+.label-thd div span {
+  background: #f96302;
+  color     : white;
+}
+
+.label-cc div span,
+.label-ff div span {
+  background: #adffbb;
+  color     : black;
+}
+
+.label-pci div span {
+  background: #c797df;
+  color     : black;
+}
+
+.label-sync-hd div span {
+  background: #4f3772;
+  color     : white;
+}
+
+.label-sync-kc div span {
   background: #2e539e;
   color     : white;
-  text-align: left;
 }
 
-.label-sync-kc a {
-  color: white;
-}
-
-.label-cc,
 .label-rev,
 .label-rev * {
   background: #00ff0030;
