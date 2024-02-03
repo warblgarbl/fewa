@@ -57,32 +57,30 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       // Find first visible sheet
       window.location.hash = "gid=" + gids[0];
       var start = $('.docs-sheet-active-tab .docs-sheet-tab-name').html();
-      for (let i = 1; i < gids.length; i++) {
-        window.location.hash = "gid=" + gids[i];
-        if (start != $('.docs-sheet-active-tab .docs-sheet-tab-name').html()) {
-          window.location.hash = "gid=" + gids[--i];
-          if (start != $('.docs-sheet-active-tab .docs-sheet-tab-name').html()) {
-            window.location.hash = "gid=" + gids[++i];
-            start = $('.docs-sheet-active-tab .docs-sheet-tab-name').html();
-          }
-          chrome.runtime.sendMessage({
-            to: "popup",
-            target: ".spreadsheet",
-            type: "sheet",
-            value: {
-              gid: gids[i],
-              name: start
-            }
-          });
-          names.push(start);
-          start = i;
-          break;
+      var id = 0;
+      while (id < gids.length && start == $('.docs-sheet-active-tab .docs-sheet-tab-name').html())
+        window.location.hash = "gid=" + gids[++id];
+      start = $('.docs-sheet-active-tab .docs-sheet-tab-name').html();
+      while (id >= 0 && start == $('.docs-sheet-active-tab .docs-sheet-tab-name').html())
+        window.location.hash = "gid=" + gids[--id];
+      if (id < 0 && start == $('.docs-sheet-active-tab .docs-sheet-tab-name').html())
+        while (start == $('.docs-sheet-active-tab .docs-sheet-tab-name').html())
+          window.location.hash = "gid=" + gids[++id];
+      start = $('.docs-sheet-active-tab .docs-sheet-tab-name').html();
+      chrome.runtime.sendMessage({
+        to: "popup",
+        target: ".spreadsheet",
+        type: "sheet",
+        value: {
+          gid: gids[id],
+          name: start
         }
-      }
+      });
+      names.push(start);
       // Find remaining visible sheets
-      for (let i = start + 1; i < gids.length; i++) {
-        window.location.hash = "gid=" + gids[i];
-        let gid = gids[i];
+      for (id = 0; id < gids.length; id++) {
+        window.location.hash = "gid=" + gids[id];
+        let gid = gids[id];
         let name = $('.docs-sheet-active-tab .docs-sheet-tab-name').html();
         if (names[names.length - 1] != name) {
           names.push(name);
