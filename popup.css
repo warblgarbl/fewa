@@ -123,6 +123,16 @@ input[type="number"].empty {
   text-align: right;
 }
 
+.label:hover,
+.order:hover {
+  cursor: grab;
+}
+
+.label:active,
+.order:active {
+  cursor: grabbing;
+}
+
 .sheet-name {
   font-size   : 1.6rem;
   font-variant: small-caps;
