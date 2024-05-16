@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "FEWA Office",
-  "version": "0.6.0.0",
+  "version": "0.7.0.0",
 
   "action": {
     "default_popup": "popup.html"
@@ -68,12 +68,18 @@
       "run_at": "document_start"
     },
     {
+      "matches": ["https://*.lightning.force.com/*"],
+      "js": ["scripts/external/jquery-3.7.0.min.js", "scripts/salesforce/Dashboard.js"],
+      "all_frames": true,
+      "match_about_blank": true
+    },
+    {
       "matches": ["https://docs.google.com/spreadsheets/d/*"],
       "js": ["scripts/external/jquery-3.7.0.min.js", "scripts/google/sheets/Slideshow.js"]
     }
   ],
   "content_security_policy": {
-    "extension_pages": "default-src 'self' 'wasm-unsafe-eval';"
+    "extension_pages": "default-src 'self' 'wasm-unsafe-eval'; script-src-elem 'self' 'unsafe-inline' https://*.lightning.force.com/*"
   },
   "host_permissions": [
     "https://script.google.com/macros/s/*"
