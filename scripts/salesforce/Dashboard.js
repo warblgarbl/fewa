@@ -66,9 +66,12 @@ function getLastRefresh() {
 }
 
 function refreshCycle() {
+  var now = new Date();
+  if (now.getHours() < 7 || now.getHours() > 17)
+    return;
   var refresh = $('button.refresh').eq(0);
   var prevRefresh = getLastRefresh();
-  if ((new Date().getTime() - prevRefresh.getTime()) > (1000 * 60 * 4)) {
+  if ((now.getTime() - prevRefresh.getTime()) > (1000 * 60 * 4)) {
     refresh.click();
     setTimeout(() => {
       if (prevRefresh.getTime() == getLastRefresh().getTime())
