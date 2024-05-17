@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "FEWA Office",
-  "version": "0.7.0.1",
+  "version": "0.7.1.0",
 
   "action": {
     "default_popup": "popup.html"
@@ -70,6 +70,7 @@
     {
       "matches": ["https://*.lightning.force.com/*"],
       "js": ["scripts/external/jquery-3.7.0.min.js", "scripts/salesforce/Dashboard.js"],
+      "css": ["scripts/salesforce/Dashboard.css"],
       "all_frames": true,
       "match_about_blank": true
     },

@@ -1,0 +1,4 @@
+.slds-button.auto-refresh.refreshing {
+  background: indigo;
+  color     : white;
+}
