@@ -8,8 +8,8 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     case ".spreadsheet":
       switch (request.type) {
         case "init":
-          $('.spreadsheet').attr({ name: request.name });
-          $('.spreadsheet .name').html(request.name);
+          $(request.target).attr({ name: request.name });
+          $(request.target + " " + '.name').html(request.name);
           $load.progressbar('option', 'max', request.max);
           break;
         case "1 sheet":
@@ -40,8 +40,8 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
           $load.progressbar('value', $load.progressbar('value') + 1);
           break;
         case "sort":
-          var $list = $('.spreadsheet .list');
-          var $old = $('.spreadsheet .sheet');
+          var $list = $(request.target + " " + '.list');
+          var $old = $(request.target + " " + '.sheet');
           var $new = [];
           for (let i = 0; i < $old.length; i++) {
             let $n = $old.eq(request.value[i]);
@@ -54,12 +54,12 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
             containment: "parent",
             revert: true,
             stop: function () {
-              var $sort = $('.spreadsheet .sheet:not(.ui-sortable-helper)');
+              var $sort = $(request.target + " " + '.sheet:not(.ui-sortable-helper)');
               var $place = $('.ui-sortable-placeholder');
               var $help = $('.ui-sortable-helper');
               for (let i = 0; i < $sort.length; i++)
                 $sort.eq(i).find('.order').html(i + 1);
-              $help.find('.order').html($place.index('.spreadsheet .sheet:not(.ui-sortable-helper)') + 1);
+              $help.find('.order').html($place.index(request.target + " " + '.sheet:not(.ui-sortable-helper)') + 1);
             },
             tolerance: "pointer"
           }).on('sort', $list.sortable('option', 'stop'));

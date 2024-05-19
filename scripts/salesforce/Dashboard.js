@@ -75,7 +75,7 @@ function refreshCycle() {
   // Do not run during normal business hours.
   if (now.getHours() < 7 || now.getHours() > 17)
     return;
-  var refresh = $('button.refresh');
+  var refresh = $('.dashboard button.refresh');
   var prevRefresh = getLastRefresh();
   // Only refresh if at least 5 minutes have passed since last refresh
   if ((now.getTime() - prevRefresh.getTime()) > ($window.dashInterval - 1000)) {
@@ -91,13 +91,13 @@ function refreshCycle() {
 $(document).ready(() => {
   var observer = new MutationObserver(() => {
     // Only run a single time, 10 seconds after refresh button is available
-    if ($('button.refresh').length > 0 && $window.dashInitiate === undefined) {
+    if ($('.dashboard button.refresh').length > 0 && $window.dashInitiate === undefined) {
       $window.dashInitiate = setTimeout(() => {
         var autoRefresh = $('<button>').html('Auto-refresh').attr({
           class: 'slds-button slds-button_neutral auto-refresh',
           type: 'button'
         });
-        $('button.refresh').after(autoRefresh);
+        $('.dashboard button.refresh').after(autoRefresh);
         autoRefresh.click();
       }, 1000 * 10);
     }
