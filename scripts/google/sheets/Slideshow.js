@@ -34,11 +34,12 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       });
 
       // Check for multiple sheets
-      if (gids.length < 2) return chrome.runtime.sendMessage({
-        to: "popup",
-        target: ".spreadsheet",
-        type: "1 sheet"
-      });
+      if (gids.length < 2)
+        return chrome.runtime.sendMessage({
+          to: "popup",
+          target: ".spreadsheet",
+          type: "1 sheet"
+        });
 
       // Find first visible sheet
       window.location.hash = "gid=" + gids[0];
@@ -50,8 +51,14 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       while (id >= 0 && start == $('.docs-sheet-active-tab .docs-sheet-tab-name').html())
         window.location.hash = "gid=" + gids[--id];
       if (id < 0 && start == $('.docs-sheet-active-tab .docs-sheet-tab-name').html())
-        while (start == $('.docs-sheet-active-tab .docs-sheet-tab-name').html())
+        while (id < gids.length && start == $('.docs-sheet-active-tab .docs-sheet-tab-name').html())
           window.location.hash = "gid=" + gids[++id];
+      if (id == gids.length)
+        return chrome.runtime.sendMessage({
+          to: "popup",
+          target: ".spreadsheet",
+          type: "error"
+        });
       start = $('.docs-sheet-active-tab .docs-sheet-tab-name').html();
       chrome.runtime.sendMessage({
         to: "popup",

@@ -7,6 +7,10 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   switch (request.target) {
     case ".spreadsheet":
       switch (request.type) {
+        case "error":
+          $load.hide('fade');
+          $(request.target + " " + '.message').html("Error: Sheets not found.").show('fade');
+          break;
         case "init":
           $(request.target).attr({ name: request.name });
           $(request.target + " " + '.name').html(request.name);

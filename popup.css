@@ -108,6 +108,10 @@ input[type="number"].empty {
   background: #79c9ec;
 }
 
+.message {
+  font-size: 1.2rem;
+}
+
 .spreadsheet {
   max-width: 400px;
   min-width: 100px;
@@ -141,6 +145,7 @@ input[type="number"].empty {
 }
 
 .gid {
-  font-size : 1.2rem;
-  font-style: italic;
+  font-size  : 1.2rem;
+  font-style : italic;
+  white-space: nowrap;
 }
