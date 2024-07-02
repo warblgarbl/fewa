@@ -19,40 +19,40 @@ function getLastRefresh() {
   }
   // Convert MMM string to 0-index
   switch (lastRefresh.date.month) {
-    case 'January':
+    case 'Jan':
       lastRefresh.date.month = 0;
       break;
-    case 'February':
+    case 'Feb':
       lastRefresh.date.month = 1;
       break;
-    case 'March':
+    case 'Mar':
       lastRefresh.date.month = 2;
       break;
-    case 'April':
+    case 'Apr':
       lastRefresh.date.month = 3;
       break;
     case 'May':
       lastRefresh.date.month = 4;
       break;
-    case 'June':
+    case 'Jun':
       lastRefresh.date.month = 5;
       break;
-    case 'July':
+    case 'Jul':
       lastRefresh.date.month = 6;
       break;
-    case 'August':
+    case 'Aug':
       lastRefresh.date.month = 7;
       break;
-    case 'September':
+    case 'Sep':
       lastRefresh.date.month = 8;
       break;
-    case 'October':
+    case 'Oct':
       lastRefresh.date.month = 9;
       break;
-    case 'November':
+    case 'Nov':
       lastRefresh.date.month = 10;
       break;
-    case 'December':
+    case 'Dec':
       lastRefresh.date.month = 11;
       break;
   }
